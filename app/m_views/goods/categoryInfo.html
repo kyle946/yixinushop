@@ -1,0 +1,96 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+
+    <div class="goodslist clearfix" >
+        <ul>
+            <list name="goodslist" item="v" >
+            <li>
+                <div class="left left2" >
+                    <!--<div class="left1" >&nbsp;&nbsp;</div>-->
+                    <a href="<?php echo createLink('index/item',array('id'=>$v['id']) ); ?>" ><img src="<?php echo IMAGE_URL; ?>{$v.thumb}" /></a>
+                </div>
+                <div class="right right2" >
+                    <a class="a1" href="<?php echo createLink('index/item',array('id'=>$v['id']) ); ?>">
+                        <div class="title" >{$v.goodsname}</div>
+                    </a>
+                    <a href="<?php echo createLink('index/item',array('id'=>$v['id']) ); ?>">
+                        <div class="title" >{$v.attributeStr}</div>
+                    </a>
+                    <a href="<?php echo createLink('index/item',array('id'=>$v['id']) ); ?>">
+                        <div class="title2" >{$v.business_name}</div>
+                    </a>
+                    <div class="price" >
+                        &yen;&nbsp;{$v.shopPrice}&nbsp;&nbsp;
+                        <?php if( $v['numbers']<KUCUNBUZU ){ ?>
+                        库存不足！
+                        <?php }elseif( $v['xiangou']>0 && $v['xiangouuser']>0 && $v['xiangouuser']>=$v['xiangou'] ){ ?>
+                        [限购],今日已买
+                        <?php } ?>
+                    </div>
+                </div>
+                
+                 <?php if( $v['numbers']<KUCUNBUZU ){ ?>
+                 <?php }elseif( $v['xiangou']>0 && $v['xiangouuser']>0 && $v['xiangouuser']>=$v['xiangou'] ){ ?>
+                 <?php }else{ ?>
+                 <button onclick="goodsfun.shoppingCart('{$v.id}', 1);" class="fr">加入购物车</button>
+                 <?php } ?>
+                     
+            </li>
+            </list>
+        </ul>
+    </div>
+
+</div>
+<div class="hg10 w100" ></div>
+<div class='pageinfo' >{$pageinfo}</div>
+<div class="item_buynow" >
+    <div class="cart" ><a href="<?php echo createLink('goods/shoppingcartList'); ?>" ><div  class="iconfont"><i>0</i>&#xe698;</div></a></div>
+    <div class="add" ><a href="<?php echo createLink('goods/shoppingcartList'); ?>" >前往购物车</a></div>
+</div>
+<script>
+    publicMethod = {};
+    $(function() {
+        publicMethod.init();
+        //--购物车总数
+        $.get('<?php echo createLink("goods/shopcartTotal"); ?>', function(d) {
+            $(".item_buynow .cart div i").text(d.total);
+        },'json');
+    });
+    
+    //--分页加载数据
+    publicMethod.nextpage = function (p,s){
+        $.get('<?php echo createLink("goods/category"); ?>p/'+p+'/id/{$info.id}',function(d){ 
+            $.each(d.data,function(n,item){
+                //--console.log(item); 
+                
+                //--库存和限购检测 start 
+                var ht1 = '<button onclick="goodsfun.shoppingCart(\''+item.id+'\', 1);" class="fr">加入购物车</button>';
+                var ht2 =''; var ht3='';
+                var kucun = parseInt('<?php echo KUCUNBUZU; ?>');
+                if( item.numbers < kucun ){
+                    ht2 = '库存不足！';
+                }
+                if( item.xiangou>0 && item.xiangouuser >0 && item.xiangouuser > item.xiangou ){
+                    ht3 = '[限购],今日已买';
+                }
+                if( ht3 || ht2 ){
+                    ht1 = '';
+                }
+                //--库存和限购检测 end 
+                
+                var html = '<li> <div class="left left2"> <a href=" <?php echo createLink('index/item'); ?>id/'+item.id+'"><img src="<?php echo IMAGE_URL; ?>'+item.thumb+'"></a> </div> <div class="right right2" style="width: 187px;"> <a class="a1" href="<?php echo createLink('index/item'); ?>id/'+item.id+'"><div class="title">'+item.goodsname+'</div></a> <a href="<?php echo createLink('index/item'); ?>id/'+item.id+'"><div class="title">'+item.attributeStr+'</div><div class="title2">'+item.business_name+'</div></a> <div class="price">¥&nbsp;'+item.shopPrice+'&nbsp;&nbsp;'+ht2+ht3+'</div> </div> '+ht1+' </li>'; 
+                $(".goodslist ul").append(html); 
+            });  
+            $(".pageinfo").html(d.page);
+        },'json');
+    };
+    
+    //--初始化的函数 
+    publicMethod.init = function() {
+        var w1 = parseInt($(".goodslist").width());
+        var w2 = parseInt($(".goodslist .left").width());
+        $(".goodslist .right").css({'width': w1 - w2 - 15});
+    };
+
+</script>

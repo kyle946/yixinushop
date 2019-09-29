@@ -1,0 +1,1 @@
+INSERT INTO `y_goods_attr` VALUES (99,38,'口味','麻辣\r\n清淡',2,'kouwei',1),(100,38,'产地','湖南\r\n山东',1,'changdi',1),(103,39,'特性','香辣味\r\n辣味',2,'texing',1),(106,40,'品种','null\n',1,'pingzhong',2),(108,42,'配料','',1,'peiliao',1),(109,42,'保质期','',1,'baozq',1),(110,43,'配料','null\n',1,'pieliao',2);

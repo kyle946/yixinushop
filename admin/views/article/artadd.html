@@ -1,0 +1,148 @@
+<layout name="layout/layout1" />
+<script src="<root />static/WdatePicker.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo __ROOT__; ?>static/k/kindeditor-min.js" ></script>
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?article={$_GET.article}"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?article={$_GET.article}&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+</div>
+<style type="text/css" >
+.ticlass div,.ticlass img{ width: 100px; height: 80px;margin:0px;}
+.ticlass div{overflow: hidden;}
+.ticlass div:hover{height: auto; overflow-y: auto;}
+.ticlass a{display: block; width:80%; margin: 0px auto; text-align: center; text-decoration: underline; cursor: pointer;color:#008DFC;}
+
+div.area4 {height: auto; padding: 4px;}
+div.area4 ul.imglist{margin: 0px; padding: 0px;}
+div.area4 ul.imglist li{float: left;margin: 2px;border: 1px solid #d1d1d1;list-style-type: none;height: 90px;width:100px;overflow: hidden; position: relative;}
+div.area4 ul.imglist li img{width:100px; height: 90px; margin: 0px; padding: 0px; display: block;}
+div.area4 ul.imglist li .hoverArea{height: 180px;display: block; position: relative;}
+div.area4 ul.imglist li .hoverArea:hover{top: -20px;}
+div.area4 ul.imglist li .hoverArea a{ display: block; cursor: pointer; margin: 0px auto; padding: 0px; text-align: center;}
+</style>
+<div class="w100">
+    <form method="post" action="" name="iform" onsubmit="return icheck();" >
+    <table class="w100 content_list">
+        <tr>
+            <th width="120" style="text-align: left;">内容 编辑 </th>
+            <th></th>
+            <!--<th></th>-->
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">标题：</span></td>
+            <td>
+                <textarea name="title" onblur="ch.onecheck(this);" class="textarea3" >{$info.title}</textarea>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="titletips" class="c1"></span>
+            </td>
+            <!--<td><span id="nametips" class="c1">频道名称</span></td>-->
+        </tr>
+<!--        <tr>
+            <td style="text-align: right;"><span class="fb">简略标题：</span></td>
+            <td>
+                <input type="text" class="input1" name="shorttitle"  onblur="ch.onecheck(this);" value="{$info.shorttitle}" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="shorttitletips" class="c1"></span>
+            </td>
+        </tr>-->
+        <tr>
+            <td style="text-align: right;"><span class="fb">主栏目：</span></td>
+            <td>
+                <select name="cid">
+                    <option value="0" >请选择</option>
+                    <list name="channel2" item="v" >
+                    <option value="{$v.id}" <if con="$info['cid']==$v['id']">selected="selected"</if> >{$v.name}</option>
+                    </list>
+                </select>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="fb">副栏目：</span>
+                <select name="cid2">
+                    <option value="0" >请选择</option>
+                    <list name="channel2" item="v" >
+                    <option value="{$v.id}" <if con="$info['cid2']==$v['id']">selected="selected"</if> >{$v.name}</option>
+                    </list>
+                </select>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="cidtips" class="c1"></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="border-bottom: 1px dashed #e1e1e1;text-align: right;"><span class="fb">缩略图：</span></td>
+            <td style="border-bottom: 1px dashed #e1e1e1;">
+                <input class="bt1" onclick="insertImage({mode:'single',divid:'thumbimage',inputname:'picname','level':'1'})" type="button" value="添加图片" />
+                <div id='thumbimage' class="ticlass">
+                <?php if(isset($info['picname']) && !empty($info['picname'])): ?>
+                    <div>
+                            <img src="<?php echo IMAGE_URL; ?>{$info.picname}">
+                            <input type="hidden" name="picname" value="{$info.picname}">
+                            <a onclick="deleteImgSingle(this)">删除图片</a>
+                    </div>
+                <?php endif; ?>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">权限：</span></td>
+            <td>
+                <select name="arcrank">
+                    <option value="o" >开放浏览</option>
+                    <option value="c" >待审核</option>
+                    <option value="oc" >禁止评论</option>
+                </select>
+<!--                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="fb">作者：</span>
+                <input type="text" class="input2" name="author"  onblur="ch.onecheck(this);" value="{$info.author}" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="authortips" class="c1"></span>-->
+            </td>
+        </tr>
+        
+        <?php if(isset($_GET['type']) &&$_GET['type']=='edit'):parseChannelFieldType($fields,$extFieldValue); else:parseChannelFieldType($fields,null); endif; ?>
+        
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">创建时间：</span></td>
+            <td>
+                <input type="text" class="input2" name="addtime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'%y-%M-%d'})" value="{$info.addtime}" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="fb">来源：</span>
+                <input type="text" class="input2" name="source"  onblur="ch.onecheck(this);" value="{$info.source}" />
+                &nbsp;&nbsp;&nbsp;<span id="sourcetips" class="c1"></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">浏览次数：</span></td>
+            <td>
+                <input type="text" class="input2" name="hits"  onblur="ch.onecheck(this);" value="{$info.hits}" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="fb">排序：</span>
+                <input type="text" class="input2" name="sort"  onblur="ch.onecheck(this);" value="{$info.sort}" />
+                &nbsp;&nbsp;&nbsp;<span id="hitstips" class="c1"></span>&nbsp;&nbsp;<span id="sorttips" class="c1"></span>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="保存" />
+            </td>
+        </tr>
+    </table>
+    </form>
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'title',type:'regexp',msg:'标题应该为1-200个字符！',rule:/^.{1,200}$/,required:1}; 
+            option[1] = {name:'shorttitle',type:'regexp',msg:'简略标题应该为1-20个字符！',rule:/^.{1,20}$/,required:0}; 
+            //--option[2] = {name:'cid',type:'isempty',msg:'请选择一个主栏目！'}; 
+            option[3] = {name:'author',type:'regexp',msg:'作者应该为1-35个字符！',rule:/^.{1,35}$/,required:0}; 
+            option[4] = {name:'hits',type:'regexp',msg:'浏览次数只能是11位以内的整数！',rule:/^[0-9]{1,11}$/,required:0}; 
+            option[5] = {name:'sort',type:'regexp',msg:'排序只能是11位以内的整数！',rule:/^[0-9]{1,11}$/,required:0}; 
+            option[6] = {name:'source',type:'regexp',msg:'来源应该在160个字符以内！',rule:/^.{1,180}$/,required:0}; 
+            option[7] = {name:'keywords',type:'regexp',msg:'SEO关键字应该在190个字符以内！',rule:/^.{1,200}$/,required:0}; 
+            option[8] = {name:'description',type:'regexp',msg:'描述应该在1200个字符以内！',rule:/^.{1,1200}$/,required:0}; 
+            ch = new formCheck(option);
+        });
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+</div>

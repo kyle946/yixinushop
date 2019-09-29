@@ -1,0 +1,143 @@
+<layout name="layout/layout1" />
+<style type="text/css">
+#logoFile div,#logoFile img{ width: 150px; height: 110px;margin:0px;}
+#logoFile div{overflow: hidden;}
+#logoFile div:hover{height: auto; overflow-y: auto;}
+#logoFile a{display: block; width:80%; margin: 0px auto; text-align: center; text-decoration: underline; cursor: pointer;color:#008DFC;}
+</style>
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?jinxiaocun=g"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>供应商列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?jinxiaocun=g&type=supplier_add"><img src="<?php echo __ROOT__; ?>static/icon/a2.png" /><font>添加供应商</font></a>
+</div>
+<div class="w100">
+    <form method="post" action="" name="iform" onsubmit="return icheck();" >
+        <table class="w100 content_list">
+            <tr>
+                <th width="180" style="text-align: left;">编辑 - 供应商</th>
+                <th width="500"></th>
+                <th></th>
+            </tr>
+            <tr>
+                <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">供应商名称：</span></td>
+                <td><input type="text" class="input1" name="name"  onblur="ch.onecheck(this)" value="{$info.name}" /></td>
+                <td><span id="nametips" class="c1">供应商的名称</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">标记：</span></td>
+                <td><input type="text" class="input1" name="mark"  onblur="ch.onecheck(this,'?c=jinxiaocun&a=CheckStoresMark&id={$_GET.id}&val='+this.value,'该标记已被使用！')" value="{$info.mark}" /></td>
+                <td><span id="marktips" class="c1">唯一标记，用来区分供应商</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">联系电话：</span></td>
+                <td><input type="text" class="input1" name="telephone"  onblur="ch.onecheck(this)" value="{$info.telephone}" /></td>
+                <td><span id="telephonetips" class="c1">供应商的联系电话</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">联系人：</span></td>
+                <td><input type="text" class="input1" name="contacts"  onblur="ch.onecheck(this)" value="{$info.contacts}" /></td>
+                <td><span id="contactstips" class="c1">联系人</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">联系手机：</span></td>
+                <td><input type="text" class="input1"  onblur="ch.onecheck(this)" name="mobile" value="{$info.mobile}" /></td>
+                <td><span id="mobiletips" class="c1">联系人的手机号码</span></td>
+            </tr>
+            <!--        <tr>
+                        <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">密码：</span></td>
+                        <td><input type="password" class="input1" name="password"  onblur="ch.onecheck(this)" value="" /></td>
+                        <td><span id="passwordtips" class="c1">登录密码</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">确认密码：</span></td>
+                        <td><input type="password" class="input1"   onblur="ch.onecheck(this)" name="pwd" value="" /></td>
+                        <td><span id="pwdtips" class="c1">确认密码</span></td>
+                    </tr>-->
+            <tr>
+                <td style="text-align: right;"><span class="fb">地址：</span></td>
+                <td>
+                    <div id="address1" >
+                        <select id="proviceId" name="provice"><option value="0">请选择</option></select> 
+                        <select id="cityId" name="city"><option value="0">请选择</option></select>     
+                        <select id="countyId" name="county"><option value="0">请选择</option></select>
+                        <!--<select id="townId" name="town"><option value="0">请选择</option></select>-->
+                    </div><br />
+                    <label><input class="input1" placeholder="详细地址……" type="text" name="address" value="{$info.address}" /></label>
+                </td>
+                <td><span class="c1"></span></td>
+            </tr>
+        <tr>
+            <td style="border-bottom: 1px dashed #e1e1e1;text-align: right;"><span class="fb">供应商图片：</span></td>
+            <td style="border-bottom: 1px dashed #e1e1e1;">
+                <input class="bt1" onclick="insertImage({'mode':'single','divid':'logoFile','level':'1'})" type="button" value="添加图片" />
+            </td>
+            <td style="border-bottom: 1px dashed #e1e1e1;"></td>
+        </tr>
+        <tr>
+            <td></td>
+                    <td>
+                        <div id='logoFile'>
+                        <?php if(isset($info['thumb']) && !empty($info['thumb'])): ?>
+                        <div>
+                                <img src="<?php echo IMAGE_URL; ?>{$info.thumb}">
+                                <input type="hidden" name="imgfile" value="{$info.thumb}">
+                                <a onclick="deleteImgSingle(this)">删除图片</a>
+                        </div>
+                        <?php endif; ?>
+                        </div>
+                    </td>
+            <td><span class="c1"> 图片 </span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">经纬度：</span></td>
+            <td>
+                <input type="text" class="input3"  name="lat" placeholder="经度" value="{$info.lat}" />&nbsp;,&nbsp;
+                <input type="text" class="input3"  name="long" value="{$info.long}" placeholder="纬度" /></td>
+            <td><span class="c1">用来定位或者按距离排序</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">状态：</span></td>
+            <td>
+                <select name="status">
+                    <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >正常</option>
+                    <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >暂停</option>
+                </select>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="保存" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</form>
+<script>
+    $(function () {
+        var option = new Array();
+        option[0] = {name: 'name', type: 'regexp', msg: '1到22个字符，不能包括： < > \ = / . ? \'  | & ', rule: /^[^<>\\=/.?+'|&]{1,22}$/, required: 1};
+        option[1] = {name: 'mark', type: 'regexp', msg: '由大小字母组成、6至50个字符！', rule: /^[a-zA-Z0-9]{4,50}$/, required: 1};
+        option[2] = {name: 'telephone', type: 'regexp', msg: '请填写一个有效的电话号码！', rule: /^[0-9]{0,4}-?[0-9]{6,9}$/, required: 1};
+        option[3] = {name: 'contacts', type: 'regexp', msg: '1到16个字符，不能包括： < > \ = / . ? \'  | & ', rule: /^[^<>\\=/.?+'|&]{1,16}$/, required: 1};
+        option[4] = {name: 'mobile', type: 'mobile', msg: '请输入正确的手机号码！',required: 1};
+        ch = new formCheck(option);
+        //--
+        <?php if( isset($info['provice']) ){ ?>
+        $("#address1").setaddr({proviceSn: {$info.provice}, citySn: {$info.city} , countySn: {$info.county} });
+        <?php }else{ ?>
+        //--初始化地址 省市区
+        $("#address1").setaddr({proviceSn: 430, citySn: 430100000000});
+        <?php } ?>
+    });
+
+    function icheck() {
+        var bool_ = false;
+        var res = ch.start();
+        if (res == 1) {
+            bool_ = true;
+        }
+        return bool_;
+    }
+</script>
+</div>

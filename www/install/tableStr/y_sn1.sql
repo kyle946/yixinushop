@@ -1,0 +1,5 @@
+CREATE TABLE `y_sn1` (
+  `id` mediumint(15) NOT NULL AUTO_INCREMENT,
+  `v` tinyint(2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10002 DEFAULT CHARSET=utf8;

@@ -1,0 +1,168 @@
+<layout name="layout/layout1" />
+<include file="weixin/tou" />
+
+<div style="line-height: 1.5em; padding: 0px 20px; color:#777;" >
+    <p>说明 ：</p>
+    <p>1、自定义菜单最多包括3个一级菜单，每个一级菜单最多包含5个二级菜单。</p>
+    <p>2、一级菜单最多4个汉字，二级菜单最多7个汉字，多出来的部分将会以“...”代替。</p>
+    <p>3、创建自定义菜单后，由于微信客户端缓存，需要24小时微信客户端才会展现出来。测试时可以尝试取消关注公众账号后再次关注，则可以看到创建后的效果。</p>
+</div>
+<div class="hr" ></div>
+<div class="weixinTypeB_area1 clearfix" >
+    <div class="b1" >
+        <div class="main clearfix" >
+            <div class="l" >菜单列表&nbsp;&nbsp;&nbsp;&nbsp;<label><button onclick="privateMethod.addMenuLev1()" >添加</button></label></div>
+            <div class="r" >绑定功能</div>
+        </div>
+        
+        <div style="display: none;">
+            <div class="level1 clearfix c1" >
+                <div class="l" >
+                    <label><input type="text" maxlength="4" class="input3" />&nbsp;&nbsp;<button onclick="privateMethod.addMenuLev2(this.parentElement.parentElement.parentElement)" >+</button></label>
+                </div>
+                <div class="r" >
+                    <label>类型：<select><option value="view">绑定URL</option></select></label> &nbsp;&nbsp; <label>值：<input type="text" class="input1" /></label>
+                </div>
+                <div class="r2" > &nbsp;&nbsp;<label><button onclick="privateMethod.deleteMenu(this.parentElement.parentElement.parentElement)" >删除</button></label> &nbsp;&nbsp;</div>
+            </div>
+        
+            <div class="level1 clearfix c2" >
+                <div class="l" >
+                    <label><font>|—</font>&nbsp;&nbsp;<input type="text" maxlength="7" class="input3" /></label>
+                </div>
+                <div class="r" >
+                    <label>类型：<select><option value="view">绑定URL</option></select></label> &nbsp;&nbsp; <label>值：<input type="text" class="input1" /></label>
+                </div>
+                <div class="r2" > &nbsp;&nbsp;<label><button onclick="privateMethod.deleteMenu(this.parentElement.parentElement.parentElement)" >删除</button></label> &nbsp;&nbsp;</div>
+            </div>
+        </div>
+        
+        <?php
+            if($weixinmenu){
+                $k2 = 0;
+                foreach($weixinmenu as $k=>$v){
+        ?>
+            <div class="level1 clearfix" bianhao="a{$k}" jibie="a" >
+                <div class="l" >
+                    <label><input type="text" maxlength="4" value="{$v.name}" class="input3" />&nbsp;&nbsp;<button onclick="privateMethod.addMenuLev2(this.parentElement.parentElement.parentElement)" >+</button></label>
+                </div>
+                <div class="r" >
+                    <label>类型：<select><option value="view">绑定URL</option></select></label> &nbsp;&nbsp; <label>值：<input type="text" class="input1" value="{$v.url}" /></label>
+                </div>
+                <div class="r2" > &nbsp;&nbsp;<label><button onclick="privateMethod.deleteMenu(this.parentElement.parentElement.parentElement)" >删除</button></label> &nbsp;&nbsp;</div>
+            </div>
+        <?php
+            if( isset($v['sub_button']) ){
+                foreach($v['sub_button'] as $v2){
+        ?>
+            <div class="level1 clearfix" shangjibianhao='a{$k}' bianhao="b{$k2}" jibie="b"  >
+                <div class="l" >
+                    <label><font>|—</font>&nbsp;&nbsp;<input type="text" value="{$v2.name}" maxlength="7" class="input3" /></label>
+                </div>
+                <div class="r" >
+                    <label>类型：<select><option value="view">绑定URL</option></select></label> &nbsp;&nbsp; <label>值：<input type="text" value="{$v2.url}" class="input1" /></label>
+                </div>
+                <div class="r2" > &nbsp;&nbsp;<label><button onclick="privateMethod.deleteMenu(this.parentElement.parentElement.parentElement)" >删除</button></label> &nbsp;&nbsp;</div>
+            </div>
+        <?php 
+                $k2++;
+                }
+            }
+        ?>
+        <?php 
+                }
+            }
+        ?>
+        
+    </div>
+    <div class="b2" >
+        <p>
+            <label><button onclick="privateMethod.save();" >保存并生效</button></label>
+        </p>
+    </div>
+    
+</div>
+
+<script>
+    privateMethod = {};
+    privateMethod.data = { 0:{'type':null,'name':null,'url':null } };
+    //--    添加一级菜单
+    privateMethod.addMenuLev1 = function(){
+        var obj = $(".weixinTypeB_area1 .b1 .c1").clone(true);
+        var obj2 = $(".weixinTypeB_area1 .b1");
+        var length = obj2.find('div[jibie=a]').length;
+        if( length>=3 ){
+            confirm_('自定义菜单最多包括3个一级菜单！');
+            return false;
+        }
+        obj.removeClass('c1');
+        privateMethod.level_a++;
+        obj.attr('bianhao','a'+length);
+        obj.attr('jibie','a');
+        obj2.append(obj);
+    };
+    //--    添加二级 菜单
+    privateMethod.addMenuLev2 = function(e){
+        var obj = $(".weixinTypeB_area1 .b1 .c2").clone(true);
+        var obj2 = $(".weixinTypeB_area1 .b1");
+        var length = obj2.find('div[shangjibianhao='+$(e).attr('bianhao')+']').length;
+        if( length>=5 ){
+            confirm_('每个一级菜单最多包含5个二级菜单！');
+            return false;
+        }
+        obj.removeClass('c2');
+        obj.attr('shangjibianhao',$(e).attr('bianhao'));
+        var l2 = obj2.find("div[jibie=b]").length;
+        obj.attr('bianhao','b'+l2);
+        obj.attr('jibie','b');
+        $(e).after(obj);
+    };
+    //--    删除菜单
+    privateMethod.deleteMenu = function(e){
+        var obj = $(e);
+        if( obj.attr('jibie') == 'a' ){
+            obj.parent().find('div[shangjibianhao='+obj.attr('bianhao')+']').remove();
+        }
+        obj.remove();
+    };
+    //--取一个菜单的数据
+    privateMethod.returndata = function(bianhao){
+        var obj2 = $(".weixinTypeB_area1 .b1");
+        var o = obj2.find('div[bianhao='+bianhao+']');
+        var data = {};
+        data.name = o.find('div.l input').attr('value');
+        data.type = o.find('select option:selected').attr('value');
+        data.url = o.find('div.r input').attr('value');
+        return data;
+    };
+    //--保存菜单
+    privateMethod.save = function(){ 
+        var obj  = $(".weixinTypeB_area1 .b1");
+        var level1data = obj.find("div[jibie=a]");
+        $.each(level1data,function(n,i){
+            var bianhao = $(i).attr('bianhao');
+            var rdata = privateMethod.returndata(bianhao);
+            privateMethod.data[n] = rdata;
+            var level2data = obj.find('div[shangjibianhao='+bianhao+']');
+            if(level2data.length>0){
+                var dd = {};
+                $.each(level2data,function(a,b){
+                    var bianhao2 = $(b).attr('bianhao');
+                    var rdata2 = privateMethod.returndata(bianhao2); //--sub_button
+                    dd[a] = rdata2;
+                });
+                privateMethod.data[n]['sub_button'] = dd;
+            }
+        });
+        //--console.log(privateMethod.data);
+        $.post('<root />?weixin=index&type=b',privateMethod.data,function(d){
+            //--console.log(d);
+            if(d.status==1){
+                confirm_('创建完成。');
+                console.log(d.rr);
+            }else{
+                confirm_('失败。');
+            }
+        },'json');
+    };
+</script>

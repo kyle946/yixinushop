@@ -1,0 +1,41 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?user=rank"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?user=rank&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <a href="<?php echo __ROOT__; ?>"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>别名</th>
+            <th>等级积分</th>
+            <th>折扣</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td>{$v.id}</td>
+                <td>{$v.name}</td>
+                <td>{$v.alias}</td>
+                <td>{$v.points}</td>
+                <td>{$v.discount}</td>
+                <td>
+                    <?php if($v['status']==1): ?>
+                    <font class='cg'>可用</font>
+                    <?php else: ?>
+                    <font class='cr'>禁用</font>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <a href="<?php echo __ROOT__; ?>?user=rank&type=edit&id={$v['id']}">修改</a>&nbsp;&nbsp;
+                    <?php if($v['id']>3): ?>
+                        <a href="javascript:confirm_('你确定要删除 吗？','<?php echo __ROOT__.'?user=rank&type=del&id='.$v['id']; ?>')" >删除</a></td>
+                    <?php endif; ?>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>

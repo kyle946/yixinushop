@@ -1,0 +1,48 @@
+<layout name="layout/layout_mobile2" />
+<div class="user_index" >
+    <div class="head2 clearfix ">
+        <!--<a class="head2a1" href="<root />" ><i class="iconfont" >&#xe697</i>&nbsp;</a>-->
+        <div class="clearfix area1" >
+            <div class="left" >
+                <div class="img" ><img border="0" src="http://<?php echo MAIN_DOMAIN; ?>avatar/{$info.avatar}" /></div>
+            </div>
+            <div class="right" >
+                <div class="nickname" >{$info.nickname}</div>
+                <div class="d2" >{$info.mobile}</div>
+                <!--<div class="d1" >{$info.username}</div>-->
+            </div>
+        </div>
+        <div class='menu clearfix' >
+            <a href='javascript:void(0);' >{$info.money}<br /><span>累计消费</span></a>
+            <a href='javascript:void(0);' ><i></i>{$info.orderCount}<br /><span>订单</span></a>
+            <a href='javascript:void(0);' ><i></i>{$info.payPoints}<br /><span>积分</span></a>
+            <div class="bg" ></div>
+        </div>
+    </div>
+
+    <div class="hr" ></div>
+    <div class="myorder" >
+        <div><h4>我的订单</h4></div>
+        <a class="s1" href="<?php echo createLink('user/orderlist',array('s'=>1)); ?>"><i class="i3" ><?php echo $info['orderCount']; ?></i><i style="color:<pr />;" class="iconfont">&#xe667;</i><span>全部订单</span></a>
+        <a class="s2" href="<?php echo createLink('user/orderlist',array('s'=>2)); ?>"><i class="i3" ><?php echo $info['orderdaizhifu']; ?></i><i style="color:<pr />;" class="iconfont">&#xe669;</i><span>待付款</span></a>
+        <a class="s3" href="<?php echo createLink('user/orderlist',array('s'=>3)); ?>"><i class="i3 bg1" ><?php echo $info['orderdaifahuo']; ?></i><i style="color:<pr />;" class="iconfont">&#xe668;</i><span>待发货</span></a>
+        <a class="s4" href="<?php echo createLink('user/orderlist',array('s'=>4)); ?>"><i class="i3 bg1" ><?php echo $info['orderdone']; ?></i><i style="color:<pr />;" class="iconfont">&#xe663</i><span>已完成</span></a>
+    </div>
+    <div class="hr" ></div>
+    <div class="menulist" >
+        <!--<a href='javascript:void(0);' ><i style="color:<pr />;" class="iconfont" >&#xe696</i>我的订单<i class="i3" >99+</i><i class="i2 iconfont" >&#xe6a7</i></a>-->
+        <a href='<?php echo createLink("user/shoppingcart") ?>' ><i style="color:<pr />;" class="iconfont" >&#xe698</i>购物车<i class="i3 bg1" >{$info.goodsCount}</i><i class="i2 iconfont" >&#xe6a7</i></a>
+        <a href=' <?php echo createLink("user/ticket") ?> ' ><i style="color:<pr />;" class="iconfont" >&#xe663</i>优惠券<i class="i3 bg1" >{$info.coupon}</i><i class="i2 iconfont" >&#xe6a7</i></a>
+        <a href=' <?php echo createLink("user/BuyTheGoods") ?> ' ><i style="color:<pr />;" class="iconfont" >&#xe6e4</i>买到的商品<i class="i2 iconfont" >&#xe6a7</i></a>
+        <a href=' <?php echo createLink("user/integral") ?> ' ><i style="color:<pr />;" class="iconfont" >&#xe663</i>我的积分<i class="i2 iconfont" >&#xe6a7</i></a>
+        <div class="hr" ></div>
+        <a href='<?php echo createLink("user/goodscomment") ?> ' ><i style="color:<pr />;" class="iconfont" >&#xe69b</i>我的评论(商品)<i class="i2 iconfont" >&#xe6a7</i></a>
+        <a href='<?php echo createLink("user/artcomment") ?> ' ><i style="color:<pr />;" class="iconfont" >&#xe69b</i>我的评论(文章)<i class="i2 iconfont" >&#xe6a7</i></a>
+        <div class="hr" ></div>
+        <a href=' <?php echo createLink("u/retrievepassword") ?>  ' ><i style="color:<pr />;" class="iconfont" >&#xe69e</i>修改登录密码<i class="i2 iconfont" >&#xe6a7</i></a>
+        <a href=' <?php echo createLink("user/info") ?>  ' ><i style="color:<pr />;" class="iconfont" >&#xe621</i>个人资料<i class="i2 iconfont" >&#xe6a7</i></a>
+        <a href='<?php echo createLink("user/address"); ?>' ><i style="color:<pr />;" class="iconfont" >&#xe626</i>地址管理<i class="i2 iconfont" >&#xe6a7</i></a>
+        <div class="hr" ></div>
+        <a href='<root />?c=u&a=logout' ><i style="color:<pr />;" class="iconfont" >&#xe6b7</i>退出<i class="i2 iconfont" >&#xe6a7</i></a>
+    </div>
+</div>

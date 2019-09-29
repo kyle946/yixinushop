@@ -1,0 +1,130 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?order=list"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    
+    <div class="search" >
+        <span>订单号/收货人/电话/短订单号：</span>
+        <input type="text" class="input2" name="keywords" value="{$_GET.keywords}" onkeyup="keydown(function(){ privateMethod.search(); })" />
+        &nbsp;&nbsp;
+        <input type="button" class="bt1" onclick="privateMethod.search()" value="搜索" />
+    </div>
+</div>
+<script src="<root />static/orders.js" type="text/javascript"></script>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th style="wdith:15px" ><input type="checkbox" /></th>
+            <th>订单号 | 短号</th>
+            <th>应付款</th>
+            <th>收货人</th>
+            <th>收货人电话</th>
+            <th>收货区域</th>
+            <th>下单时间</th>
+            <th>支付状态</th>
+            <th>配送状态</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td class="td1"><input type="checkbox" /></td>
+                <td class="td1">{$v.orderSn} | <font class='cf60' >{$v.sortsn}</font></td>
+                <td class="td1" ><font class="cr" >{$v.amount}</font></td>
+                <td class="td1" >{$v.name}</td>
+                <td class="td1" >{$v.mobile}</td>
+                <td class="td1"  style="position: relative;" >
+                    <div style="z-index: 1;" >{$v.provice_name},{$v.city_name},{$v.county_name}</div>
+                    <div class="orderlist_rightHere" id='editOrderId_{$v.id}' ></div>
+                </td>
+                <td class="td1" >{$v.createTime}</td>
+                <td class="td1" >
+                    <switch name="$v['payStatus']" >
+                    <case value="1"><font class='cr' >未支付</font></case>
+                    <case value="2"><font class='cg' >已支付</font></case>
+                    <case value="3"><font class='cr' >退款</font></case>
+                    </switch>
+                </td>
+                <td class="td1">
+                    <switch name="$v['delStatus']" >
+                    <case value="1"><font class='cr' >未发货</font></case>
+                    <case value="2"><font class='cg' >已发货</font></case>
+                    <case value="3"><font class='cg' >已签收</font></case>
+                    <case value="3"><font class='cr' >拒收</font></case>
+                    </switch>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="4">
+                    <span class='c1' >商户：{$v.business_name}</span>&nbsp;&nbsp;<font class='cb'>|</font>&nbsp;&nbsp;
+                    <span class='c1' >发货：{$v.warehouse_name}</span>&nbsp;&nbsp;<font class='cb'>|</font>&nbsp;&nbsp;
+                    <span class='c1'>属性：<?php if($v['split_sn']){  ?><span class='cb'>已拆单({$v.split_sn})</span><?php } ?></span>
+                </td>
+                <td colspan="4" style="text-align: right; position: relative; z-index: 1;" >
+                    <a class="a1" href="javascript:void(0);" onclick="goodsorder.info({$v.id});" >查看</a>&nbsp;&nbsp;
+                    
+                    <!--没付钱之前才能调价-->
+                    <?php if($v['payStatus']==1){ ?>
+                            <a class="a1" href="javascript:void(0);" onclick="goodsorder.priceMod({$v.id});"  >调价</a>&nbsp;&nbsp;
+                    <?php }else{ ?>
+                            <a class="a1" style='color:#ACACAC;' href="javascript:void(0);" onclick="confirm_('支付状态为 [未支付] 才可以调价！')" >调价</a>&nbsp;&nbsp;
+                    <?php } ?>
+                    
+                    <!--只有银行转账的支付方式才有这个功能-->
+                    <if con="$v['payStatus']==1 and ( $v['payType']=='transfer' or $v['payType']=='face_pay' ) " >
+                        <a class="a1" href="javascript:void(0);" onclick="goodsorder.ConfirmPayment({$v.id});" >确认支付</a>&nbsp;&nbsp;
+                    <else />
+                        <a class="a1" style='color:#ACACAC;' href="javascript:void(0);" onclick="confirm_('<p>只有支付方式为 [ 微信转账 ]或者[当面付]  <br />并且支付状态为  [未支付] <br /> 的订单才能使用这个功能！</p>')" >确认支付</a>&nbsp;&nbsp;
+                    </if>
+            
+                    <!--如果订单没有发货，才能有下面的按钮-->
+                    <?php if($v['delStatus']==1){ ?>    
+                            <if con="$v['payStatus']==2 " >   <!--只有付完钱之后才能发货-->
+                                <a class="a1" href="javascript:void(0);" onclick="goodsorder.sendout({$v.id},{$v.orderSn});"  >发货</a>&nbsp;&nbsp;
+                            <else />
+                                <a class="a1" style='color:#ACACAC;' href="javascript:void(0);" onclick="confirm_('订单未支付，不能发货！')" >发货</a>&nbsp;&nbsp;
+                            </if>
+                    <?php }else{ ?>
+                            <a class="a1" style='color:#ACACAC;' href="javascript:void(0);" onclick="confirm_('订单已经发货！')" >发货</a>&nbsp;&nbsp;
+                    <?php } ?>
+            
+                    <!--<a class="a1" href="javascript:void(0);" >修改</a>&nbsp;&nbsp;-->
+                     <!--onclick="setTimeout('window.location.reload()',1400)"-->
+                    <a class="a1" target="_blank" href="?order=printOrder&id={$v.id}" >打印订单</a>&nbsp;&nbsp;
+                    <a class="a1" target="_blank"  href="?order=printDelivery&id={$v.id}" >打印配送单</a>&nbsp;&nbsp;
+                    
+                    <!--付了钱才能打印快递单并发货-->
+                    <if con="$v['payStatus']==2 " >
+                        <a class="a1" target="_blank"  href="?order=printExpress&id={$v.id}" >打印快递单</a>&nbsp;&nbsp;
+                    <else />
+                        <a class="a1" style='color:#ACACAC;' href="javascript:void(0);" onclick="confirm_('订单未支付，不能打印快递单！')" >打印快递单</a>&nbsp;&nbsp;
+                    </if>
+                    
+                    <if con="$v['payStatus']==1 and $v['delStatus']==1 " >
+                        <a class="a1" href="javascript:void(0);" onclick="goodsorder.deleteOrder({$v.id})" >删除</a>&nbsp;&nbsp;
+                    <else />
+                        <a class="a1" style='color:#ACACAC;' href="javascript:void(0);" onclick="confirm_('只有 [未支付] 并且 [未发货] 的订单才可以删除！')" >删除</a>&nbsp;&nbsp;
+                    </if>
+                </td>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+    <script>
+        $(function(){
+            var id = 'editOrderId_'+'{$editOrderId}';
+            $('#'+id).css({'display':'block'});
+            $("input[name='keywords']").focus();
+        });
+        
+        privateMethod = {};
+        privateMethod.search = function(){
+            var data = '';
+
+            var keywords = $("input[name='keywords']").attr('value');
+            if(keywords!=''){
+                data += '&keywords='+keywords;
+            }
+            var url = '<root />?order={$_GET.order}' + data;
+            window.location.replace(url);
+        };
+    </script>
+</div>

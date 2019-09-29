@@ -1,0 +1,68 @@
+<div class="layout1_area1 w100 clearfix" >
+    <div class="area2" >
+        <?php if(isset($userinfo) and !empty($userinfo)): ?>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        你好，{$userinfo.nickname}&nbsp;&nbsp;&nbsp;&nbsp;|
+        <a href='<root />{u user}' >用户中心</a>
+        <a href='<root />{u u/logout}' >退出</a>
+        <?php else: ?>
+        &nbsp;&nbsp;&nbsp;&nbsp;<a class='fg' href='javascript:void(0);' >欢迎光临&nbsp;{$webconfig.webtitle}！</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a target="_blank" href='<root />{u u/login}' >登录</a>&nbsp;&nbsp;<a target="_blank" href='<root />{u u/register}' >注册</a>
+        <?php endif; ?>
+    </div>
+    <div class="area3" >
+        <!--<a href='javascript:void(0);' >YixinU授权</a>&nbsp;|&nbsp;-->
+        <a href='<root />{u u/business_register}' >商户注册/登录</a>&nbsp;|&nbsp;
+        <a href='javascript:void(0);' >帮助中心</a>&nbsp;|&nbsp;
+        <a href='javascript:void(0);' >联系我们</a>&nbsp;|&nbsp;
+        <a href='javascript:void(0);' class='fg' >客服热线：{$webconfig.wap}</a>
+    </div>
+</div>
+<div class='layout1_area2 clearfix w100' >
+    <div class="area1 w1 clearfix" >
+        <a class="logo" href='<root />' ><img border='0' src='<?php echo __ROOT__; ?>static/logo.png' /></a>
+        <div class="area2" >
+            <input type="text" class='search' id="searchGoodsKeywords" name="searchGoodsKeywords" value="{$searchGoodsKeywords}" onkeypress="keydown(function(){ goodsfun.search(); })" />
+            <input class="bt1" type="button" onclick="goodsfun.search()" value="" />
+        </div>
+        <div class="shoppingcart" id="myshoppingcart" >
+            <div class="d1" >
+                <a class="a1" href="<root />?c=user&a=shoppingcart" >去购物车结算 >> </a>
+                <div class="d2" >
+<!--                    <div id="list" class="w100 clearfix" >
+                        <div class="d3 clearfix" >
+                            <div class="d4"><img src="<root />static/i3.jpg" /></div>
+                            <div class="d5"><a href="javascript:void(0)" >这是商品标题这是商品标</a></div>
+                            <div class="d6">
+                                <div><font> &yen;188</font> * 2</div>
+                                <div><a href="javascript:void(0)" >删除</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d3">
+                        <div class="d7 w100" >小计(不含运费)：<font>&yen;</font><font>188</font>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    </div>-->
+                    <div class="d111" ><div class="d8 w100" >购物车内暂无商品</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="returnTop" ><a href="javascript:void(0)" onclick="$('html,body').animate({scrollTop:0},500);" >返回顶部</a></div>
+<script>
+    <!-- 这个常量是为了防止鼠标移入后重复加载购物车商品，导致删除时无法更新购物车的商品，这个非常重要-->
+    myshoppingcartMouseenter = 0;
+    $("#myshoppingcart").mouseenter(function(){
+        $(this).find(".d1 a.a1").css({'border-bottom':'1px solid #fff'});
+        $(this).find(".d1 div.d2").css({'display':'block'});
+        if( myshoppingcartMouseenter==0 ){
+            goodsfun.getshoppingcart();
+            myshoppingcartMouseenter = 1;
+        }
+    });
+    $("#myshoppingcart").mouseleave(function(){
+        $(this).find(".d1 a.a1").css({'border-bottom':'0px solid #fff'});
+        $(this).find(".d1 div.d2").css({'display':'none'});
+        myshoppingcartMouseenter = 0;
+    });
+</script>

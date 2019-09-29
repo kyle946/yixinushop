@@ -1,0 +1,90 @@
+<layout name="layout/layout2" />
+<div class="area4" >
+<!--    <div class="orderinfo_area1 w100">基本信息<i></i></div>
+    <div class="h10 w100" ></div>-->
+    <div class="row1" >
+        <div class="a1" >
+            <div class='area' >
+                 <div class="img fl" ><img src="<root />avatar/{$info.avatar}" /></div>
+                 <div class="row nickname" >{$info.nickname}</div>
+                 <div class="row c2" >积分：<font class="cf60" >{$info.payPoints}</font></div>
+                 <div class="row c2" >等级：<font class="cg" >{$info.rankName}</font>&nbsp;&nbsp;
+                     <if con="!empty($nextRank)" >
+                         还差&nbsp;{$nextRank.points}&nbsp;分达到&nbsp;[<font class="cf60" >{$nextRank.name}</font>]
+                     </if>
+                 </div>
+                 <!--<div class="row c2" >上次登录：{$info.lastLogin}</div>-->
+            </div>
+        </div>
+        <div class="a2" >
+            <div class='area' >
+                <div class="row c2" style="width:100%;" >用户名：{$info.username}&nbsp&nbsp&nbsp&nbsp
+                    <!--<span class="c1" >[&nbsp<?php echo date("H:i:s",$_SESSION['userInfo']['expiretime']); ?>&nbsp;自动退出登录&nbsp]</span>-->
+                </div>
+                 <div class="row c2" >手机号码：<font class="cg" >{$info.mobile}</font></div>
+                 <div class="row c2" >注册时间：<font class="cf60" >{$info.regTime}</font></div>
+                 <div class="row c2" >Email：<font class="cg" >{$info.email}</font></div>
+                 <div class="row c2" >上次登录：{$info.lastLogin}</div>
+<!--                 <div class="row c2" >QQ号码：<font class="cg" >{$info.qq}</font></div>
+                 <div class="row c2" >生日：<font class="cf60" >{$info.birthday}</font></div> -->
+            </div>
+        </div>
+    </div>
+    <div class="h10 w100" ></div>
+    <div class="row2" >
+                <a class="link" href="javascript:void(0)" >累计消费：{$info.money}</a>
+                <a class="link" href="javascript:void(0)" >订单：{$info.orderCount}</a>
+                <a class="link" href="javascript:void(0)" >购物车：{$info.goodsCount}</a>
+                <a class="link" href="javascript:void(0)" >优惠券：{$info.coupon}</a>
+                <a class="link" href="javascript:void(0)" >待收货：0</a>
+                <a class="link" href="javascript:void(0)" >待评价：0</a>
+    </div>
+    
+    <div class="h10 w100" ></div>
+    <div class="orderinfo_area1 w100">最近订单<i></i></div>
+    <div class="h10 w100" ></div>
+    <div class="order_area1" >
+        <table border="0" cellspacing="5">
+<!--            <thead>
+                <tr>
+                    <th>订单编号</th>
+                    <th>下单时间</th>
+                    <th>总额</th>
+                    <th style="width:8%;" >支付状态</th>
+                    <th style="width:8%;" >配送状态</th>
+                    <th style="width:15%;" >操作</th>
+                </tr>
+            </thead>-->
+            <tbody>
+                <list name="orderlist" item="v" >
+                <tr>
+                    <td><a class="a1" href="<root />?c=user&a=orderinfo&id={$v.id}" >{$v.orderSn}</a></td>
+                    <td>{$v.createTime}</td>
+                    <td>{$v.amount}</td>
+                    <td>
+                        <switch name="$v['payStatus']" >
+                        <case value="1"><font class='f2' >未支付</font></case>
+                        <case value="2"><font class='f1' >已支付</font></case>
+                        <case value="3"><font class='f2' >退款</font></case>
+                        </switch>
+                    </td>
+                    <td>
+                        <switch name="$v['delStatus']" >
+                        <case value="1"><font class='f2' >未发货</font></case>
+                        <case value="2"><font class='f1' >已发货</font></case>
+                        <case value="3"><font class='f1' >已签收</font></case>
+                        <case value="4"><font class='f2' >拒收</font></case>
+                        </switch>
+                    </td>
+                    <td>
+                        <if con="$v['payStatus']==1" ><a class="a1" href="javascript:confirm_('你确定要删除吗？',function(){ugoodsfun.deleteOrder({$v.id});},310,80)" >删除</a>&nbsp;</if>
+                        <if con="$v['payStatus']==1 and $v['payType']!='transfer' " ><a class="a1" target="_blank" href="<?php echo createLink('pay/collectMoney',array('id'=>$v['id'])); ?>" >支付</a>&nbsp;</if>
+                        <a class="a1" href="<root />?c=user&a=orderinfo&id={$v.id}" >查看</a> 
+                    </td>
+                </tr>
+                </list>
+            </tbody>
+        </table>
+    </div>
+    
+</div>

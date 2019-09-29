@@ -1,0 +1,56 @@
+<layout name="layout/layout2" />
+<div class="h10 w100" ></div>
+<div class="h10 w100 cr">提示：只有支付状态为 [已支付] 的商品才可以 评论、退货。</div>
+<div class="h10 w100" ></div>
+    <div class="orderinfo_area2" >
+        <table class="table2" border="0" cellspacing="5">
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th></th>
+                    <th>价格</th>
+                    <th>数量</th>
+                    <th>购买时间</th>
+                    <!--<th style="width:8%;" >支付状态</th>-->
+                    <th style="width:100px;" >支付/配送</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <list name="list" item="v" >
+                <tr>
+                    <td style="width:40%;text-align: left;" >
+                        <div class="thumb fl" ><img src="<?php echo IMAGE_URL; ?>{$v.goodsthumb}"></div>
+                        <div class="title fl" ><a href="<root />{u item/$v[goodsid] }" >{$v.goodsname}</a></div>
+                    </td>
+                    <td>{$v.goodsattributeStr}</td>
+                    <td>{$v.goodsprice}</td>
+                    <td>{$v.goodsnum}</td>
+                    <td>{$v.createTime}</td>
+                    <td>
+                        <switch name="$v['payStatus']" >
+                        <case value="1"><font class='f2' >未支付</font></case>
+                        <case value="2"><font class='f1' >已支付</font></case>
+                        <case value="3"><font class='f2' >退款</font></case>
+                        </switch> / 
+                        
+                        <switch name="$v['delStatus']" >
+                        <case value="1"><font class='f2' >未发货</font></case>
+                        <case value="2"><font class='f1' >已发货</font></case>
+                        <case value="3"><font class='f1' >已签收</font></case>
+                        <case value="4"><font class='f2' >拒收</font></case>
+                        </switch>
+                    </td>
+                    <td>
+                        <?php if($v['payStatus']==2): ?>
+                        <a class="a1" href="<root />{u item/$v[goodsid] }#commentList" >评论</a>
+                        <?php else: ?>
+                        <a style='color:#B3B3B3;' href="javascript:void(0)" >评论</a>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                </list>
+            </tbody>
+        </table>
+        <div id="page" >{$pageinfo}</div>
+    </div>

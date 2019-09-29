@@ -1,0 +1,91 @@
+<layout name="layout/layout1" />
+<style type="text/css" >
+.dlarea1{ display: inline-block;margin: 0px 5px; padding: 6px;min-width:240px;}
+.dlarea1 dt,.dlarea1 dd{display: inline-block;}
+.dlarea1 dd{color:#666;}
+</style>
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?user=list"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?user=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <a href="<?php echo __ROOT__; ?>"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+<div class="w100">
+    <table class="w100 content_list">
+        <tr>
+            <th width="180" style="text-align: left;">用户详细信息</th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+    </table>
+    <div class="w100 h10" ></div>
+    <div class="padding10" >
+        <div style="position: absolute; top: 10px ; left: 600px; width: 120px; height: 100px;" ><img style="width: 120px; height: 100px;" src="http://<?php echo MAIN_DOMAIN; ?>avatar/<?php if(empty($info['avatar'])): echo 'default.gif'; else: echo $info['avatar']; endif; ?>" /></div>
+        <dl class="dlarea1" >
+            <dt class="fb" >ID：</dt>
+            <dd>{$info.id}</dd>
+        </dl>
+        <dl class="dlarea1" >
+            <dt class="fb" >用户名：</dt>
+            <dd>{$info.username}</dd>
+        </dl> <br />
+        <dl class="dlarea1" >
+            <dt class="fb" >昵称：</dt>
+            <dd>{$info.nickname}</dd>
+        </dl>
+        <dl class="dlarea1" >
+            <dt class="fb" >手机号码：</dt>
+            <dd>{$info.mobile}</dd>
+        </dl> <br />
+        <dl class="dlarea1" >
+            <dt class="fb" >QQ：</dt>
+            <dd>{$info.qq}</dd>
+        </dl>
+        <dl class="dlarea1" >
+            <dt class="fb" >状态：</dt>
+            <dd>
+                <switch name="$info['status']" >
+                <case value='1' >可用</case>
+                <case value='2' >禁用</case>
+                </switch>
+            </dd>
+        </dl> <br />
+        <dl class="dlarea1" >
+            <dt class="fb" >Email：</dt>
+            <dd>{$info.email}</dd>
+        </dl>
+        <dl class="dlarea1" >
+            <dt class="fb" >积分：</dt>
+            <dd>{$info.payPoints}</dd>
+        </dl> <br />
+        <dl class="dlarea1" >
+            <dt class="fb" >等级：</dt>
+            <dd>{$info.rankname} [{$info.alias}]</dd>
+        </dl>
+        <dl class="dlarea1" >
+            <dt class="fb" >性别：</dt>
+            <dd>
+                <switch name="$info['sex']" >
+                <case value='1' >男</case>
+                <case value='2' >女</case>
+                </switch>
+            </dd>
+        </dl> <br />
+        <dl class="dlarea1" >
+            <dt class="fb" >生日：</dt>
+            <dd>{$info.birthday}</dd>
+        </dl>
+        <dl class="dlarea1" >
+            <dt class="fb" >注册时间：</dt>
+            <dd>{$info.regTime}</dd>
+        </dl>  <br />
+        <dl class="dlarea1" >
+            <dt class="fb" >最后一次登录：</dt>
+            <dd>{$info.lastLogin}</dd>
+        </dl>
+        <dl class="dlarea1" >
+            <dt class="fb" >电话：</dt>
+            <dd>{$info.phone}</dd>
+        </dl>
+    </div>
+    <div class="w100 h10" ></div>
+</div>

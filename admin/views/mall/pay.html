@@ -1,0 +1,210 @@
+<layout name="layout/layout1" />
+<style type="text/css" >
+    #address1{padding: 15px;}
+</style>
+<!--<script src="<?php echo __ROOT__; ?>/static/jquery.form.js" type="text/javascript"></script>-->
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?system=pay"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+</div>
+
+<?php if( !isset($_GET['type']) ): ?>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>支付方式</th>
+            <th></th>
+            <th>分组</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        <list name="list" item="v">
+        <tr <?php if($v['status']!=1): ?>style="background:#e6e6e6;"<?php endif; ?> >
+            <td><?php if( !empty($v['logo']) ): ?><div style="width: 128px;height: 45px;padding: 0px;border: 2px solid #e1e1e1;" ><img style="width: 128px;height: 45px;text-indent: 0px;padding: 0px;display: block;" src="<?php echo __ROOT__;  ?>static/{$v.logo}" /></div><?php endif; ?></td>
+            <td>{$v.description}</td>
+            <td>{$v.group}</td>
+            <td>
+                <?php if($v['status']==1): ?>
+                <font class='cg'>可用</font>
+                <?php else: ?>
+                <font class='cr'>禁用</font>
+                <?php endif; ?>
+            </td>
+            <td>
+                <a href="<?php echo __ROOT__; ?>?system=pay&type=edit&id={$v['id']}">修改</a>
+        </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+
+<?php elseif( isset($_GET['type']) && $_GET['type']=='edit' ): ?>
+<div class="w100">
+    <form method="post" action="" id="iform" enctype="multipart/form-data" name="iform" onsubmit="return icheck();" >
+        <table class="w100 content_list">
+            <tr>
+                <th width="150" style="text-align: left;">编辑 - 支付方式 
+                    <!--<span class="cf60" >{$info.description}</span>-->
+                </th>
+                <th width="300"></th>
+                <th></th>
+            </tr>
+
+            <switch name="$info['sn']" >
+            <case value='unionpay' >
+                <tr>
+                    <td style="text-align: right;"><span class="fb cr">*</span><span class="fb">商户ID：</span></td>
+                    <td><input type="text" class="input1" name="partnerId" onblur="ch.onecheck(this)" value="{$info.partnerId}" /></td>
+                    <td><span id='partnerIdtips' class="c1" ></span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb">商户密钥(文本)：</span></td>
+                    <td><input type="text" class="input1" name="partnerKey" onblur="ch.onecheck(this)" value="{$info.partnerKey}" /></td>
+                    <td><span id='partnerKeytips' class="c1" ></span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb">商户密钥(文件)：</span></td>
+                    <td>{$info.partnerKeyFile}<br /><br /><input type="file" name="partnerKeyFile" value="" /></td>
+                    <td><span id='partnerKeyFile' class="c1" >文件名只能使用英文字母、数字、下划线组成 。</span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb">签名证书密码：</span></td>
+                    <td><input type="text" class="input1" name="config[signCertPwd]" onblur="ch.onecheck(this)" value="{$info.signCertPwd}" /></td>
+                    <td><span class="c1" ></span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb cr">*</span><span class="fb">运行模式：</span></td>
+                    <td>
+                        <select name="runmode">
+                            <option value="1" <?php if(isset($info['runmode']) && $info['runmode']==1): ?>selected='selected'<?php endif; ?> >生产环境</option>
+                            <option value="2" <?php if(isset($info['runmode']) && $info['runmode']==2): ?>selected='selected'<?php endif; ?> >测试环境</option>
+                        </select>
+                    </td>
+                    <td><span id='nametips' class="c1" >支付接口的运行模式。</span></td>
+                </tr>
+
+            </case>
+
+            <case value='transfer' >
+                <tr>
+                    <td style="text-align: right;"><span class="fb">微信号：</span></td>
+                    <td><input type="text" class="input1" name="config[myweixin]" onblur="ch.onecheck(this)" value="{$info.myweixin}" /></td>
+                    <td><span class="c1" ></span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb">微信二维码：</span></td>
+                    <td>
+                        <input class="bt1" onclick="insertImage({'mode':'single','divid':'logoFile','level':'4'})" type="button" value="添加图片" />
+                    </td>
+                    <td><span class="c1" >上传你收款的微信二维码图片</span></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <div id='logoFile'>
+                            <?php if(isset($info['weixinqrcode']) && !empty($info['weixinqrcode'])): ?>
+                            <div>
+                                <img src="<?php echo IMAGE_URL; ?>{$info.weixinqrcode}">
+                                <input type="hidden" name="imgfile" value="{$info.weixinqrcode}">
+                                <a href="javascript:void(0);" onclick="deleteImgSingle(this)">删除图片</a>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                    <td><span class="c1">微信二维码图片</span></td>
+                </tr>
+
+            </case>
+            
+            <case value="weixinPay" >
+                <tr>
+                    <td style="text-align: right;"><span class="fb">微信公众号 appid：</span></td>
+                    <td><input type="text" class="input1" name="config[weixinappid]" onblur="ch.onecheck(this)" value="{$info.weixinappid}" /></td>
+                    <td><span class="c1" ></span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb">微信公众号 appsecret：</span></td>
+                    <td><input type="text" class="input1" name="config[weixinsecret]" onblur="ch.onecheck(this)" value="{$info.weixinsecret}" /></td>
+                    <td><span class="c1" ></span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb">微信商户支付密钥 KEY：</span></td>
+                    <td><input type="text" class="input1" name="config[weixinkey]" onblur="ch.onecheck(this)" value="{$info.weixinkey}" /></td>
+                    <td><span class="c1" ></span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb">微信支付商户号 MCHID：</span></td>
+                    <td><input type="text" class="input1" name="config[weixinmchid]" onblur="ch.onecheck(this)" value="{$info.weixinmchid}" /></td>
+                    <td><span class="c1" ></span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb">商户证书 (cert)：</span></td>
+                    <td><font class="cf60" >{$info.weixinsslcert}</font><br /><br /><input type="file" name="weixinsslcert" value="" /></td>
+                    <td><span id='weixinsslcert' class="c1" >文件名只能使用英文字母、数字、下划线组成 。</span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb">商户证书 (key)：</span></td>
+                    <td><font class="cf60" >{$info.weixinsslkey}</font><br /><br /><input type="file" name="weixinsslkey" value="" /></td>
+                    <td><span id='weixinsslkey' class="c1" >文件名只能使用英文字母、数字、下划线组成 。</span></td>
+                </tr>
+            </case>
+            
+            <case value='alipayj' >
+                <tr>
+                    <td style="text-align: right;"><span class="fb">支付宝签约账号：</span></td>
+                    <td><input type="text" class="input1" name="config[alipaypartner]" onblur="ch.onecheck(this)" value="{$info.alipaypartner}" /></td>
+                    <td><span class="c1" >一般情况下收款账号就是签约账号</span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><span class="fb">商户私钥：</span></td>
+                    <td><textarea name="config[alipayprivatekeytext]" class="textarea1" >{$info.alipayprivatekeytext}</textarea></td>
+                    <td><span id="descriptiontips" class="c1">商户的私钥,此处填写原始私钥,不要转码 </span></td>
+                </tr>
+            </case>
+            </switch>
+
+
+                <tr>
+                    <td style="text-align: right;"><span class="fb cr">*</span><span class="fb">状态：</span></td>
+                    <td>
+                        <select name="status">
+                            <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                            <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                        </select>
+                    </td>
+                    <td><span id='nametips' class="c1" ></span></td>
+                </tr>
+            <tr>
+                <td style="text-align: right;"><span class="fb">描述：</span></td>
+                <td><textarea name="description" class="textarea1" >{$info.description}</textarea></td>
+                <td><span id="descriptiontips" class="c1">支付方式简单的描述 </span></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;"><span class="fb"></span></td>
+                <td>
+                    <input type="submit"  name="_submit_" class="bt1" value="保存" />
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </form>
+    <script>
+        $(function() {
+            var option = new Array();
+            option[0] = {name: 'name', type: 'regexp', msg: '名称应该为1－30个字符！', rule: /^.{1,30}$/, required: 0};
+            option[1] = {name: 'description', type: 'regexp', msg: '描述应该在120个字符 以内！', rule: /^.{1,120}$/, required: 0};
+            option[2] = {name: 'partnerId', type: 'regexp', msg: '1到30个字符！', rule: /^.{1,30}$/, required: 1};
+            option[3] = {name: 'partnerKey', type: 'regexp', msg: '30个字符 以内！', rule: /^.{1,30}$/, required: 0};
+            option[4] = {name: 'note', type: 'regexp', msg: '描述应该在120个字符 以内！', rule: /^.{1,120}$/, required: 0};
+            ch = new formCheck(option);
+        })
+        function icheck() {
+            var bool_ = false;
+            var res = ch.start();
+            if (res == 1) {
+                bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+</div>
+<?php endif; ?>

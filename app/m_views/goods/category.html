@@ -1,0 +1,15 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+
+<div class="goodscategory_area2" >
+    <?php $arr = getgoodscate(); ?>
+    <?php foreach($arr as $v){ ?>
+        <div class='li clearfix' >
+            <a class='a2' href='<?php echo createLink("goods/category",array("id"=>$v["id"])); ?>' >{$v.name}</a>
+            <br />
+            <?php if( isset($v['son']) and is_array($v['son']) ): foreach($v['son'] as $k2=>$v2): ?>
+            <a class='a3' href='<?php echo createLink("goods/category",array("id"=>$v2["id"])); ?>' >{$v2.name}</a>
+            <?php endforeach; endif; ?>
+        </div>
+    <?php } ?>
+</div>

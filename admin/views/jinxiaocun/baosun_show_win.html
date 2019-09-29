@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>TODO write content</div>
+    </body>
+</html>
+-->
+<div class='jinxiaocun_baosun_show_win_aa' >
+    <form id='baosun_form1' name='baosun_form1' action="<root />?c=jinxiaocun&a=baosun_post_data" >
+    <p>
+        <span>报损仓库：</span> {$w_name}
+        <input type="hidden" name="warehouse_id" value="{$w_id}" />
+        <input type="hidden" name="warehouse_name" value="{$w_name}" /> 
+    </p>
+    <p>
+        <span>商品名称：</span> {$goods_name}
+        <input type="hidden" name="goods_id" value="{$goods_id}" />
+        <input type="hidden"  name="goods_name" value="{$goods_name}" /> 
+    </p>
+    <p>
+        <span>数量：</span>
+        <input type="text" class="input1" name="nums"   onblur="ch.onecheck(this)" value="" />
+        <span class='c1' id='numstips' >注意:如果数量大于仓库数量，仓库数量全部报损</span>
+    </p>
+    <p>
+        <span>原因：</span>
+        <textarea class="textarea11" name='comments'   onblur="ch.onecheck(this)" >损坏或者丢失</textarea>
+        <span class='c1' id='commentstips' ></span>
+    </p>
+    </form>
+</div>

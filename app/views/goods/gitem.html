@@ -1,0 +1,495 @@
+<layout name="layout/layout1" />
+<script src="<root />static/jquery.jqzoom-core.js" type="text/javascript"></script>
+<script src="<root />static/jquery.jqzoom-core.pack.js" type="text/javascript"></script>
+<link href="<root />static/jquery.jqzoom.css" rel="stylesheet" type="text/css"/>
+<div class="h10 w100" ></div>
+<div class="w1 clearfix" >
+    <!--商品分类position  开始--> 
+    <div class="goodsCatetroyPos" >
+        <list name="goodsCatetroyPosData" item="v1" >
+        <div class="a1" >
+            <a href="<root />{u g/$v1[id]}" >{$v1.name}&nbsp;&nbsp;↓</a>
+            <div class="a3" ></div>
+            <div class="a2" >
+                <?php if( isset($v1['list']) ): foreach($v1['list'] as $v2): ?>
+                <a href="<root />{u g/$v2[id]}" >{$v2.name}</a>
+                <?php endforeach; endif; ?>
+            </div>
+        </div>
+        &nbsp;&nbsp;>&nbsp;&nbsp;
+        </list>
+        {$info.name}&nbsp;&nbsp;{$info.attributeStr}
+    </div>
+    <script>
+        $(".goodsCatetroyPos .a1").mouseenter(function(){ 
+            $(this).find('.a3').css({'display':'block'});
+            $(this).find('.a2').css({'display':'block',"border":"1px solid #EAAE34"});
+            $(this).css({"border":"1px solid #EAAE34"});
+        });
+        $(".goodsCatetroyPos .a1").mouseleave(function(){ 
+            $('.goodsCatetroyPos .a3').css({'display':'none'});
+            $('.goodsCatetroyPos .a2').css({'display':'none',"border":"1px solid #FFE2A6"});
+            $('.goodsCatetroyPos .a1').css({"border":"1px solid #FFE2A6"});
+        });
+    </script>
+    <!--商品分类position  结束-->
+    <div class="h10 w100" ></div>
+    
+    <div class="w100 gitem_area1 clearfix" >
+        <div class="pic clearfix" >
+            <div class="image br1" >
+                <a href="<?php echo str_replace('thumb_','800_',IMAGE_URL.$info['thumb']); ?>" class="jqzoom" ><img border='0' src="<?php echo str_replace('thumb_','400_',IMAGE_URL.$info['thumb']); ?>" /></a>
+            </div>
+            <div class="h10 w100" ></div>
+            <div class="w100 clearfix images_area1" >
+                <!--<a class="bt1 fl" href="javascript:void(0)" ></a>-->
+                <div class="images" >
+                    <?php if( !empty($info['imgs']) and is_array($info['imgs']) ): foreach($info['imgs'] as $v1): ?>
+                    <a href="javascript:void(0)" ><img border="0" src="<?php echo IMAGE_URL.$v1; ?>" /></a>
+                    <?php endforeach; endif; ?>
+                </div>
+                <!--<a class="bt2 fr" href="javascript:void(0)" ></a>-->
+            </div>
+        </div>
+        <div class="info clearfix" >
+            <div class='area1' ><font class="f3 c1">商品编号：{$info.sn}</font></div>
+            <div class="title pad2" >{$info.name}&nbsp;&nbsp;{$info.attributeStr}</div>
+            <div class="stitle pad2" >{$info.name2}</div>
+            <div class="h10 w100" ></div>
+            <div class="w100 price_area1" >
+                <div class='area2' >
+                    <font class="f3"><a class="a2" href="javascript:publicMethod.selectArea('selectArea2')"  >当前评论：{$info.comments}</a></font><br />
+                    <font class="f3"><a class="a2" href="javascript:publicMethod.selectArea('selectArea2')"  >累计评论：{$commentInfo.count}</a></font>
+                </div>
+                <div class='price' >
+                    <font class="f2" >售价：</font><font class="f1" >&yen;{$info.shopPrice}</font>
+                    <font class='f2' >原价：</font><font class="f3" style='text-decoration: line-through;' >&yen;{$info.sprice}</font>
+                    <font class='f2' >库存：</font><font class="f3" >{$info.numbers}</font>
+                </div>
+            </div>
+            <div class='b1 pad2 clearfix' >
+                <div class="w9 fl" ><font class='f2' >促销信息：</font></div>
+                <div class='w3 fl' ><font class='f4 cr' >{$info.activityName} {fun substr($info['starttime'],0,10)} - {fun substr($info['endtime'],0,10)}</font> </div>
+            </div>
+            <div class='b1 pad2 clearfix' >
+                <div class="w9 fl" ><font class='f2' >服务：</font></div>
+                <div class='w3 fl' ><font class='f4 cf60' >价格保护</font> <font class='f4 cf60' >此商品支持七天内退货</font> </div>
+            </div>
+            
+            <!--判断限购-->
+            <?php if( $info['xiangou']>0 ){ ?>
+            <div class='b1 pad2 clearfix' >
+                <div class="w9 fl" ><font class='f2' >限购：</font></div>
+                <div class='w3 fl' ><font class='f4' >每人每天限购数量</font> <font class='cf60' > {$info.xiangou}</font></div>
+            </div>
+            <?php } ?>
+            
+            <div class="h10 w100" ></div>
+            <?php if( is_array($info['attr']) ): foreach($info['attr'] as $k1=>$v1): ?>
+            <?php  if( is_array($v1['list']) ):  ?>
+            <div class='b1 pad2 clearfix' >
+                <div class="w9 fl" ><font class='f2' >{$v1.name}：</font></div>
+                <div class='w3 fl' >
+                    <?php foreach($v1['list'] as $k2=>$v2): ?>
+                    <a <?php if( array_search($v2,$info['attribute'])!==false ): ?> class="a1hover"<?php else: ?> class="a1"<?php endif; ?>  href="<root />{u item/$k2}" >{$v2}</a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+            <?php endforeach; endif; ?>
+<!--            <div class='b1 pad2 clearfix' >
+                <div class="w9 fl" ><font class='f2' >颜色：</font></div>
+                <div class='w3 fl' >
+                    <a class="a1" href="javascript:void(0);" >黑色</a>
+                    <a class="a1" href="javascript:void(0);" >黑色</a>
+                    <a class="a1" href="javascript:void(0);" >黑色</a>
+                    <a class="a1" href="javascript:void(0);" >我不知道 在这里写一些什么 东西 </a>
+                    <a class="a1" href="javascript:void(0);" >黑色</a>
+                </div>
+            </div>-->
+            <div class='b1 pad1 clearfix' >
+                <div class="w9 fl" ><font class='f2' >运费：</font></div>
+                <div class='w3 fl' >
+                    <font class='f4' id="budgetFreightText" ></font>
+                    <a class="a1" href="javascript:void(0);" onclick="publicMethod.setaddress();" >点击&nbsp;预算运费</a>
+                </div>
+            </div>
+            <div class='pad2 clearfix' >
+                <div class="w9 fl" ><font class='f2' >数量：</font></div>
+                <div class='w3 fl' >
+                    <div class="numbtn clearfix">
+                        <input type="button" class='bt1' onclick="var a=document.getElementById('num');if(a.value>1){a.setAttribute('value',a.value--);}" value="-" />
+                        <input type="text" name="goodsnum" id="num" value="1" />
+                        <input type="button" class='bt1' onclick="var a=document.getElementById('num');var rule = new RegExp(/^[0-9]{1,5}$/);if( !rule.test(a.value) ){a.value=0;} a.setAttribute('value',a.value++);" value="+" />
+                    </div>
+                </div>
+            </div>
+            <div class='pad1 clearfix' >
+                
+                    <font class='f2' ></font>
+                    <!--库存不足和限购判断  --> 
+                    <?php if( $info['numbers']<KUCUNBUZU ){ ?>
+                    <a class="done3"  href="javascript:void(0);" >库存不足，</a>
+                    <a class="done3" href="javascript:void(0);" >再等等吧</a>
+                    <?php }elseif( $info['xiangou']>0 && $info['xiangouuser']>0 && $info['xiangouuser']>=$info['xiangou'] ){ ?>
+                    <a class="done3"  href="javascript:void(0);" >[限购]&nbsp;&nbsp;今天已</a>
+                    <a class="done3" href="javascript:void(0);" >经买过了</a>
+                    <?php }else{ ?>
+                    
+                        <?php if( isset($userinfo) and !empty($userinfo) ){ ?>
+                        <a class="done1" href="javascript:void(0);" onclick="goodsfun.buy({$info.id})" >立即购买</a>
+                        <a class="done2" href="javascript:void(0);" onclick="goodsfun.addcart({$info.id})" >加入购物车</a>
+                        <?php }else{ ?>
+                        <a class="done1" href="javascript:void(0);" onclick="goodsfun.login(1,{$info.id})" >立即购买</a>
+                        <a class="done2" href="javascript:void(0);" onclick="goodsfun.login(2,{$info.id})" >加入购物车</a>
+                        <?php } ?>
+                    
+                    <?php } ?>
+                
+                    
+        </div>
+    </div>
+    <div class="h10 w100 fl" ></div>
+</div>
+<div class="h10 w100" ></div>
+<div class="gitem_area2 w100 br1" >
+    
+    <!--tableswitch  开始--> 
+    <div class="tableswitch clearfix" >
+        <div class="t1" ></div>
+        <ul class="menu clearfix" >
+            <li><a class="hover" id="bt1" onclick="publicMethod.tableswitch('bt1','tableswitch_tab1','.gitem_area2')" href="javascript:void(0)" >推荐组合</a></li>
+<!--            <li><a id="bt2" onclick="publicMethod.tableswitch('bt2','tableswitch_tab2','.gitem_area2')" href="javascript:void(0)" >优惠套装</a></li>
+            <li><a id="bt3" onclick="publicMethod.tableswitch('bt3','tableswitch_tab3','.gitem_area2')" href="javascript:void(0)" >优惠套装</a></li>-->
+        </ul>
+        <div class="tableswitch_area dis clearfix"  id="tableswitch_tab1" >
+            <?php $temprecommendList = 0; ?>
+            <list name="recommendList" item="v" >
+            <div class="area1 fl" >
+                <div class="img" ><a href="<root />{u item/$v[id]};" ><img border="0" src="<?php echo IMAGE_URL; ?>{$v.thumb}" /></a></div>
+                <div class="title" ><a href="<root />{u item/$v[id]};" >{$v.name} {$v.attributeStr}</a></div>
+                <div class="price" >&yen;{$v.shopPrice}</div>
+            </div>
+            <?php $temprecommendList+=$v['shopPrice']; ?>
+            </list>
+            <div class="area2" >
+                <div class="p1" >套装价：&yen;<font class="f1" >{$temprecommendList}</font></div>
+                <div class="p1" >原　价：&yen;<font class="f2" >{$temprecommendList}</font></div>
+                <!--<div class="p1" >节　省：&yen;<font class="f3" >212</font></div>-->
+                <a href="javascript:void(0);" >加入购物车</a>
+            </div>
+        </div>
+        <div class="tableswitch_area hid clearfix"  id="tableswitch_tab2" >二区</div>
+        <div class="tableswitch_area hid clearfix"  id="tableswitch_tab3" >三区</div>
+    </div>
+    <!--tableswitch  结束-->
+    
+</div>
+<div class="h10 w100" ></div>
+<div class="w100 clearfix" >
+    <div class="w22 fl br1" >dsfads</div>
+    <div class="w92 fr" >
+        <div class="gitem_area3  br1" >
+            <div class="tableswitch clearfix"  id="selectArea1" >
+                <div class="t1" ></div>
+                <ul class="menu clearfix" >
+                    <li><a class="hover" id="bt1" href="javascript:void(0)" onclick="publicMethod.tableswitch(this,'tableswitch_tab1','.gitem_area3')" >商品介绍</a></li>
+                    <li><a id="bt2" href="javascript:void(0)" onclick="publicMethod.tableswitch(this,'tableswitch_tab2','.gitem_area3')"  >规格参数</a></li>
+                    <li><a id="bt3" href="javascript:publicMethod.selectArea('selectArea2')" >商品评价</a></li>
+                </ul>
+                <div class="tableswitch_area dis clearfix"  id="tableswitch_tab1" >
+                    {$info.goodsDesc}
+                </div>
+                <div class="tableswitch_area hid clearfix"  id="tableswitch_tab2" >二区</div>
+            </div>
+        </div>
+        <div class="h10 w100" ></div>
+        <div class="gitem_area4 clearfix"  id="selectArea2" >
+            <div class="area1 fl" >
+                <div class="b1 fl" >
+                    <div class="ca1" >{$commentInfo.per1}%</div>
+                    <div class="ca2 c1" >好评率</div>
+                </div>
+                <div class="b2 fr" >
+                    <div class="c1" >
+                        好评({$commentInfo.per1}%) 
+                        <div style="background-color: #e1e1e1;z-index: 1;float: right;height: 14px;width:100px; position: absolute; left: 75px;top:0px;"></div>
+                        <div style="background-color: #C20000;z-index: 2;float: right;height: 14px;width:90px; position: absolute; left: 75px;top:0px;"></div>
+                    </div>
+                    <div class="c1" >
+                        中评({$commentInfo.per2}%) 
+                        <div style="background-color: #e1e1e1;z-index: 1;float: right;height: 14px;width:100px; position: absolute; left: 75px;top:0px;"></div>
+                        <div style="background-color: #C20000;z-index: 2;float: right;height: 14px;width:10px; position: absolute; left: 75px;top:0px;"></div>
+                    </div>
+                    <div class="c1" >
+                        差评({$commentInfo.per3}%) 
+                        <div style="background-color: #e1e1e1;z-index: 1;float: right;height: 14px;width:100px; position: absolute; left: 75px;top:0px;"></div>
+                        <div style="background-color: #C20000;z-index: 2;float: right;height: 14px;width:0px; position: absolute; left: 75px;top:0px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="area2 fr clearfix" >
+                <div class="content fl" >
+                    <div class="info" >购买商品后才可以发表评价！</div>
+                    <div class="info" >发表好评前7名可获得优惠券一张</div>
+                </div>
+                <div class="button fr" >
+                    <?php if( isset($userinfo) and !empty($userinfo) ): ?>
+                    <input type="button" value="现在发评价" class="bt2" id="wcommentButton" onclick="publicMethod.wcomment({$info.id})" />
+                    <?php else: ?>
+                    <input type="button" value="现在发评价" class="bt2" id="wcommentButton" onclick="goodsfun.login(3,{$info.id})" />
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+        <div class="h10 w100" ></div>
+        <div class="br1" >
+            <div class="tableswitch clearfix"  id="commentList" >
+                <div class="t1" ></div>
+                <ul class="menu clearfix" >
+                    <li><a class="hover" href="javascript:void(0);" >全部评价({$commentInfo.all})</a></li>
+                    <li><a href="javascript:void(0);" >好评({$commentInfo.lev1})</a></li>
+                    <li><a href="javascript:void(0);" >中评({$commentInfo.lev2})</a></li>
+                    <li><a href="javascript:void(0);" >差评({$commentInfo.lev3})</a></li>
+                    <li><a href="javascript:void(0);" >有图片的评价({$commentInfo.image})</a></li>
+                </ul>
+                <div class="tableswitch_area dis clearfix" >
+                    <div class="list padding10 clearfix" >
+                        <div class="row" ><h3 class="c1" >还没有评价，快来抢沙发吧！</h3></div>
+                        
+<!--                        <div class="row clearfix" >
+                            <div class="area4 c1">
+                                <p><img src="<root />static/tmp1.jpg" /></p>
+                                <p>
+                                    <span class="cf60" >平民百姓</span>
+                                </p>
+                            </div>
+                            <div class="area1 c1">
+                                <p> <span class="c2 fb" >我是流氓我怕谁</span> &nbsp;&nbsp;2015-06-24 09:52</p>
+                                <p>这个产品还不错，虽说不经常用这个产品还不错这个产品还不错，虽说不经常用这个</p>
+                            </div>
+                            <div class="area5" >
+                                <a href="javascript:void(0)" ><img src="<root />static/tmp1.jpg" border="0"/></a>
+                                <a href="javascript:void(0)" ><img src="<root />static/tmp1.jpg" border="0"/></a>
+                            </div>
+                            <div class="area2 c1">
+                                <p><span class="span1">好评</span></p>
+                            </div>
+                            <div class="area3 c2">
+                                <p><span class="cf60" >2015-04-19 21:40</span> <span class="c1" >购买</span></p>
+                                <p>4G内存 256G固态硬盘</p>
+                            </div>
+                        </div>-->
+                        
+                    </div>
+                    <div id="page" >{$pageinfo}</div>
+                    <div class="h10 w100" ></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="h10 w100" ></div>
+<script>
+    publicMethod = {};
+    privateMethod = {};
+    $(function(){
+        var option = {
+            title: false,
+            preloadText:'&nbsp;',
+            preloadImages:false
+        }; 
+        $('.jqzoom').jqzoom(option);
+        $(".gitem_area1 .pic .images a ").click(function(){
+            var v = jQuery(this).find("img").attr("src");
+            var v1 = v.replace("thumb_","400_");
+            var h  = v.replace("thumb_","800_");
+            $(".gitem_area1 .pic .image").html("<a href=\""+h+"\" class=\"jqzoom\"> <img src=\""+v1+"\" /> </a>");
+            $('.jqzoom').jqzoom(option);
+        });
+        
+        $(".gitem_area1 .pic .images_area1").mouseenter(function(){ $(this).animate({width:'935px'},200); });
+        $(".gitem_area1 .pic .images_area1").mouseleave(function(){ $(this).animate({width:'440px'},200); });
+        //--加载评价
+        publicMethod.loadComment({$info.goodsId});
+        
+        //-- 图片延迟加载 start
+        privateMethod.loadimage();
+        $(window).scroll(function(){
+            privateMethod.loadimage();
+        });
+        //-- 图片延迟加载 end
+    });
+    
+    publicMethod.selectArea = function(id){
+        $("html,body").animate({scrollTop:$('#'+id).offset().top},500);
+    };
+    
+    publicMethod.tableswitch = function (e,id,parentClass){
+        $(parentClass+" .tableswitch .menu li a").attr("class","");
+        $(e).attr("class","hover");
+        $(parentClass+" .tableswitch_area").attr('class','tableswitch_area hid clearfix');
+        $(parentClass+" #"+id).attr('class','tableswitch_area dis clearfix');
+    };
+    //--选择地址，计算运费
+    publicMethod.setaddress = function (){
+        var nums = $("input[name='goodsnum']").attr('value');
+        $.get('<root />goods/budgetFreight',{id:{$info.id},nums:nums},function(d){
+            var msg = kmsg(d,'预算运费',1,680,120,null,1,function(){
+                publicMethod.addarea();
+                msg.hide();
+            });
+            $("#address1").setaddr({proviceSn:430,citySn:430100000000});
+        });
+    };
+    
+    publicMethod.addarea = function (){
+            var jqForm = $("#iform2");
+            var obj = jqForm[0];
+            if(obj.provice.value==0){
+                confirm_('请至少选择一个省级区域。');return false;
+            }
+            if(obj.provice.value!=0){
+                $.post('<root />goods/budgetFreight',$('#iform2').serialize(),function(d){
+                    $("#budgetFreightText").text(d.info);
+                    //--console.log(d);
+                },'json');
+            }
+    };
+    //--发表评价
+    publicMethod.wcomment = function(goodsid){
+        $.get("<root />user/wcomment/goodsid_"+goodsid,{goodsid:goodsid},function(d){
+            //--如果用户已经退出登录
+            if(d==0){ deletemsg = kmsg('/u/login/type_m_param_3_goodsid_'+goodsid,'你还没有登录！',2,410,360); return false; }else{
+                var msg = kmsg(d,'发表评价',1,600,230,null,1,function(){
+                    //--判断表单是不是存在，是不是显示的提示信息。
+                    if( document.getElementById('commentForm1') ){
+                            //--表单字段判断
+                            if( publicMethod.commentCheck()==false ){
+                                return false;
+                            } 
+                            $("#commentForm1").ajaxSubmit({
+                                url:'<root />user/wcomment/goodsid_'+goodsid,
+                                type:'post',
+                                dataType:'json',
+                                success:function(d){
+                                    //--console.log(d);
+                                    if(d.status==1){
+                                        confirm_('<span class="cg" >评价成功！</span><br /><br />点击确定刷新页面。',function(){ window.location.reload();  });
+                                    }else{
+                                        switch(d.status){
+                                            case 401: confirm_('只能上传1M以内的图片！<br /><br /><span class="cr" >评价失败！</span>'); break;
+                                            case 402: confirm_('图片类型不符,只能上传 jpg png gif 格式图片！<br /><br /><span class="cr" >评价失败！</span>'); break;
+                                            case 403: confirm_('图片上传失败！<br /><br /><span class="cr" >评价失败！</span>'); break;
+                                        }
+                                    }
+                                    
+                                },
+                                resetForm: false,
+                                clearForm: false
+                            });
+                    }
+                    msg.hide();
+                });
+            }
+        });
+    };
+    //--获取过滤评价内容中的非法字符
+    publicMethod.commentFilt = function(){
+        var content = $('#commentContent').attr('value');
+        $.get("<root />user/commentFilt",{data:content},function(d){
+            $('#commentContent').attr('value',d);
+        } );
+    };
+    //--检测表单
+    publicMethod.commentCheck = function(){
+        var option  = new Array();
+        option[0] = {name:'commentContent',type:'regexp',msg:'内容1 - 200个字符！',rule:/^(.|\r|\n){1,200}$/,required:1};
+        option[1] = {name:'commentpromise',type:'check',msg:'保证 评价内容 属实！'};
+        ch = new formCheck(option);
+        var bool_ = false;
+        var res = ch.start();
+        if(res==1){
+            bool_ = true;
+        }
+        return bool_;
+    };
+    //--加载评价
+    publicMethod.loadComment = function(goodsid,page_){
+        var page = page_ || 1;
+        $.getJSON("<root />goods/loadComment",{goodsid:goodsid,p:page},function(d){
+            if(d.data.length == 0) return false;
+            var obj = $("#commentList .tableswitch_area .list");
+            obj.html("");
+            $("#page").html(d.page);
+            $.each(d.data,function(i,item){
+                var commentLevel = '';
+                switch(item.level){
+                    case '1':commentLevel = '好评'; break;
+                    case '2':commentLevel = '中评'; break;
+                    case '3':commentLevel = '差评'; break;
+                }
+                var image1 = '';
+                if(item.image1){
+                    image1 = '<a title="点击查看大图" href="javascript:publicMethod.openCommentImage(\''+item.image1+'\');" ><img src="<root />'+item.image1+'" border="0"/></a> ';
+                }
+                obj.append('<div class="row clearfix" > <div class="area4 c1"> <p><img src="<root />avatar/'+item.avatar+'" /></p> <p> <span class="cf60" >平民百姓</span> </p> </div> <div class="area1 c1"> <p> <span class="c2 fb" >'+item.nickname+'</span> &nbsp;&nbsp;'+item.ctime+'</p> <p>'+item.content+' </p> </div> <div class="area5" > '+image1+'  </div> <div class="area2 c1"> <p><span class="span'+item.level+'">'+commentLevel+'</span></p> </div> <div class="area3 c2"> <p><span class="cf60" >'+item.buytime+'</span> <span class="c1" >购买</span></p> <p>'+item.spec+'</p> </div> </div>');
+            });
+        });
+    };
+    //--加载评论翻页回调函数
+    publicMethod.loadCommentPage = function(p,str){
+        publicMethod.loadComment({$info.goodsId},p);
+    };
+    //--加载评价图片
+    publicMethod.openCommentImage = function(url){
+        var url_ = url.replace(/40_/,'600_');
+        var imageurl = "<root />"+url_;
+        var content = "<img src="+imageurl+" border='0' />";
+        $.get(imageurl);
+        confirm_(content,null,620,420);
+    };
+    
+    function loginMinCallback(param,goodsid){
+        if(param==1){
+            goodsfun.buy(goodsid);
+        }else if(param==2){
+            goodsfun.addcart(goodsid);
+        }else if(param==3){
+            try{ 
+                deletemsg.hide(); 
+            }catch(err){}
+            publicMethod.wcomment(goodsid);
+        }
+    }
+    
+    
+    //-- 图片延迟加载 start
+    privateMethod.loadimageAllimg = function(){
+        var allimg = document.getElementsByTagName('img');
+        var img_ = new Array();
+        for(x in allimg){
+            var t1 = allimg.item(x).getAttribute('init');
+            if( t1==1){
+                img_.push(allimg.item(x));
+            }
+        }
+        return img_;
+    };
+    
+    privateMethod.loadimage = function(){
+        var img_ = privateMethod.loadimageAllimg();
+        var documentTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var documentHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        var dt = documentTop + documentHeight;
+        $.each(img_,function(i,n){
+            var nodeTop = $(this).offset().top ;
+            if(nodeTop <= dt){
+                var src_ = $(this).attr('xsrc');
+                $(this).attr('src',src_);
+                $(this).attr('init',0);
+            }
+        });
+    };
+    //-- 图片延迟加载 end
+</script>

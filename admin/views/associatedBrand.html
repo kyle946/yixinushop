@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+<title>关联品牌</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+<script src="<?php echo __ROOT__; ?>static/jquery.form.js" type="text/javascript"></script>
+<style type="text/css">
+body{    margin: 0px; padding: 0px; font-size: 12px;     font-family: "微软雅黑","黑体",sans-serif,"Times New Roman", Times, serif; }
+.clearfix:after{content:".";display:block;height:0; clear:both; visibility:hidden;}
+.w100{width:99%;}
+.footer{ position: absolute; bottom: 0px; width: 100%;}
+
+.imglist{overflow: scroll; height: 300px;}
+.imglist ul li{list-style-type: none; float: left; width: 103px; height: 93px; border:1px solid #e1e1e1; margin: 3px;}
+.imglist ul li a{display: block;width: 103px; height: 93px;}
+.imglist ul{margin: 0px; padding: 0px;}
+.imglist  .icon{ margin: 10px auto; width: 70px;}
+.imglist .text{ margin: 0px auto; width: 90%; text-align: center;}
+</style>
+</head>
+<body>
+    <div class="contentArea w100">
+        <form id="theform" name="theform" action="" method="POST">
+        <div class="imglist clearfix w100" id="imglist">
+                <ul class="clearfix">
+                    <list name="list" item="v">
+                    <li>
+                        <?php if(strstr($brand,$v['id'].',')): ?>
+                        <a check="1" style='border: 1px solid red;' itemid="{$v.id}" onclick="selectBrand(this)" href="javascript:void(0)" >
+                        <div id="formdata"><input type="hidden" name="brand[]" value="{$v.id}"></div>
+                        <?php else: ?>
+                        <a check="0" itemid="{$v.id}" onclick="selectBrand(this)" href="javascript:void(0)" >
+                        <?php endif; ?>
+                        <div class="icon"><img width="65" height="49" border="0" src="<?php echo IMAGE_URL; ?>{$v.logo}"></div>
+                        <div class="text">{$v.name}</div>
+                        </a>
+                    </li>
+                    </list>
+                </ul>
+        </div>
+        <div class="footer">
+            <div style=" border-top: 1px solid #e1e1e1;" ></div>
+            <div style="margin: 10px; float: right;"> <input type="hidden" name="_submit_" value="1" /><input type="button" onclick="insert_()" value="确定" /> </div>
+        </div>
+        </form>
+    </div>
+    <script>
+        function selectBrand(e){
+             if(e.getAttribute("check")==0){
+                e.setAttribute("check",1); //根据 这个属性判断 图片 是否被 选中添加 到父窗口
+                e.style.border = "1px solid #f00";
+                var d = document.createElement("div");
+                d.id='formdata';
+                var i = document.createElement("input");
+                i.setAttribute("type",'hidden');
+                i.setAttribute("name",'brand[]');
+                i.setAttribute("value",e.getAttribute('itemid'));
+                d.appendChild(i);
+                $(e).append(d);
+            }else{
+                e.setAttribute("check",0);
+                e.style.border = "0px solid #f00";
+                $(e).find("#formdata").remove();
+            }
+        }
+        
+        function insert_(){
+            var bool_ = false;
+            var imglist = document.getElementById("imglist").getElementsByTagName("a");
+            for(var i=0; i<imglist.length; i++){
+                if(imglist[i].getAttribute("check")==1){
+                    bool_ = true;
+                }
+            }
+            
+            if(!bool_){
+                return ;
+            }else{
+                $.ajax({
+                    url:"?c=goods&a=associatedBrand",
+                    type:"post",
+                    data:$("#theform").serialize(),
+                    success:function(d){
+                        if(d==1){
+                            if(typeof(window.parent.success) == 'function'){
+                                window.parent.success();
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

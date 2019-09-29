@@ -1,0 +1,58 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+
+    <div class="goodslist" >
+        <ul>
+            <list name="goodslist" item="v" >
+            <li>
+                <div class="left left2" >
+                    <div class="left1" >&nbsp;&nbsp;</div>
+                    <a href="<?php echo createLink('index/item',array('id'=>$v['id']) ); ?>" ><img src="<?php echo IMAGE_URL; ?>{$v.thumb}" /></a>
+                </div>
+                <div class="right right2" >
+                    <a class="a1" href="<?php echo createLink('index/item',array('id'=>$v['id']) ); ?>"><div class="title" >{$v.goodsname}</div></a>
+                    <a href="<?php echo createLink('index/item',array('id'=>$v['id']) ); ?>"><div class="title2" >{$v.attributeStr}</div></a>
+                    <div class="price" >&yen;&nbsp;{$v.shopPrice}</div>
+                </div>
+                <button onclick="goodsfun.shoppingCart('{$v.id}', 1);" class="fr">加入购物车</button>
+            </li>
+            </list>
+        </ul>
+    </div>
+
+</div>
+<div class="hg10 w100" ></div>
+<div class='pageinfo' >{$pageinfo}</div>
+<div class="item_buynow" >
+    <div class="cart" ><a href="<?php echo createLink('goods/shoppingcartList'); ?>" ><div  class="iconfont"><i>0</i>&#xe698;</div></a></div>
+    <div class="add" ><a href="<?php echo createLink('goods/shoppingcartList'); ?>" >前往购物车</a></div>
+</div>
+<script>
+    publicMethod = {};
+    $(function() {
+        publicMethod.init();
+        //--购物车总数
+        $.get('<?php echo createLink("goods/shopcartTotal"); ?>', function(d) {
+            $(".item_buynow .cart div i").text(d.total);
+        },'json');
+    });
+    //--分页加载数据
+    publicMethod.nextpage = function (p,s){
+        $.get('<root />c=goods&a=search',{'keywords':'{$_GET.keywords}'},function(d){ 
+            $.each(d.data,function(n,item){
+                //--console.log(item); 
+                var html = '<li> <div class="left left2"> <div class="left1">&nbsp;&nbsp;</div> <a href=" <?php echo createLink('index/item'); ?>id/'+item.id+'"><img src="<?php echo IMAGE_URL; ?>'+item.thumb+'"></a> </div> <div class="right right2" style="width: 187px;"> <a class="a1" href="<?php echo createLink('index/item'); ?>id/'+item.id+'"><div class="title">'+item.goodsname+'</div></a> <a href="<?php echo createLink('index/item'); ?>id/'+item.id+'"><div class="title2">'+item.attributeStr+'</div></a> <div class="price">¥&nbsp;'+item.shopPrice+'</div> </div> <button onclick="goodsfun.shoppingCart(\''+item.id+'\', 1);" class="fr">加入购物车</button> </li>'; 
+                $(".goodslist ul").append(html); 
+            });  
+            $(".pageinfo").html(d.page);
+        },'json');
+    };
+    //--初始化的函数 
+    publicMethod.init = function() {
+        var w1 = parseInt($(".goodslist").width());
+        var w2 = parseInt($(".goodslist .left").width());
+        $(".goodslist .right").css({'width': w1 - w2 - 30});
+    };
+
+</script>

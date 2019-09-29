@@ -1,0 +1,271 @@
+<layout name="layout/layout1" />
+<!-- 评论的楼层样式，最多盖15楼 -->
+<style type="text/css" >
+<?php for($i=1; $i<16;$i++): ?>
+#commentList .tableswitch_area .list .row div.area11 p.lc<?php echo $i ?>{width:<?php echo 100-$i; ?>%;}    
+<?php endfor; ?>
+</style>
+<div class="h10 w100" ></div>
+<div class="w1 clearfix" >
+    <div class="artcontent_area1 fr clearfix" >
+        <div class="area1 w100" >
+            <div class="area3" >
+                <p>排序：<a class="cur"  href="javascript:void(0);" >最新</a><a href="javascript:void(0);" >人气最高</a><a href="javascript:void(0);" >评论最多</a></p>
+                <p>时间：<a class="cur"  href="javascript:void(0);" >不限</a><a href="javascript:void(0);" >三天内</a><a href="javascript:void(0);" >一周</a><a href="javascript:void(0);" >一个月内</a><a href="javascript:void(0);" >一年内</a></p>
+            </div>
+            <div class="h10 w100" ></div>
+            <div class="area5" >
+                <h2>{$info.title}</h2>
+                <div class="a1" >
+                    栏目：<a href='javascript:void(0)' >{$columName}</a>
+                    时间：<a href='javascript:void(0)' >{$info.addtime}</a>
+                    来源：<a href='javascript:void(0)' >{$info.source}</a>
+                    人气：<a href='javascript:void(0)' >{$info.hits}</a>
+                    <a class="fr" href='javascript:void(0)' >评论：{$info.comments}</a>
+                </div>
+            </div>
+            <div class="area6" >{$info.content}</div>
+        </div>
+        <div class="h10 w100" ></div>
+        <div class="area2" ></div>
+        <div class="h10 w100" ></div><div class="h10 w100" ></div>
+        <div class="area4 clearfix" >
+                <font>分享到：</font>
+                <div class="bdsharebuttonbox" data-tag="share_1">
+                        <a class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+                        <a class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+                        <!--<a class="bds_baidu" data-cmd="baidu"></a>-->
+                        <a class="bds_tsina" data-cmd="tsina">新浪微博</a>
+                        <a class="bds_renren" data-cmd="renren">人人网</a>
+                        <a class="bds_tqq" data-cmd="tqq">腾讯微博</a>
+                        <a class="bds_more" data-cmd="more">更多</a>
+                        <a class="bds_count" data-cmd="count"></a>
+                </div>
+                <script>
+                        window._bd_share_config = {
+                                common : { bdText : document.getElementsByTagName('title').item(0).innerHTML,bdDesc : document.getElementsByTagName('title').item(0).innerHTML,},
+                                share : [{"bdSize" : 16}]
+                        };
+                        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+                </script>
+        </div>
+        <div class="h10 w100" ></div><div class="h10 w100" ></div>
+        <div class="h10 w100" ></div>
+        <div class="area7 clearfix" >
+            <dl>
+                <dt>相关阅读：</dt>
+                <list name="o1" item="v" ><dd><a href="<root />{u m/$v[mark]/id_$v[id]}" >{$v.title}</a></dd></list>
+                <list name="o2" item="v" ><dd><a href="<root />{u m/$v[mark]/id_$v[id]}" >{$v.title}</a></dd></list>
+            </dl>
+        </div>
+        <div class="h10 w100" ></div> <div class="h10 w100" ></div>
+    </div>
+
+<div class="artlist_area3 clearfix" >
+        <div class="area11 w100 br1">
+            <h3>栏目分类</h3>
+            <?php if( isset($sonColumn11) && count($sonColumn11)!=0 ): foreach($sonColumn11 as $k2=>$v2): ?>
+            <dl> 
+                <dt><a <?php if( searchColumnSpeStyle($v2['id']) ): ?>class='cur'<?php endif; ?> href="<root />{fun replaceColumnType($v2['id']) }/{$v2.mark}">{$v2.name}</a></dt> 
+                    <!--查找是不是有子栏目-->
+                    <?php if( isset($v2['son']) && count($v2['son'])!=0 ): foreach($v2['son'] as $v3): ?>
+                    <dd><a <?php if( searchColumnSpeStyle($v3['id']) ): ?>class='cur'<?php endif; ?> href="<root />{fun replaceColumnType($v3['id']) }/{$v3.mark}">{$v3.name}</a></dd>  
+                    <?php endforeach; endif; ?>
+            </dl>  
+            <?php endforeach; endif; ?>
+        </div>
+        
+        <div class="h10" ></div>
+        <div class="br1 clearfix " >
+            <h3 >更多精彩内容</h3>
+            <ul>
+                <artlist mark="news" sort="hits desc" num="5" >
+                <li>
+                    <div class="area1 fl" >
+                        <a href="<root />{u m/$v[mark]/id_$v[id]}" >
+                            <if con="empty($v['picname'])">
+                                <div style='background-color: <pr />' class='nothumb' ><div class="title" >{fun ysubstr($v[title],8)}</div></div>
+                            <else />
+                                <img border="0" src="<root />image/{$v.picname}" />
+                            </if>
+                        </a>
+                    </div>
+                    <div class="area2 fr" ><p><a href="<root />{u m/$v[mark]/id_$v[id]}" >{fun ysubstr($v[title],18)}</a></p></div>
+                    <div class="area3 fr" ><p>人气：<font>{$v.hits}</font></p></div>
+                </li>
+                </artlist>
+            </ul>
+            <div class="h10" ></div>
+        </div>
+    </div>
+    
+    <!--如果没有关闭评论--> 
+    <?php if($info['arcrank']!='oc'){ ?>
+    <div class="artcontent_area3 fr clearfix" >
+        <div class="a4 w100" >文明上网 ， 理性发言， 两小时内只能发一条评论。</div>
+        <div class="h10 w100" ></div>
+        <div class="a5 w8">评论发表得太频繁了，过两个小时再来吧!</div>
+        <div class="comment w8" >
+            <form action="post" id="commentForm22" name="commentForm22" >
+                 <!--onpaste="return false"-->
+            <textarea onkeydown="publicMethod.checktext(this)" onchange="publicMethod.checktext(this)" onblur="publicMethod.commentFilt()" name="commentContent" id="commentContent" maxlength="500" placeholder="我有话说……" ></textarea>
+            <input type="hidden" name="_submit_" value="1" />
+            </form>
+        </div>
+        <div class="a3 w8 clearfix" >
+            <span class="cr" >提示：* 为自动替换掉的违规字符</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            还可以输入 <font id="commentNum" >500</font> 个字&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             <a class="bt1" href="javascript:publicMethod.wcomment()" >发表评论</a>
+        </div>
+        <div class="h11 w100" ></div><div class="h11 w100" ></div>
+        <div class="a2 w100" ><a href="javascript:void(0)" >全部评论({$info.comments})</a></div>
+        <!--<div class="h11 w100" ></div>-->
+        <!--<div class="nocomment w8" >还没有评论，赶紧去抢沙发吧。。</div>-->
+        
+        <div class="tableswitch clearfix"  id="commentList" >
+                <div class="tableswitch_area dis clearfix" >
+                    <div class="list padding10 clearfix" >
+                        <div class="row" ><h3 class="c1" >还没有评价，快来抢沙发吧！</h3></div>
+<!--                        <div class="row clearfix" >
+                            <div class="area4 c1">
+                                <p><img src="<root />static/tmp1.jpg" /></p>
+                                <p>
+                                    <span class="cf60" >平民百姓</span>
+                                </p>
+                            </div>
+                            <div class="area11" >
+                                <p> <span class="c2 fb" >我是流氓我怕谁</span> &nbsp;&nbsp;<span class="c1" >2015-06-24 09:52</span></p>
+                                
+                                <?php for($i=1; $i<7; $i++): ?>
+                                <p class="c1 lc<?php echo $i; ?>">
+                                    <?php echo $i; ?>楼&nbsp;&nbsp;我是流氓我怕谁&nbsp;&nbsp;2015-06-24 09:52 <br /><br />
+                                    <span class="c2" >这个是测试评论用的，俺们还是来盖楼的，你能把我咋的啊 。。</span>
+                                </p>
+                                <?php endfor; ?>
+                                
+                                <p>这个是测试评论用的 <br /><br /><a href="javascript:void(0)" >回复</a></p>
+                            </div>
+                        </div>-->
+                        
+                    </div>
+                    <div id="page" >{$pageinfo}</div>
+                    <div class="h10 w100" ></div>
+                </div>
+            </div>
+        
+    </div>
+    <?php } ?>
+    
+    <div class="h10 w100 fl" ></div>
+    <div class="h10 w100 fl" ></div>
+</div>
+<script>
+    $(function(){
+        publicMethod.loadComment();
+    });
+    publicMethod = {};
+    //--检测输入的字符是否超过字数
+    publicMethod.checktext = function(e){
+        var num = 500;
+        var count_ = e.value.length;
+        if(e.value.length>num){
+            document.getElementById('commentNum').innerHTML = 0;
+            e.value = e.value.substring(0, num);
+        }else{
+            document.getElementById('commentNum').innerHTML = num-count_;
+        }
+    };
+    //--写评价
+    publicMethod.wcomment = function(){
+        $("#commentForm22").ajaxSubmit({
+            url:"<root />user/wcommentArt/cid_{$info.cid}_id_{$info.id}",
+            type:'post',
+            beforeSend:function(){
+                var rule = new RegExp(/^(.|\r|\n){1,500}$/);
+                var content = $('#commentContent').attr('value');
+                if( !rule.test(content) ){
+                    confirm_('评论内容为1 - 500个字符',null,420,120);
+                    return false;
+                }
+            },
+            success:function(d){
+                if(d==0){ deletemsg = kmsg('/u/login/type_m','你还没有登录！',2,420,380); return false; }else if(d==1){
+                   confirm_('<span class="cg" >评论发表成功！</span><br /><br />点击确定重新加载页面。',function(){ window.location.reload(); },420,120);
+                }else if(d==2){
+                    confirm_('评论发得太频繁了，过两个小时再来吧！',null,420,120);
+                    //-- $(".artcontent_area3 .a5").css({'display':'block'});
+                }else{
+                    confirm_('评论发表失败，过会再来吧！',null,420,120);
+                }
+            }
+        });
+    };
+    //--获取过滤评价内容中的非法字符
+    publicMethod.commentFilt = function(){
+        var content = $('#commentContent').attr('value');
+        $.get("<root />user/commentFilt",{data:content},function(d){
+            if(d!=0){
+                $('#commentContent').attr('value',d);
+            }
+        } );
+    };
+    //--加载评价
+    publicMethod.loadComment = function(page_){
+        var page = page_ || 1;
+        $.getJSON("<root />article/loadComment",{cid:{$info.cid},id:{$info.id},p:page},function(d){
+            if(d.data.length == 0) return false;
+            var obj = $("#commentList .tableswitch_area .list");
+            obj.html("");
+            $("#page").html(d.page);
+            $.each(d.data,function(i,item){
+                //--评论的楼层数据  start
+                var floor = '';
+                if(item.floor.length>0){
+                    $.each(item.floor,function(i2,item2){
+                        i2 = ++i2;
+                        floor += '<p class="c1 lc'+i2+'">'+i2+'楼&nbsp;&nbsp;'+item2.nickname+'&nbsp;&nbsp;'+item2.ctime+' <br /><br /><span class="c2" >'+item2.content+'</span></p>';
+                    });
+                }
+                //--评论的楼层数据  end
+                obj.append('<div class="row clearfix" > <div class="area4 c1"> <p><img src="<root />avatar/'+item.avatar+'" /></p> <p> <span class="cf60" >平民百姓</span> </p> </div> <div class="area11"> <p> <span class="c2 fb" >'+item.nickname+'</span> &nbsp;&nbsp;<span class="c1" >'+item.ctime+'</span></p> '+floor+'<p>'+item.content+'<br /><br /><a href="javascript:publicMethod.replyComment('+item.id+')" >回复</a> </p> </div>  </div>');
+            });
+        });
+    };
+    //--加载评论翻页回调函数
+    publicMethod.loadCommentPage = function(p,str){
+       publicMethod.loadComment(p);
+    };
+    //--回复评论
+    publicMethod.replyComment = function(id){
+        var url = "<root />user/replyComment/cid_{$info.cid}_artid_{$info.id}_id_"+id;
+        $.get(url,function(d){
+            if(d==0){ deletemsg = kmsg('/u/login/type_m','你还没有登录！',2,410,360); return false; }
+            else if(d==2){
+                confirm_('回复评论发得太频繁了，过一个小时再来吧！',null,420,120); return false; 
+            }
+            var msg = kmsg(d,'回复评论',1,590,180,null,1,function(){
+                $("#replyCommentform1").ajaxSubmit({
+                    url:url,
+                    type:'post',
+                    beforeSend:function(){
+                        var rule = new RegExp(/^(.|\r|\n){1,500}$/);
+                        var content = $('#ReplyCommentContent').attr('value');
+                        if( !rule.test(content) ){
+                            kmsg('回复内容为1 - 500个字符','消息',1,320,80,3,1,null);
+                            return false;
+                        }
+                    },
+                    success:function(d2){
+                        if(d2==1){
+                            confirm_('<span class="cg" >回复成功！</span><br /><br />点击确定重新加载页面。',function(){ window.location.reload(); },420,120);
+                        }
+                    }
+                });
+            });
+        });
+    };
+    //--登录后的回调函数
+    function loginMinCallback(){
+        window.location.reload();
+    }
+</script>

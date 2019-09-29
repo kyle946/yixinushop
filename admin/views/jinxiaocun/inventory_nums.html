@@ -1,0 +1,128 @@
+<layout name="layout/layout1" />
+<style>
+#goodslisttable tr th{text-align: center;}
+#goodslisttable tr td{border-bottom: 0px dashed #ECE7E7; text-align: center; padding: 14px 5px;}
+</style>
+<div class="content_title w100 clearfix">
+    <include file='jinxiaocun/menu1' />
+    <div class="search" >
+        <!--<span>批次：</span>-->
+        <select>
+            <option>选择仓库</option>
+        </select>
+        <!--<span>名称：</span>-->
+        <input type="text" class="input2" placeholder="名称或编号" name="searchVal" value="{$_GET.searchVal}" onkeyup="keydown(function(){ privateMethod.search(); })" />
+        &nbsp;&nbsp;
+        <input type="button" class="bt1" onclick="privateMethod.search()" value="搜索" />
+    </div>
+</div>
+<div class="w100">
+    <table id='goodslisttable' class="content_list w100">
+        <tr>
+            <th>订单ID</th>
+            <th>商品名称</th>
+            <th>编号</th>
+            <th>数量</th>
+<!--            <th>进价</th>
+            <th>总价</th>-->
+            <th>总库存</th>
+            <th>仓库</th>
+            <th>入库时间</th>
+            <!--<th>总金额</th>-->
+            <th>操作</th>
+        </tr>
+        
+        <?php $temp_id = null; $color = printColor(); ?>
+        <list name="list" item="v">
+        <?php if($temp_id==$v['orderid']){ ?>
+            <tr style='color: {$color};'>
+                <td><font class='c2'>{$v.orderid}</font></td>
+        <?php }else{ ?>
+            <tr style='border-top: 1px solid #cfcfcf;' >
+                <td>{$v.orderid}</td>
+        <?php } ?>
+                <td> {$v.goods_name}</td>
+                <td>{$v.goods_sn}</td>
+                <td>{$v.nums}</td>
+<!--                <td>{$v.purch_price}</td>
+                <td>{$v.price_total}</td>-->
+                <td>{$v.numbers}</td>
+                
+        <?php if($temp_id==$v['orderid']){ ?>
+                <td><font class='c2'>{$v.warehouse_name}</font></td>
+                <td><font class='c2'>{$v.storage_time}</font></td>
+                <!--<td><font class='c2'>{$v.total}</font></td>-->
+                <td>
+                    <input type="hidden" name="warehouse_id" value="{$v.warehouse_id}" />
+                    <input type="hidden" name="warehouse_name" value="{$v.warehouse_name}" />
+                    <input type="hidden" name="goods_id" value="{$v.goods_id}" />
+                    <input type="hidden" name="goods_name" value="{$v.goods_name}" />
+                    <a href="#" onclick="privateMethod.baosun_show_win(this)">报损</a>&nbsp;&nbsp;
+                    <a href="<?php echo __ROOT__; ?>?jinxiaocun=k&type=inventory_records&goods_id={$v.goods_id}" title='出入库记录' >记录</a>&nbsp;&nbsp;　　&nbsp;
+                </td>
+        <?php }else{ ?>
+                <td>{$v.warehouse_name}</td>
+                <td>{$v.storage_time}</td>
+                <!--<td>{$v.total}</td>-->
+                <td>
+                    <input type="hidden" name="warehouse_id" value="{$v.warehouse_id}" />
+                    <input type="hidden" name="warehouse_name" value="{$v.warehouse_name}" />
+                    <input type="hidden" name="goods_id" value="{$v.goods_id}" />
+                    <input type="hidden" name="goods_name" value="{$v.goods_name}" />
+                    <a href="#" onclick="privateMethod.baosun_show_win(this)">报损</a>&nbsp;&nbsp;
+                    <a href="<?php echo __ROOT__; ?>?jinxiaocun=k&type=inventory_records&goods_id={$v.goods_id}" title='出入库记录' >记录</a>&nbsp;&nbsp;
+                    <a href="<?php echo __ROOT__; ?>?jinxiaocun=c&type=order_add&order_id={$v.orderid}">查看</a>
+                </td>
+        <?php } ?>
+            </tr>
+            <?php $temp_id = $v['orderid']; ?>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+
+<script>
+    $(function(){
+        $("input[name='searchVal']").focus();
+    });
+    privateMethod = {};
+    privateMethod.search = function(){
+        var data = '';
+        var searchVal = $("input[name='searchVal']").attr('value');
+        if(searchVal!=''){
+            data += '&searchVal='+searchVal;
+        }
+        var url = '<root />?jinxiaocun=k' + data;
+        window.location.replace(url);
+    };
+    
+    var option = new Array();
+    option[0] = {name: 'nums', type: 'regexp', msg: '填写一个小于总库存的数值 ', rule: /^[0-9]{1,7}$/, required: 1};
+    option[1] = {name: 'comments', type: 'regexp', msg: '1到120个字符，不能包括： < > \ = / . ? \'  | & ', rule: /^[^<>\\=/.?+'|&]{1,130}$/, required: 1};
+    ch = new formCheck(option);
+    
+    //--报损显示窗口
+    privateMethod.baosun_show_win = function(e){
+        var w_id = $(e).parent().find("input[name='warehouse_id']").val();
+        var w_name = $(e).parent().find("input[name='warehouse_name']").val();
+        var goods_id = $(e).parent().find("input[name='goods_id']").val();
+        var goods_name = $(e).parent().find("input[name='goods_name']").val();
+        $.get('<root />?c=jinxiaocun&a=baosun_show_win',{w_id:w_id,w_name:w_name,goods_id:goods_id,goods_name:goods_name},function(d){
+            var msg = kmsg(d,'报损 - 记录商品损耗',1,550,480,null,1,function(){
+                //--检测输入的值是否合格
+                var res = ch.start();
+                if (res == 1) {
+                    var url = $("#baosun_form1").attr('action');
+                    var data = $("#baosun_form1").serialize();
+                    $.post(url,data,function(d){
+                        if(d.status==1){
+                            window.location.reload();
+                        }else{
+                            confirm_('<p>&nbsp;&nbsp;&nbsp;&nbsp;'+d.msg+'</p>');
+                        }
+                    },'json');
+                }
+            });
+        });
+    };
+</script>

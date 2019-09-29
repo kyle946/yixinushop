@@ -1,0 +1,71 @@
+<layout name="layout/layout_null" />
+<div class="w1 clearfix" > 
+    <div class="h10 w100" ></div>
+    <div class="login_area1 clearfix" >
+        <div class="area1 fl" >
+            <div style="position: absolute; font-size: 22px; color:#999; top: 140px; left: 160px;" >{$webtitle_} {$webconfig.webtitle} / 用户登录界面</div>
+        </div>
+        <div class="area2 fr clearfix" >
+            <div class="area3 br2" >
+                <div class="head" >用户登录</div>
+                <div class="h10 w100" ></div>
+                <div class="main clearfix" >
+                    <form action="" method="post" name="form1" id="form1" >
+                        <div><input class="i1" type="text" name="username" value="" /></div>
+                        <div><input class="i1" type="password" name="pwd" value="" /></div>
+                    <div class="clearfix">
+                        <input class="i2 fl" name="verifyStr" onkeypress="keydown(function(){priveteMethod.submit1();})" type="text" />
+                        <a class="a1 fl" href="javascript:priveteMethod.getverify();" ><img border="0" id="yzm" class="yzm" src="<root />u/verifyCode" /></a>
+                        <a href="javascript:priveteMethod.getverify();" class="a2 fl">看不清</a>
+                    </div>
+                    <input type="hidden" name="_submit_" value="1" />
+                    <div><input class="i3" type="button" onclick="priveteMethod.submit1()" value="登             录" /></div>
+                    <div class="d1" >
+                        <a href="<root />u/register" >注册</a>
+                        <a href="<?php echo createLink('u/retrievepassword'); ?>" >忘记密码</a>
+                    </div>
+                    <div class="d2" >
+                        <p>你可以使用</p>
+                        <div class="d3" >
+                            <a href="javascript:void(0)" >QQ登录</a>
+                            <a href="javascript:void(0)" >微信登录</a>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="h10 w100" ></div>
+            </div>
+        </div>
+    </div>
+    <div class="h10 w100" ></div>
+    <div class="h10 w100" ></div>
+</div>
+
+<script>
+    priveteMethod = {};
+    priveteMethod.getverify = function (){
+        var imgyzm = document.getElementById('yzm');
+        imgyzm.setAttribute('src',"<root />u/verifyCode/id_"+Math.random());
+    };
+    priveteMethod.submit1 = function (){
+        $.ajax({
+            url:'<root />u/login',
+            data:$("#form1").serialize(),
+            type:'POST',
+            cache:false,
+            dataType:'json',
+            success:function(data){
+                $("input[name='_verifyKey_']").attr('value',data.verifyKey);
+                priveteMethod.getverify();
+                if(data.status!='ok'){
+                    confirm_(data.msg,function(){
+                        window.location.reload();
+                    });
+                }else{
+                    window.location.href = "<root />user";
+                }
+            }
+        });
+    };
+</script>
+

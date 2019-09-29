@@ -1,0 +1,79 @@
+<layout name="layout/layout2" />
+<div class="w100 clearfix">
+    <div class="w100 h10"></div>
+    <include file="index/menu" />
+    
+    <div class="w100 h10 fleft" >&nbsp;</div>
+    <div class="w100 h10 fleft" >&nbsp;</div>
+    <div class="layout2_area3 clearfix" >
+        <include file="index/right" />
+
+        <div class="layout2_area21" >
+            <form method="post" action='' >
+            <table class="w100 content_list">
+                <tr>
+                    <th style="text-align: right;background-color: #0ae; color:#fff;"  width="200" >支付方式配置：支付宝</th>
+                    <th style='background-color: #0ae;'></th>
+                </tr>
+                <tr>
+                    <td style="text-align: right;" >支付宝帐户：</td>
+                    <td style="color:#777;"><input type="text" class="input11" name='alipay_account' value='{$a.alipay_account}' /></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;" >交易安全校验码：</td>
+                    <td style="color:#777;"><input type="text" class="input11" name='alipay_key' value='{$a.alipay_key}' /></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;" >合作者身份ID：</td>
+                    <td style="color:#777;"><input type="text" class="input11" name='alipay_partner' value='{$a.alipay_partner}' /></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;" >秘钥：</td>
+                    <td style="color:#777;"><textarea class='textarea11' name='alipay_private_key' >{$a.alipay_private_key}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;" >选择接口类型：</td>
+                    <td style="color:#777;">
+                        <label><input type="radio" value="1" <?php if(@$a['alipay_pay_method']==1){ ?>checked='checked'<?php } ?> name="alipay_pay_method" />即时到帐交易</label>
+                        <label><input type="radio" value="2" <?php if(@$a['alipay_pay_method']==2){ ?>checked='checked'<?php } ?> name="alipay_pay_method" />担保交易</label>
+                    </td>
+                </tr>
+            </table>
+            <div class="w100 h10"></div><div class="w100 h10"></div><div class="w100 h10"></div>
+            <table class="w100 content_list">
+                <tr>
+                    <th style="text-align: right;background-color: #44b549; color:#fff;"  width="200" >支付方式配置：微信支付</th>
+                    <th style='background-color: #44b549;'></th>
+                </tr>
+                <tr>
+                    <td style="text-align: right;" >绑定支付的APPID：</td>
+                    <td style="color:#777;"><input type="text" class="input11" name='weixin_appid' value='{$w.weixin_appid}' /></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;" >商户号：</td>
+                    <td style="color:#777;"><input type="text" class="input11" name='weixin_mchid' value='{$w.weixin_mchid}' /></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;" >商户支付密钥：</td>
+                    <td style="color:#777;"><input type="text" class="input11" name='weixin_key' value='{$w.weixin_key}' /></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;" >公众帐号secert：</td>
+                    <td style="color:#777;"><input type="text" class="input11" name='weixin_secret' value='{$w.weixin_secret}' /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" class="bt1" name="_submit_" value="保存" />
+                    </td>
+                </tr>
+            </table>
+            </form>
+        </div>
+        
+    </div>
+        <div class="w100 h10 fleft" >&nbsp;</div>
+        <div class="w100 h10 fleft" >&nbsp;</div>
+        <div class="w100 h10 fleft" >&nbsp;</div>
+        <div class="w100 h10 fleft" >&nbsp;</div>
+</div>

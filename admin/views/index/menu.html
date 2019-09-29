@@ -1,0 +1,14 @@
+<div class="layout2_area4" >
+    <a href='<root />?goods=edit'  ><img src="<?php echo __ROOT__; ?>static/icon/tianjia.png" /><span>添加商品</span></a>
+    <a href='<root />?jinxiaocun=c&type=order_add' ><img src="<?php echo __ROOT__; ?>static/icon/a2.png" /><span>采购入库</span></a>
+    <a href='<root />?jinxiaocun=k' ><img src="<?php echo __ROOT__; ?>static/icon/kucun.png" /><span>库存查看</span></a>
+    <a href='<root />?goods=list&numbers=1' ><img src="<?php echo __ROOT__; ?>static/icon/jinggao.png" /><span>库存不足</span></a>
+    <a href='<root />?goods=imgmanage' ><img src="<?php echo __ROOT__; ?>static/icon/tupianguanli.png" /><span>图片管理</span></a>
+    <a href='<root />?order=alist' ><img src="<?php echo __ROOT__; ?>static/icon/dingdan.png" /><span>订单(已支付)</span></a>
+
+    <!--只有商户角色才有这两个配置-->
+    <?php if($usermark=='business'){ ?>
+    <a href='<root />?c=index&a=business_base_info'  ><img src="<?php echo __ROOT__; ?>static/icon/a7.png" /><span style="color:#71d800;">基本信息</span></a>
+    <a href='<root />?c=index&a=business_config'  ><img src="<?php echo __ROOT__; ?>static/icon/a7.png" /><span style="color:#f60;">收银台配置</span></a>
+    <?php } ?>
+</div>

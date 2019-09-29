@@ -1,0 +1,42 @@
+<?php if(!empty($msg)): ?>
+<h3 class="c1" >{$msg}</h3>
+<?php else: ?>
+
+<div class="order_area1" >
+<form name="useCouponform1" id="useCouponform1" action="/goods/useCouponHTML" method="POST">
+<table class="table2" border="0" cellspacing="5">
+    <thead>
+        <tr>
+            <th>选择</th>
+            <th>面额</th>
+            <th>需满金额</th>
+            <th>状态</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input type="radio" name="selectcoupon" checked="checked" value="0" /></td>
+            <td colspan="3" style="color:#f00;" >不使用优惠券</td>
+        </tr>
+        <list name="couponList" item="v" >
+                <tr>
+                    <td><input type="radio" name="selectcoupon" value="{$v.id}" /></td>
+                    <td>{$v.money}</td>
+                    <td>{$v.amount}</td>
+                    <td>
+                        <switch name="$v['status']" >
+                        <case value="1"><font class='f1' >可用</font></case>
+                        <case value="2"><font class='f2' >禁用</font></case>
+                        <case value="3"><font class='f2' >已过期</font></case>
+                        <case value="4"><font class='f2' >已使用</font></case>
+                        </switch>
+                    </td>
+                </tr>
+        </list>
+    </tbody>
+</table>
+<input type="hidden" name="_submit_" value="1" />
+</form>
+</div>
+
+<?php endif; ?>

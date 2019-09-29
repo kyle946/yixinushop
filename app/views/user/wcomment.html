@@ -1,0 +1,26 @@
+<?php if( !empty($msg) ): ?>
+<h3 class="c1" >{$msg}</h3>
+<?php else: ?>
+<form name="commentForm1" id="commentForm1" method="POST" enctype="multipart/form-data" >
+    <div class="w100 clearfix f12" >
+        <div class=" clearfix " >
+            <div class="fl" style="line-height: 28px;" >内容：</div>
+            <div class="fl" style='width:90%;' >
+                <textarea style='width:100%;height:100px;' id="commentContent" onblur="publicMethod.commentFilt()" name="commentContent" ></textarea>
+            </div>
+        </div>
+        <div class="w100 f12 cr tr" ><span  id="commentContenttips" ></span>　　　提示：* 为自动替换掉的违规字符。</div>
+        <div class="h10 w100 " ></div>
+        <div class=" clearfix" >
+            <div class="fl" style="line-height: 28px;" >等级：</div><div class="fl" ><select name="commentlevel" ><option value="1" >好评</option><option value="2" >中评</option><option value="3" >差评</option></select></div>
+        </div>
+        <div class="h10 w100 " ></div>
+            <div class="fl" style="line-height: 28px;" >附图：</div><div class="fl" > <input type="file" name="commentimage1" value="" /> </div>
+        </div>
+        <div class="h10 w100 " ></div>
+        <div class="f12 clearfix" >
+            <div class="fl" style="line-height: 28px;" >　　　</div><div class="fl" > <input type="checkbox" name="commentpromise" value="1" />我保证 评价内容属实　　　<span class="f12 cr" id="commentpromisetips" ></span></div>
+        </div>
+        <input type="hidden" name="_submit_" value="1" />
+</form>
+<?php endif; ?>

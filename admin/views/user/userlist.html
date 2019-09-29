@@ -1,0 +1,69 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?user=list"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?user=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    
+    <div class="search" >
+        <span>用户名/手机：</span>
+        <input type="text" class="input2" name="username" value="{$_GET.username}" onkeyup="keydown(function(){ privateMethod.search(); })" />
+        &nbsp;&nbsp;
+        <input type="button" class="bt1" onclick="privateMethod.search()" value="搜索" />
+    </div>
+</div>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>手机</th>
+            <th>等级</th>
+            <th>昵称</th>
+            <!--<th>余额</th>-->
+            <!--<th>冻结余额</th>-->
+            <th>注册时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td>{$v.id}</td>
+                <td><a href="<root />?user=list&type=userinfo&id={$v['id']}" >{$v.username}</a></td>
+                <td>{$v.mobile}</td>
+                <td>{$v.rankname} [{$v.rankalias}]</td>
+                <td>{$v.nickname}</td>
+                <!--<td>{$v.money}</td>-->
+                <!--<td>{$v.frozenMoney}</td>-->
+                <td>{$v.regTime}</td>
+                <td>
+                    <?php if($v['status']==1): ?>
+                    <font class='cg'>可用</font>
+                    <?php else: ?>
+                    <font class='cr'>禁用</font>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <a href="<root />?user=list&type=userinfo&id={$v['id']}">查看</a>&nbsp;&nbsp;
+                    <a href="<?php echo __ROOT__; ?>?user=list&type=edit&id={$v['id']}">修改</a>&nbsp;&nbsp;
+                    <!--<a href="javascript:confirm_('你确定要删除用户 [{$v['username']}] 吗？','<?php echo __ROOT__.'?user=delete&id='.$v['id']; ?>')" >删除</a>-->
+                </td>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+
+<script>
+        $(function(){
+            $("input[name='username']").focus();
+        });
+    privateMethod = {};
+    privateMethod.search = function(){
+        var data = '';
+        var username = $("input[name='username']").attr('value');
+        if(username!=''){
+            data += '&username='+username;
+        }
+        var url = '<root />?user=list' + data;
+        window.location.replace(url);
+    }
+</script>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+<title><?php if( empty($webtitle_) ){  echo isset($webconfig['webtitle'])?$webconfig['webtitle']:'异新优商城内容系统'; }else{ echo $webtitle_; } ?></title>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="Keywords" content="{$webconfig.keywords}" />
+<meta name="Description" content="{$webconfig.description}" />
+<script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+<script src="<root />static/jquery.form.js" type="text/javascript"></script>
+<script>imageUrl = '<?php echo IMAGE_URL; ?>'; rootPath = '<?php echo __ROOT__; ?>';</script>
+<script src="<?php echo __ROOT__; ?>static/main.js" type="text/javascript"></script>
+<link href="<?php echo __ROOT__; ?>static/style.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo __ROOT__; ?>static/v3style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <include file='layout/common' />
+    <div class='layout1_area3 w100' >
+        <div class="area1 w1 clearfix">
+            <ul class='clearfix'>
+                <li id="menu">
+                    <a class="a1" href='<root />'>全部商品分类</a>
+                    <if con="isindex()"><div class="area2 clearfix" ><else /><div class="area2 clearfix" style="display: none;" ></if>
+                        <ul class="clearfix">
+                        <?php $arr = getgoodscate(); ?>
+                        <?php foreach($arr as $v){ ?>
+                                <li class='clearfix' >
+                                    <div class='text'>
+                                        <a class='a2' href='<root />{u g/$v[id]}' >{$v.name}</a>
+                                        <?php if( isset($v['son']) and is_array($v['son']) ): foreach($v['son'] as $k2=>$v2): ?>
+                                        <a class='a3' href='<root />{u g/$v2[id]}' >{$v2.name}</a>
+                                        <?php endforeach; endif; ?>
+                                    </div>
+                                </li>
+                        <?php } ?>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href='<root />'>首页</a></li>
+                
+                <?php $arr = getcolumn('product'); ?>
+                <li><a href='{$arr.link}'>{$arr.name}</a></li>
+                
+                <?php $arr = getcolumn('douzhiping'); ?>
+                <li><a href='{$arr.link}'>{$arr.name}</a></li>
+                
+                <?php $arr = getcolumn('tiantiantj'); ?>
+                <li><a href='{$arr.link}'>{$arr.name}</a></li>
+                
+                <?php $arr = getcolumn('news'); ?>
+                <li><a href='{$arr.link}'>{$arr.name}</a></li>
+                
+                
+                <?php $arr = getcolumn('jobs'); ?>
+                <li><a href='{$arr.link}'>{$arr.name}</a></li>
+                
+            </ul>
+        </div>
+    </div>
+    <div class="w100 clearfix" >{__CONTENT__}</div>
+    <include file='layout/footer' />
+<script>
+    $(function(){
+        <if con="isindex()==FALSE">
+        $('#menu').mouseenter(function(){ $('.layout1_area3 .area2').css({'display':'block','height':'480px'})});
+        $('#menu').mouseleave(function(){ $('.layout1_area3 .area2').css({'display':'none'})});
+        </if>
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<div class="content" style="overflow: scroll; height: 420px;" >
+    <div class="select_goods_search" >
+        <input type="text" id="select_goods_search_value" class="input1" value="" placeholder="名称/条码/编码" />
+        <button type="button" class="bt1" onclick="obj.select_goods_page(1)" >搜索</button>
+    </div>
+    <ul class="select_goods_list clearfix" >
+        <list name="list" item="v" >
+        <li check="0" onclick="obj.select_goods_select_action(this)" data-id="{$v.id}" >
+            <div class="select_goods_list_img" ><img src="<?php echo IMAGE_URL; ?>{$v.thumb}" /></div>
+            <div class="select_goods_list_content" >
+                <div class="select_goods_list_sn" >{$v.sn}</div>
+                <div class="select_goods_list_title" >{$v.name} {$v.attributeStr}</div>
+                <div class="select_goods_list_price" >售价：{$v.shopPrice}</div>
+            </div>
+        </li>
+        </list>
+    </ul>
+    <div id="page" class="SpecifiesGoodspage" class="clearfix">{$pageinfo}</div>
+</div>

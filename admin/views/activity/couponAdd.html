@@ -1,0 +1,92 @@
+<script src="<root />static/WdatePicker.js" type="text/javascript"></script>
+<div class="content_title w100 clearfix">
+    <a href="<root />?activity=coupon"><img src="<root />static/icon/a1.png" /><font>列表</font></a>
+    <a href="<root />?activity=coupon&type=add"><img src="<root />static/icon/a1.png" /><font>添加</font></a>
+</div>
+
+<div class="w100">
+    <form method="post" action="" onsubmit="return icheck()" >
+    <table border="0" cellspacing="5" class="w100 content_list" >
+        <thead>
+            <tr>
+                <th colspan="3" >编辑/添加 - 优惠券</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width:180px; text-align: right;" ><span class="fb">优惠券名称：</span></td>
+                <td style="width:300px;" ><input type="text" name="name" class="input1" value="{$info.name}" /></td>
+                <td><span class="c1" id="nametips" >1 - 15个字符的名称</span></td>
+            </tr>
+            <tr>
+                <td style="width:180px; text-align: right;" ><span class="fb">金额：</span></td>
+                <td style="width:300px;" ><input type="text" name="money" class="input2" value="{$info.money}" /></td>
+                <td><span class="c1" id="moneytips" >优惠券的面额</span></td>
+            </tr>
+            <tr>
+                <td style="width:180px; text-align: right;" ><span class="fb">订单需满金额：</span></td>
+                <td style="width:300px;" ><input type="text" name="amount" class="input2" value="{$info.amount}" /></td>
+                <td><span class="c1" id="amounttips" >订单需要满多少金额，优惠券才能使用</span></td>
+            </tr>
+            <tr>
+                <td style="width:180px; text-align: right;" ><span class="fb">生效时间：</span></td>
+                <td style="width:300px;" >
+                    <input type="text" name="startTime" id="startTime"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{ $dp.$D(\\'endTime\\',{d:-1}); }'})" class="input2" value="{$info.startTime}" />
+                    <!--<input type="text" name="startTime"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'%y-%M-%d'})" class="input2" value="{$info.startTime}" />-->
+                </td>
+                <td><span class="c1" id="startTimetips" >优惠券生效的时间</span></td>
+            </tr>
+            <tr>
+                <td style="width:180px; text-align: right;" ><span class="fb">到期时间：</span></td>
+                <td style="width:300px;" >
+                    <input type="text" name="endTime" id="endTime"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{ $dp.$D(\\'startTime\\',{d:1}); }' })"  class="input2" value="{$info.endTime}" />
+                    <!--<input type="text" name="endTime"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'%y-%M-%d'})"  class="input2" value="{$info.endTime}" />-->
+                </td>
+                <td><span class="c1" id="endTimetips" >优惠券到期的时间</span></td>
+            </tr>
+            <tr>
+                <td style="width:180px; text-align: right;" ><span class="fb">状态：</span></td>
+                <td style="width:300px;" >
+                    <select name="status" >
+                    <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                    <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width:180px; text-align: right;" ></td>
+                <td style="width:300px;" ><input type="submit" name="_submit_" class="bt1" value="保存" /></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    </form>
+</div>
+<script>
+    $(function(){
+        var option = new Array();
+        option[0] = {name:'name',type:'regexp',msg:'名称应该为1－12个字符！',rule:/^.{1,15}$/,required:1};
+        option[1] = {name:'money',type:'regexp',msg:'优惠券的面额，9位以内的整数',rule:/^[0-9]{1,9}\.?[0-9]{0,2}?$/,required:1};
+        option[2] = {name:'amount',type:'regexp',msg:'订单需满金额，9位以内的整数！',rule:/^[0-9]{1,9}\.?[0-9]{0,2}?$/,required:1};
+        option[3] = {name:'startTime',type:'isempty',msg:'生效时间不能为空！'};
+        option[4] = {name:'endTime',type:'isempty',msg:'到期时间不能为空！'};
+        ch = new formCheck(option);
+    });
+    function icheck(){
+        //--判断面额是否比订单需满金额小  start
+        var money = parseFloat(document.getElementsByName('money').item(0).value);
+        var amount = parseFloat(document.getElementsByName('amount').item(0).value);
+        if( money > amount || money == amount ){
+            confirm_(' 面额 必须比 订单需满金额 小！');
+            return false;
+        }
+        //--判断面额是否比订单需满金额小  end
+        var bool_ = false;
+        var res = ch.start();
+        if(res==1){
+            bool_ = true;
+        }
+        return bool_;
+    }
+</script>

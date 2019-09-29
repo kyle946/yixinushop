@@ -1,0 +1,133 @@
+<layout name="layout/layout_mobile2" />
+<!--<div class="item_header w100" >
+    <div class="mainMenu3">
+        <div class="a1" ><i class="iconfont" >&#xe697</i></div>
+        <div class="a2" >
+            <div class="b4" >{$layout_title}</div>
+        </div>
+        <div class="a3" >
+            <div><a href='<?php echo createLink("index/index"); ?>' ><span>首页</span></a> </div>
+            <div><a href='<?php echo createLink("user/index"); ?>' ><span><i class="iconfont" >&#xe6b8;</i>我的</span></a> </div>
+        </div>
+    </div>
+</div>-->
+<div class="item_image">
+    <ul>
+        <li>
+            <img src="<?php echo IMAGE_URL ?>{$info.thumb}" />
+        </li>
+    </ul>
+</div>
+<div class="item_content" >
+    <div class="title" >{$info.name}&nbsp;&nbsp;{$info.attributeStr}</div>
+    <div class="title2" style="color:<pr />;" >{$info.name2}</div>
+
+    <div class='price' >
+        <font class="f1" >&yen;{$info.shopPrice}</font>
+        <font class="f3" style='text-decoration: line-through;' >&yen;{$info.sprice}</font>
+        <!--<font class='f2' >库存：</font><font class="f3" >{$info.numbers}</font>-->
+    </div>
+
+    <div class='b1 pad2 clearfix' >
+        <font class='f2' >促销：</font>
+        <font class='f4' style="color: rgb(233,155,82);" >{$info.activityName}  {fun substr($info['starttime'],0,10)} - {fun substr($info['endtime'],0,10)}</font> 
+    </div>
+    <?php if($info['xiangou']>0){ ?>
+    <div class='b1 pad2 clearfix' >
+        <font class='f2' >限购：</font>
+        <font class='f4' >每人每天限购数量：{$info.xiangou}</font>
+    </div>
+    <?php } ?>
+    <div class='b1 pad2 clearfix' >
+        <font class='f2' >服务：</font>
+        <font class='f4' >价格保护</font> <font class='f4 cf60' >此商品支持七天内退货</font>
+    </div>
+    <div class='b1 pad2 clearfix' >
+        <font class='f2' >商户：</font>
+        <font class='f4' style="color: rgb(233,155,82);" >{$info.business_name}</font>
+    </div>
+    <div class="hg10" ></div>
+    <div class="hg10 br1b" ></div>
+    <div class='b1 pad2 clearfix' >
+        <font class='f4 clearfix' style="text-align: right; display: block; padding: 0rem .5rem;" >
+        <a class="numbtn" href="javascript:goodsfun.jia();" >+</a><input class="numbtn i1" onkeyup="goodsfun.checknum()" type="text" name="num" value="1" /><a class="numbtn" href="javascript:goodsfun.jian();" >-</a>
+        </font>
+    </div>
+    <!--    <div class="clearfix" style="padding: .8rem 0rem;" >
+            <a class="addcart" href="" >加入购物车</a>
+            <a class="buynow" href="javascript:void(0);" >立即购买</a>
+        </div>-->
+    <div class="hg10" ></div>
+    <div class="hg10 br1b" ></div>
+    
+<!--    <div class="menutop1 clearfix" >
+        <div class="act"><a href="javascript:void(0);" >商品详情</a></div>
+        <div><a href="javascript:void(0);" >规格参数</a></div>
+    </div>-->
+    
+    <!--<div class='menucur1' >规格参数&nbsp;<i class="iconfont" >&#xe6a6;</i></div>-->
+    <div class='menucur1' >商品详情&nbsp;(……)<i class="iconfont" >&#xe6a6;</i></div>
+    <div class="info" >
+        {$info.goodsDesc}
+    </div>
+    
+    <div class="hg10" ></div>
+    <div class='menucur1' onclick="privateMethod.comment()" >全部评价&nbsp;({$commentCount})<i class="iconfont" >&#xe6a7</i></div>
+
+</div>
+
+    <div class="hg40" ></div>
+<div class="item_buynow maxwidth" >
+    <div class="cart" ><a href="<?php echo createLink('goods/shoppingcartList'); ?>" ><div  class="iconfont"><i>0</i>&#xe698;</div></a></div>
+    <div class="buy" ><a href="javascript:goodsfun.buy('{$info.id}','<?php echo base64_encode('?v=/goods/ConfirmAnOrder') ?>');" >立即购买</a></div>
+    <div class="add" ><a href="javascript:goodsfun.shoppingCart('{$info.id}',1);" >加入购物车</a></div>
+</div>
+<script>
+    privateMethod = {};
+    $(function() {
+        //-- 图片延迟加载 start
+        privateMethod.loadimage();
+        $(window).scroll(function() {
+            privateMethod.loadimage();
+        });
+        //-- 图片延迟加载 end
+
+        //--购物车总数
+        $.getJSON('<?php echo createLink("goods/shopcartTotal"); ?>', function(d) {
+            $(".item_buynow .cart div i").text(d.total);
+        });
+    });
+    
+    //--跳转到评论页面 
+    privateMethod.comment = function(){
+        window.location.href = '<?php echo createLink("goods/comment",array("goodsid"=>$info["goodsId"],"id"=>$info["id"])); ?>';
+    };
+
+    //-- 图片延迟加载 start
+    privateMethod.loadimageAllimg = function() {
+        var allimg = document.getElementsByTagName('img');
+        var img_ = new Array();
+        for (x in allimg) {
+            var t1 = allimg.item(x).getAttribute('init');
+            if (t1 == 1) {
+                img_.push(allimg.item(x));
+            }
+        }
+        return img_;
+    };
+    privateMethod.loadimage = function() {
+        var img_ = privateMethod.loadimageAllimg();
+        var documentTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var documentHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        var dt = documentTop + documentHeight;
+        $.each(img_, function(i, n) {
+            var nodeTop = $(this).offset().top;
+            if (nodeTop <= dt) {
+                var src_ = $(this).attr('xsrc');
+                $(this).attr('src', src_);
+                $(this).attr('init', 0);
+            }
+        });
+    };
+    //-- 图片延迟加载 end
+</script>

@@ -1,0 +1,88 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=all_imgmanage">
+        <img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font>
+    </a>
+    <?php if( isset($_GET['name']) ){ ?>
+    <a href="javascript:void(0)"><label><input onclick="privateMethod.listcheck(this);" type="checkbox" />全选</label></a>
+    <a href="javascript: privateMethod.delete(); "><img src="<?php echo __ROOT__; ?>static/icon/recycle32.png" /><font>删除</font></a>
+    <?php } ?>
+</div>
+<style type="text/css">
+    .imglist ul li{ list-style-type: none; float: left; text-align: center; border:1px solid #e1e1e1; margin: 3px; width: 170px; height: 110px; }    
+    .imglist ul { margin: 0px; padding: 0px; }
+    .imglist ul li img{ width: 90px; }
+</style>
+<div class="w100">
+
+    <div class="imglist clearfix" >
+        <ul class="clearfix" >
+            <?php foreach($dirdata as $value){ ?>
+            <li>
+                <?php if( isset($_GET['dir']) && !isset($_GET['name']) ){ ?>
+                <a href="<root />?goods=all_imgmanage&dir={$_GET.dir}&name={$value}" ><div><img src="<?php echo __ROOT__; ?>static/dir.jpg" /></div></a>
+                <div>{$value}</div>
+                <?php }elseif( isset($_GET['name']) && !isset($_GET['dir']) ){ ?>
+                <div><img src="<?php echo IMAGE_URL.$_GET['name'].'/'.$value; ?>" /></div>
+                <div> <label><input name="imglistdata[]" type="checkbox" value='{$value}' /> {$value}</label></div>
+                <?php }elseif( isset($_GET['dir']) && isset($_GET['name']) ){ ?>
+                <div><img src="<?php echo IMAGE_URL.$_GET['dir'].'/'.$_GET['name'].'/'.$value; ?>" /></div>
+                <div> <label><input name="imglistdata[]" type="checkbox" value='{$value}' /> {$value}</label></div>
+                <?php }else{ ?>
+                <a href="<root />?goods=all_imgmanage&dir={$value}" ><div><img src="<?php echo __ROOT__; ?>static/dir.jpg" /></div></a>
+                <div>{$value}</div>
+                <?php } ?>
+            </li>
+            <?php } ?>
+        </ul>
+    </div>
+
+    <!--<div id="page" class="clearfix">{$pageinfo}</div>-->
+</div>
+
+<script>
+    privateMethod = {};
+    //--全选函数
+    privateMethod.listcheck = function(e) {
+        var chk = 'imglistdata';
+        var elems = document.getElementsByTagName("INPUT");
+        for (var i = 0; i < elems.length; i++) {
+            if (elems[i].name == chk || elems[i].name == chk + "[]") {
+                elems[i].checked = e.checked;
+            }
+        }
+    };
+    //--检测是否选择了商品
+    privateMethod.check = function() {
+        var str = $("input[name='imglistdata[]']:checked").serialize();
+        if (str == '') {
+            return false;
+        } else {
+            return str;
+        }
+    };
+
+    privateMethod.delete = function() {
+        var data = privateMethod.check();
+        if (data == false) {
+            confirm_('请选择要删除的商品图片!');
+            return false;
+        } else {
+            var msg2 = new message();
+            msg2.show('请选择要删除的商品图片吗？', '警告！', null, 320, 90, null, 1, function() {
+
+                $.ajax({
+                    url: '?c=goods&a=unlingimage&dirname={$_GET.name}',
+                    type: 'get',
+                    data: data,
+                    dataType: 'json',
+                    success: function(d) {
+                        //--msg2.hide();
+                        window.location.reload();
+                    }
+                });
+
+            });
+        }
+    };
+</script>

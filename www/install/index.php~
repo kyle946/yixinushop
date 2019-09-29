@@ -1,0 +1,441 @@
+<?php
+session_start();
+ini_set('display_errors', 0); 
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>安装向导</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css" >
+            body{ margin: 0px; padding: 0px; font-size: 12px; font-family: "微软雅黑","黑体",sans-serif,"Times New Roman", Times, serif; color:#555; } 
+            div{ position: relative; }
+            .w2{ width:820px; }
+            .area1{ width: 820px; margin: 20px auto; }
+            .area2{ border-bottom: 1px solid #e1e1e1; }
+            .area2 .a1{ width: 1100px; margin: 0px auto; margin-top: 50px; }
+            .area2 .a1 img{display: inline-block;}
+            .area2 .a1 font{ font-size: 24px; top:8px; padding-left: 25px; margin-left: 30px; border-left: 1px solid #e1e1e1; position: absolute; }
+            .hr{ background-color: #f1f1f1; }
+            .h30{ padding: 15px 0px; }
+            .h10{ padding: 10px 0px; }
+            .w1{width:100%;}
+            .area1 h3{ text-indent: 2em; }
+            .table1 tr td{ padding: 10px; }
+            .table1 tr th{ padding: 8px; font-size: 12px; }
+            .table1 tr td font{display: inline-block; margin-left: 35px; color:#00CF00;}
+            .table1 tr td font.f2{ color:#f00; } 
+            .area3{ text-align: center; }
+            .area3 a{ padding: 10px 25px; background-color: #ca0000; text-decoration: none; color:#fff; display: inline-block; }
+            .area4{ height: 450px; border: 2px solid #e1e1e1; width: 816px; overflow: scroll; }
+            .area4 .a41{ padding: 10px 15px; font-size: 14px; }
+            .area4 .a41 p { text-indent: 2em; line-height: 2em; }
+            .area4 .a41 h3{text-align: center;}
+            .area4 .a41 h4{ text-indent: 2em; }
+            .input1{ border:1px solid #CFCDCD; padding: 5px; }
+            #daojishi{ color:#f60; }
+            .area6{ text-align: center; font-size: 14px; margin: 30px auto; padding: 30px 0px; }
+        </style>
+    </head>
+    
+<?php
+        $step = isset($_GET['s'])?$_GET['s']:1;
+        switch ($step) {
+            case 1:
+                break;
+            default:
+                break;
+        }
+?>
+    
+    <body>
+        <div class="area2" >
+            <div class="a1" >
+                <img src="/static/logo.png" /><font>正在安装……</font>
+            </div>
+        </div>
+        <?php if($step==1){ ?>
+        <div class="area1" >
+            <div class="w1 h30" ></div>
+            <h3 class="hr h10" >Step 1 ， 许可协议：</h3>
+            <div class="area4" >
+                <div class="a41" >
+                    <h3>异新优商城内容系统 安装许可协议</h3>
+                    <p>欢迎使用异新优商城内容系统及服务，为更好的使用 异新优商城内容系统（以下简称＂本系统＂），请您阅读并遵守《异新优商城内容系统 安装许可协议》（以下简称＂本协议＂）。官方网址为　http://www.yixinu.com。</p>
+                    <p>本协议是您与异新优商城内容系统原作者的法律协议，如果您安装、复制或以其它方式使用了本软件产品，则视为您已经同意本协议的服务条款，并和本系统的原作者　向露　（以下称为作者）签订了本协议。如果您不同意本协议中的服务条款，请不要安装软件。</p>
+                    <p>本协议一旦发生变更，我们将在官方网站公布修改内容。修改后的服务条款一旦在官网上公布即有效代替原来的服务条款，如果您接受本协议，即表示您同意接受本协议的各项服务条款。如果您不同意本协议服务条款，或者有违反本协议的服务条款，作者有权随时中止或终止您对本系统的使用资格并保留追究相关法律责任的权利。</p>
+                    <p>&nbsp;</p>
+                    <h4>协议许可权利</h4>
+                    <p>您可以在完全遵守本协议的基础上，将本系统应用于非商业用途，不可以放到公网环境中使用（即不能通过互联网访问）。</p>
+                    <p>您可以在本协议规定的约束和限制范围内修改本系统源代码，如果有提供的话。</p>
+                    <p>本系统只授予使用许可，不允许出售。本协议只授予您使用本系统的某些权利。本系统的作者（向露）保留所有其他权利。除非适用的法律赋予您此项限制之外的权利，否则您只能在本协议明示允许的范围内使用本系统。在按规定使用本系统时，您必须遵守系统中的所有技术限制，这些限制只允许您以特定方式使用该软件。</p>
+                    <p>若您需将本系统或服务用于商业用途，必须另行获得作者的授权许可，您在获得商业授权之后，您可以将本系统应用于商业用途，同时依据所购买的授权类型中确定的技术支持期限、技术支持方式和技术支持内容，自购买时刻起，在技术支持期限内拥有通过指定的方式获得指定范围内的技术支持服务。商业授权用户享有反映和提出意见的权利，相关意见将被作为首要考虑，但没有一定被采纳的承诺或保证。</p>
+                    <p>未获本系统作者的授权之前，不得：</p>
+                    <p>　　将本系统用于商业用途（包括但不限于企业网站、经营性网站、以营利为目或实现盈利的网站）；</p>
+                    <p>　　对本系统或与之关联的商业授权进行出租、出售、抵押或发放子许可证；</p>
+                    <p>　　绕过该系统中的任何技术限制；</p>
+                    <p>　　出租、租赁或出借本系统；</p>
+                    <p>　　或将本系统或本协议转让给任何第三方；</p>
+                    <p>无论用途如何、是否经过修改或美化、修改程度如何，只要使用异新优商城内容系统的整体或任何部分，未经授权许可，页面页脚处的异新优商城内容系统的版权信息都必须保留，而不能清除或修改。</p>
+                    <p>禁止在异新优商城内容系统的整体或任何部分基础上以发展任何派生版本、修改版本或第三方版本用于重新分发。</p>
+                    <p>如果您未能遵守本协议的条款，您的授权将被终止，所许可的权利将被收回，同时您应承担相应法律责任。</p>
+                    <p>&nbsp;</p>
+                    <h4>免责声明</h4>
+                    <p>用户出于自愿而使用本系统，您必须了解使用本系统的风险，在尚未购买产品技术服务之前，我们不承诺提供任何形式的技术支持、使用担保，也不承担任何因使用本系统而产生问题的相关责任。</p>
+                    <p>异新优商城内容系统原作者不对使用本系统构建的平台中的会员、商品或文章信息承担责任，全部责任由您自行承担。</p>
+                    <p>异新优商城内容系统原作者对提供的软件和服务之及时性、安全性、准确性不作担保，由于不可抗力因素、异新优商城内容系统原作者无法控制的因素（包括黑客攻击、停断电等）等造成软件使用和服务中止或终止，而给您造成损失的，您同意放弃追究异新优商城内容系统原作者责任的全部权利。</p>
+                    <p>&nbsp;</p>
+                    <p>一旦您开始安装异新优商城内容系统，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权利的同时，受到相关的约束和限制。协议许可范围以外的行为，将直接违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权利。</p>
+                    <p>&nbsp;</p>
+                </div>
+            </div>
+            <div class="h30" >&nbsp;</div>
+            <div class="area3" >
+                <a href="javascript:void(0);" >不同意</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="./?s=2" >我同意</a>
+            </div>
+        </div>
+        <?php }elseif($step==2){ ?>
+        <?php
+            $bool = 1;
+            //版本检测
+            $flag = version_compare(PHP_VERSION, '5.3.3','>=');
+            if( !$flag ){ $bool = 0; }
+            //扩展检测
+            $var1 = array();
+            $exts=(array_change_key_case(array_flip(get_loaded_extensions()), CASE_LOWER));
+            $checkgd = 0;
+            if(array_key_exists('gd', $exts) ){  $checkgd=1;   }else{ $bool = 0; }
+            $checkmysql = 0;
+            if(array_key_exists('gd', $exts) ){  $checkmysql=1;   }else{ $bool = 0; }
+            $checkredis = 0;
+            if(array_key_exists('gd', $exts) ){  $checkredis=1;   }else{ $bool = 0; }
+        ?>
+        <div class="area1" >
+            <div class="w1 h30" ></div>
+            <h3 class="hr h10" >Step 2 ， 环境检测：</h3>
+            <table class="w2 table1" >
+                <tr>
+                    <th>1、PHP版本</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >版本检测：</td>
+                    <td>5.3.3 <?php if($flag){ ?><font>检测通过</font><?php }else{ ?><font class="f2" >检测失败</font><?php } ?></td>
+                </tr>
+            </table>
+            <table class="w2 table1" >
+                <tr>
+                    <th>2、PHP扩展</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >GD 扩展：</td>
+                    <td><?php if($checkgd){ ?><font>检测通过</font><?php }else{ ?><font class="f2" >检测失败</font><?php } ?></td>
+                </tr>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >MySQL 扩展：</td>
+                    <td><?php if($checkmysql){ ?><font>检测通过</font><?php }else{ ?><font class="f2" >检测失败</font><?php } ?></td>
+                </tr>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >redis 扩展：</td>
+                    <td><?php if($checkredis){ ?><font>检测通过</font><?php }else{ ?><font class="f2" >检测失败</font><?php } ?></td>
+                </tr>
+            </table>
+            <div class="h30" >&nbsp;</div>
+            <div class="area3" >
+                <a href="./?s=1" >上一步</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <?php if($bool){ ?>
+                <a href="./?s=3" >下一步</a>
+                <?php }else{ ?>
+                <a href="javascript:void(0);" style="background-color: #b1b1b1;" >下一步</a>
+                <?php } ?>
+            </div>
+        </div>
+        <?php }elseif($step==3){ ?>
+        <?php
+            if( $_SERVER["REQUEST_METHOD"] == 'POST' ){
+                $filepath = dirname(__FILE__).'/../../';
+                $configpath = $filepath.'iframe/config/config.php';  //配置文件地址
+                $indexphp = $filepath.'www/index.php';  //pc
+                $indexphpadmin = $filepath.'wwwadmin/index.php';  //admin
+                $indexphpmobile = $filepath.'wwwmobile/index.php';  //mobile
+                
+                //域名替换  begin
+                $_SESSION['install_domainpc'] = $domainpc = $_POST['domainpc'];
+                $_SESSION['install_domainadmin'] = $domainadmin = $_POST['domainadmin'];
+                $_SESSION['install_domainmobile'] = $domainmobile = $_POST['domainmobile'];
+                
+                //替换PC站的微商城域名
+                $tmpstr = file_get_contents('./rfile/indexphp');
+                $tmpstr = str_replace('http://js.yixinu.com', 'http://'.$domainmobile, $tmpstr);
+                $tmpstr = str_replace('http://m1.yixinu.com', 'http://'.$domainmobile, $tmpstr);
+                file_put_contents($indexphp, $tmpstr);
+                //替换微商城的主域名
+                $tmpstr = file_get_contents('./rfile/indexmobile');
+                $tmpstr = str_replace('demo.yixinu.com', $domainpc, $tmpstr);
+                $tmpstr = str_replace('demo1.yixinu.com', $domainpc, $tmpstr);
+                file_put_contents($indexphpmobile, $tmpstr);
+                //替换后台的主域名
+                $tmpstr = file_get_contents('./rfile/indexadmin');
+                $tmpstr = str_replace('demo.yixinu.com', $domainpc, $tmpstr);
+                $tmpstr = str_replace('demo1.yixinu.com', $domainpc, $tmpstr);
+                file_put_contents($indexphpadmin, $tmpstr);
+                // end
+                
+                //数据库 begin
+                $dbpath = $_POST['dbpath'];
+                $dbname = $_POST['dbname'];
+                $dbusername = $_POST['dbusername'];
+                $dbpwd = $_POST['dbpwd'];
+                $tmpstr = file_get_contents('./rfile/config');
+                //开始替换配置文件
+                $tmpstr = str_replace('localhost', $dbpath, $tmpstr);
+                $tmpstr = str_replace("'DB_USER' => 'admin',", "'DB_USER' => '$dbusername',", $tmpstr);
+                $tmpstr = str_replace("'DB_PASS' =>'admin',", "'DB_PASS' =>'$dbpwd',", $tmpstr);
+                $tmpstr = str_replace('yixinushopData', $dbname, $tmpstr);
+                file_put_contents($configpath, $tmpstr);
+                //end
+                
+                //redis  替换配置  begin
+                $redispath = $_POST['redispath'];
+                $redisport = $_POST['redisport'];
+                $redispre = $_POST['redispre'];
+                $file1 = $filepath.'app/config/const.php';
+                $tmpstr = file_get_contents('./rfile/const_app');
+                $tmpstr = str_replace('127.0.0.1', $redispath, $tmpstr);
+                $tmpstr = str_replace('6379', $redisport, $tmpstr);
+                $tmpstr = str_replace('ry_', $redispre, $tmpstr);
+                file_put_contents($file1, $tmpstr);
+                $file1 = $filepath.'admin/config/const.php';
+                $tmpstr = file_get_contents('./rfile/const_admin');
+                $tmpstr = str_replace('127.0.0.1', $redispath, $tmpstr);
+                $tmpstr = str_replace('6379', $redisport, $tmpstr);
+                $tmpstr = str_replace('ry_', $redispre, $tmpstr);
+                file_put_contents($file1, $tmpstr);
+                $file1 = $filepath.'app/m_config/const.php';
+                $tmpstr = file_get_contents('./rfile/const_mapp');
+                $tmpstr = str_replace('127.0.0.1', $redispath, $tmpstr);
+                $tmpstr = str_replace('6379', $redisport, $tmpstr);
+                $tmpstr = str_replace('ry_', $redispre, $tmpstr);
+                file_put_contents($file1, $tmpstr);
+                //  end 
+                //
+                
+                //检测 数据库和REDIS 连接 
+                $conn = @mysql_connect($dbpath, $dbusername, $dbpwd);
+                if ($conn) {
+                    //保存数据库配置
+                    $_SESSION['install_dbpath'] = $dbpath;
+                    $_SESSION['install_dbusername'] = $dbusername;
+                    $_SESSION['install_dbpwd'] = $dbpwd;
+                    try{
+                        $redisobj = new Redis();
+                        $redisobj->connect($redispath,$redisport);
+                        //创建数据库
+//                        if ( mysql_query("CREATE DATABASE  `$dbname` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ",$conn) ){
+                            //创始人帐号
+                            $_SESSION['install_adminname'] = $_POST['adminname'];
+                            $_SESSION['install_adminpwd'] = $_POST['adminpwd'];
+                            //保存数据名称
+                            $_SESSION['install_dbname'] = $dbname;
+                            echo '<script>window.location.href="index.php?s=4";</script>'; exit();
+//                        }
+                        
+                    } catch (Exception $ex) {
+                        $info = 'REDIS 连接失败，请检测REDIS是否已经安装！';
+                    }
+                    
+                } else {
+                    $info = '数据库连接失败，请查看是否已经安装！';
+                }
+                
+            }
+        ?>
+        <form action="" method="post" name="form1" onsubmit="return obj.icheck();" >
+        <div class="area1" >
+            <div class="w1 h30" ></div>
+            <?php if( isset($info)  && $info ){ ?>
+            <h3 class="hr h10" style="background-color:#FFDCAD;color: #D07700;" >提示：<?php echo $info; ?></h3>
+            <div class="h10" ></div>
+            <?php } ?>
+            <h3 class="hr h10" >Step 3 ， 配置参数：</h3>
+            <table class="w2 table1" >
+                <tr>
+                    <th>1、域名配置</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >PC 端商城域名：</td>
+                    <td width="220">http://<input type="text" name="domainpc" class="input1" value="<?php echo $_SERVER['HTTP_HOST']; ?>" /></td>
+                    <td>映射到&nbsp;&nbsp;<?php echo str_replace('install','',dirname(__FILE__) ); ?></td>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >后台管理系统域名：</td>
+                    <td width="220">http://<input type="text" name="domainadmin" class="input1" value="admin.<?php echo $_SERVER['HTTP_HOST']; ?>" /></td>
+                    <td>映射到&nbsp;&nbsp;<?php echo str_replace('/install','admin/',dirname(__FILE__) ); ?></td>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >微商城域名：</td>
+                    <td width="220">http://<input type="text" name="domainmobile" class="input1" value="m.<?php echo $_SERVER['HTTP_HOST']; ?>" /></td>
+                    <td>映射到&nbsp;&nbsp;<?php echo str_replace('/install','mobile/',dirname(__FILE__) ); ?></td>
+                </tr>
+            </table>
+            <table class="w2 table1" >
+                <tr>
+                    <th>2、数据库配置</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >数据库服务器地址：</td>
+                    <td><input type="text" name="dbpath" class="input1" value="127.0.0.1" /></td>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >数据库名称：</td>
+                    <td><input type="text" name="dbname" class="input1" value="" /></td>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >数据库用户名：</td>
+                    <td><input type="text" name="dbusername" class="input1" value="" /></td>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >数据库密码：</td>
+                    <td><input type="text" name="dbpwd" class="input1" value="" /></td>
+                </tr>
+            </table>
+            <table class="w2 table1" >
+                <tr>
+                    <th>3、Redis 配置</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >Redis 服务器地址：</td>
+                    <td width="200"><input type="text" name="redispath" class="input1" value="127.0.0.1" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >Redis 端口：</td>
+                    <td width="200"><input type="text" name="redisport" class="input1" value="6379" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >Redis 前缀：</td>
+                    <td width="200"><input type="text" name="redispre" class="input1" value="ry<?php echo date('ymd'); ?>_" /></td>
+                    <td></td>
+                </tr>
+            </table>
+            <table class="w2 table1" >
+                <tr>
+                    <th>４、后台管理系统</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >创始人用户名：</td>
+                    <td><input type="text" name="adminname" class="input1" value="admin" /></td>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >密码：</td>
+                    <td><input type="password" name="adminpwd" class="input1" value="" /></td>
+                </tr>
+                <tr>
+                    <td width="180" align="right" >再次输入：</td>
+                    <td><input type="password" name="adminpwd2" class="input1" value="" /></td>
+                </tr>
+            </table>
+            <div class="h30" >&nbsp;</div>
+            <div class="area3" >
+                <a href="./?s=2" >上一步</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="javascript:obj.submit();" >下一步</a>
+            </div>
+        </div>
+        </form>
+        <script>
+            obj = {};
+            obj.icheck = function(){
+                var v = {};
+                v.domainpc = document.getElementsByName('domainpc').item(0);
+                v.domainadmin = document.getElementsByName('domainadmin').item(0);
+                v.domainmobile = document.getElementsByName('domainmobile').item(0);
+                v.dbpath = document.getElementsByName('dbpath').item(0);
+                v.dbname = document.getElementsByName('dbname').item(0);
+                v.dbusername = document.getElementsByName('dbusername').item(0);
+                v.dbpwd = document.getElementsByName('dbpwd').item(0);
+                v.redispath = document.getElementsByName('redispath').item(0);
+                v.redisport = document.getElementsByName('redisport').item(0);
+                //v.redispwd = document.getElementsByName('redispwd').item(0);
+                v.adminname = document.getElementsByName('adminname').item(0);
+                v.adminpwd = document.getElementsByName('adminpwd').item(0);
+                v.adminpwd2 = document.getElementsByName('adminpwd2').item(0);
+                for( x in v ){
+                    console.log(v[x].value);
+                    if( v[x].value=='' ){
+                        return v[x].focus();
+                    }
+                }
+                if( v.adminpwd.value != v.adminpwd2.value ){
+                    alert( '两次密码输入不一致！' );
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+            obj.submit = function(){
+                if( obj.icheck() ){
+                    document.getElementsByName('form1').item(0).submit();
+                }
+            }
+        </script>
+        <?php }elseif($step==4){ ?>
+        <div class="area1" >
+            <div class="w1 h30" ></div>
+            <h3 class="hr h10" >Step 4 ， 创建数据表，导入数据：&nbsp;&nbsp;&nbsp;<span><font id="daojishi" >2</font>&nbsp;秒后开始……</span></h3>
+            
+            <div>
+                <iframe id="iframe1" style="width: 810px; border:1px solid #e1e1e1; height: 450px;" ></iframe>
+                <p>&nbsp;</p>
+            </div>
+            
+            <div class="h30" >&nbsp;</div>
+            <div class="area3" >
+                <a href="./?s=3" >上一步</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="./?s=5" >下一步</a>
+            </div>
+        </div>
+        <script>
+            window.onload = function(){
+                var wait = document.getElementById('daojishi');
+                var interval = setInterval(function(){
+                    var t = --wait.innerHTML;
+                    if( t<=0 ){
+                        var iframe1 = document.getElementById("iframe1");
+                        iframe1.src="./dbexport.php";
+                        clearInterval(interval);
+                    }
+                },1000);
+            }
+        </script>
+        <?php }elseif($step==5 && isset($_SESSION['install_isok']) && $_SESSION['install_isok']==1){ ?>
+        <?php 
+            //$_SESSION['install_domainpc'] = 'www.xxx.com';  
+        ?>
+        <div class="area1" >
+            <div class="w1 h30" ></div>
+            <h3 class="hr h10" > 系统安装成功！</h3>
+            
+            <div class="area6" >
+                <p style="color:red;" >强烈建议：请马上删除 install 目录 ！</p>
+                <p>PC 端访问地址 ：<a href="http://<?php echo $_SESSION['install_domainpc']; ?>" ><?php  echo $_SESSION['install_domainpc']; ?></a></p>
+                <p>后台 访问地址：<a href="http://<?php echo $_SESSION['install_domainadmin']; ?>" ><?php echo $_SESSION['install_domainadmin']; ?></a></p>
+                <p>手机 端访问地址：<a href="http://<?php echo $_SESSION['install_domainmobile']; ?>" ><?php echo $_SESSION['install_domainmobile']; ?></a></p>
+            </div>
+            
+            <div class="h30" >&nbsp;</div>
+        </div>
+        <?php } ?>
+    </body>
+</html>

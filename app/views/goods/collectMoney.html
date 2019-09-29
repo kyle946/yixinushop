@@ -1,0 +1,56 @@
+<layout name="layout/layout_null" />
+<style type="text/css" >
+    .orderdone_area2 {  margin-top: 20px; width:1000px; }
+    .orderdone_area2 .a1{ border-top: 1px solid #00CA0A; background-color: #E8FFE0; width:900px; padding: 15px 25px; }
+    .orderdone_area2 .a1 a.price{ position: absolute; top: 30px; right: 20px; padding: 8px 15px; text-decoration: none; color: #555;  }
+    .orderdone_area2 .a1 a.price font{ color:#ca0000; font-size: 18px; }
+    .orderdone_area2 .a1 p{padding:2px;  color:#777; }
+    .orderdone_area2 .a1 p .f1{ color:#00CA0A; font-size: 14px; }
+    .orderdone_area2 .a1 p .f2{ color:#EF0000; font-size: 14px; }
+    .orderdone_area2 .a2{  width:896px; min-height: 300px; border:2px solid #DDDDDD; /* background-color: #FEFFD7; */ padding: 15px 25px; }
+    .orderdone_area2 .a2 .area{ width: 244px; height: 244px; margin: 10px auto; border: 1px solid #e1e1e1; }
+    .orderdone_area2 .a2 .area img{ width: 244px; height: 244px; }
+    .orderdone_area2 .a2 .text{ font-size: 14px; text-align: center; padding: 10px 0px; }
+</style>
+<div class="w1 clearfix" >
+    <div class='orderdone_area2' >
+        <div class='a1' >
+            <a class='price' href='#' >支付金额：<font>{$total}</font></a>
+            <p><font class='f1' >你的订单提交成功！</font>&nbsp;&nbsp;&nbsp;&nbsp;订单号：<a href="<root  />?c=user&a=orderinfo&id={$orderid}" >{$orderSn}</a>&nbsp;&nbsp;|&nbsp;&nbsp;短订单号：<a href="<root  />?c=user&a=orderinfo&id={$orderid}" >{$sortsn}</a>&nbsp;&nbsp;|&nbsp;&nbsp;应付款：<font class='f2' >{$total}</font>&nbsp;&nbsp;|&nbsp;&nbsp;配送方式：{$deliveryMethod}</p>
+            <p><font>请在120分钟内完成支付（{$minute5}之前），否则系统将自动删除订单。</font></p>
+        </div>
+
+        <?php if($payment['sn'] == 'transfer'){ ?>
+        <div class='a2' >
+            <div class="img1" ><img src="<root />static/{$payment.logo}" /></div>
+            <div class='area'  style="width: 280px; height: auto;" >
+                <img id="qrcode" style="width: 280px; height: auto;" src='<root />image/{$payment.weixinqrcode}' />
+            </div>
+            <div class="text" >扫一扫加好友完成支付，转账时请告诉我短订单号：<font class="cf60">{$sortsn}</font></div>
+            <div class="text" >微信号：<font class="cf60">{$payment.myweixin}</font></div>
+        </div>
+        <?php }else{ ?>
+        <div class='a2' >
+            <div class="img1" ><img src="<root />static/{$payment.logo}" /></div>
+            <div class='area' >
+                <img id="qrcode" src='<root />static/default.gif' />
+            </div>
+            <div class="text" >扫描二维码完成支付</div>
+        </div>
+        <?php } ?>
+    </div>
+    <div class='h30 w100' ></div>
+    <div class='h30 w100' ></div>
+    <div class='h30 w100' ></div>
+</div>
+<?php if($payment['sn'] == 'transfer'){ ?>
+<?php }else{ ?>
+<script>
+    var obj = new Image();
+    obj.src = '<?php echo @createLink("u/qrcode",array("text"=>"$url2") ); ?>';
+    obj.onload = function() {
+        console.log(this.src);
+        document.getElementById('qrcode').setAttribute('src', this.src);
+    };
+</script>
+<?php } ?>

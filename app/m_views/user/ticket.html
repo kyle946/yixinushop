@@ -1,0 +1,52 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+    <div class="ticket_list" >
+        <?php if( $from=='ConfirmAnOrder'){ ?>
+        <div class="area1 clearfix" >
+            <div class="text1" >&yen;<?php  printf("%02d",00); ?>&nbsp;<font>&nbsp;优&nbsp;惠&nbsp;券</font></div>
+            <div class="text2" ><b>暂不使用优惠券</b></div>
+            <a href="javascript:publicMethod.select(0)" >选择</a>
+        </div>
+        <?php } ?>
+        <list name="list" item="v" >
+        <!--如果是从确认订单点击并且订单金额没有满足条件，或者状态不是可用状态-->
+        <div class="area1 <?php if( ($from=='ConfirmAnOrder' && $total<$v['amount']) || $v['status']!=1 ){ ?>area2<?php } ?> clearfix" >
+            <div class="text1" >&yen;{$v.money}&nbsp;<font>&nbsp;优&nbsp;惠&nbsp;券</font></div>
+            <div class="text2" >订单满 <b>{$v.amount}</b> 减 {$v.money}</div>
+            <div class="text3" >{$v.startTime} 至 {$v.endTime} </div>
+            <!--如果是从确认订单点击，订单金额满足了条件，并且状态为可用，才能选择优惠券-->
+            <?php if( ($from=='ConfirmAnOrder' && $total>$v['amount']) && $v['status']==1  ){ ?>
+            <a href="javascript:publicMethod.select('{$v.id}')" >选择</a>
+            <?php } ?>
+        </div>
+        </list>
+    </div>
+    <div class="hg10 w100" ></div>
+    <div class='pageinfo' >{$pageinfo}</div>
+    <div></div>
+    <script>
+        publicMethod = {};
+        $(function() {
+
+        });
+
+        //--选择优惠券，返回确认订单页面
+        publicMethod.select = function(id) {
+            $.get("<?php echo createLink('goods/selectCoupon'); ?>id/" + id, function(d) {
+                window.location.href = "<?php echo createLink('goods/ConfirmAnOrder'); ?>";
+            }, 'json');
+        };
+        
+        //--下一页
+        publicMethod.nextpage = function(p,c){
+            $.get('<?php echo createLink("user/ticket"); ?>p/'+p,function(d){
+                $.each(d.data,function(n,item){
+                    var html='<div class="area1  clearfix"> <div class="text1">¥'+item.money+'&nbsp;<font>&nbsp;优&nbsp;惠&nbsp;券</font></div> <div class="text2">订单满 <b>'+item.amount+'</b> 减 '+item.money+'</div> <div class="text3">'+item.startTime+' 至 '+item.endTime+' </div>  </div>';
+                    $(".ticket_list").append(html);
+                    $(".pageinfo").html(d.page);
+                });
+            },'json');
+        };
+
+    </script>

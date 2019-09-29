@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>{$webtitle_} {$webconfig.webtitle}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta id="viewport" name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no"/>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <script src="<root />static/jquery-1.8.1.min.js" type="text/javascript"></script>
+        <script src="<root />static/layer.js" type="text/javascript"></script>
+        <script src="<root />static/main.js" type="text/javascript"></script>
+        <link href="<root />static/mobile.css?v=<?php echo time(); ?>" rel="stylesheet" type="text/css"/>
+        <link href="<root />static/need/layer.css" rel="stylesheet" type="text/css"/>
+        <script>imageUrl = '<?php echo IMAGE_URL; ?>'; rootPath = '<?php echo __ROOT__; ?>';</script>
+    </head>
+    <body class="maxwidth">
+        <div class="w100 clearfix" >
+            <header class="mainMenu3 clearfix theme_background_color theme_border_color_bottom" >
+                <div class="a1" ><i class="iconfont" >&#xe697</i></div>
+                <div class="a2" >
+                    <div class="b4" >{$layout_title}</div>
+                </div>
+                <div class="a3" >
+                    <div><a href='<?php echo createLink("index/index"); ?>' ><span>首页</span></a> </div>
+                    <!--<div><a href='<?php echo createLink("user/index"); ?>' ><span><i class="iconfont" >&#xe6b8;</i>我的</span></a> </div>-->
+                </div>
+            </header>
+            {__CONTENT__}
+            <div class="hg40 w100" ></div>
+        </div>
+    </body>
+</html>

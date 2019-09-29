@@ -1,0 +1,175 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=customData"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?goods=customData&type=add"><img src="<?php echo __ROOT__; ?>static/icon/papercheck32.png" /><font>添加</font></a>
+    <a href="javascript:void(0)"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+<div class="commonMenu w100"><a href="javascript:void(0)">自定义数据 [<span class="cf60" >{$info.title}</span>] 数据编辑&nbsp;,&nbsp;表名[<span class="cf60" ><?php echo SQLPRE; ?>{$info.tablename}</span>] </a><input type="button" onclick="publicMethod.add({$info.id})" value="添加数据" class="bt1" /> </div>
+<div class="w100 h10" ></div>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>编号</th>
+            <th>名称/标题</th>
+            <th style="text-align: center;" >操作</th>
+        </tr>
+        <list name="list" item="v">
+        <tr>
+            <td>{$v.id}</td>
+            <td>{$v.title}</td>
+            <td style="text-align: center;" >
+                <?php if($mode==1){ ?>
+                <a target="_blank" href="http://<?php echo substr(MAIN_DOMAIN,0,-1).createLink('goods/gitem',array('item'=>$v['id'])); ?>">查看</a>&nbsp;&nbsp;
+                <?php }else{ ?>
+                <a target="_blank" href="javascript:void(0);">查看</a>&nbsp;&nbsp;
+                <?php } ?>
+                <a href="javascript:publicMethod.delete({$v.id_})" >删除</a></td>
+        </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+<script>publicMethod = {};</script>
+<?php if($mode==1){ ?>
+<script>publicMethod.mode=1;</script>
+<?php }else{ ?>
+<script>publicMethod.mode=2;</script>
+<?php } ?>
+<script>
+    //--publicMethod = {};
+    //--publicMethod.mode = {$mode};
+    
+    //--判断是选择商品还是文章
+    publicMethod.add = function(id) {
+        if (publicMethod.mode == 1) {
+            publicMethod.SpecifiesGoods(id);
+        } else {
+            publicMethod.SpecifiesArticle(id);
+        }
+    };
+    //--选择商品数据 
+    publicMethod.SpecifiesGoods = function(id) {
+        $.get("<root />?c=activity&a=SpecifiesGoods", function(d) {
+
+            var msg = kmsg(d, '指定商品', 1, 700, 400, null, 1, function() {
+                var data = publicMethod.check('goodslistcheck');
+                if (data == false) {
+                    kmsg('请至少选择一个商品！', null, 1, 400, 120, 3, 1);
+                    return false;
+                } else {
+                    $.get("<root />?c=goods&a=customdata_callback1&id=" + id,data,function(d){
+                        window.location.reload();
+                    },'json');
+                }
+
+            });
+        });
+    };
+    //--添加商品数据  下一页
+    publicMethod.SpecifiesGoodsPage = function(p, s) {
+        var pagesize = $("#pageSize").attr('value');
+        $.ajax({
+            url: "<root />?c=activity&a=SpecifiesGoods&ajax=1",
+            data: 'p=' + p + '&pagesize=' + pagesize,
+            dataType: 'json',
+            type: 'get',
+            success: function(d) {
+                var obj = $("#grantlisttable tbody");
+                obj.html("");
+                $(".SpecifiesGoodspage").html(d.page);
+                $.each(d.data, function(i, item) {
+                    obj.append('<tr> <td><input name="goodslistcheck[]" type="checkbox" value="' + item.id + '" /></td> <td>' + item.sn + '</td> <td>' + item.name + ' ' + item.attributeStr + '</td> <td>' + item.shopPrice + '</td> </tr> ');
+                });
+            }
+        });
+    };
+    //--添加文章数据  
+    publicMethod.SpecifiesArticle = function(id){
+        
+        $.get("<root />?c=goods&a=customdata_SpecifiesArticle&id={$info.id}&ta={$info.tablename}&dis=1", function(d) {
+
+            var msg = kmsg(d, '指定文章', 1, 700, 400, null, 1, function() {
+                var data = publicMethod.check('goodslistcheck');
+                if (data == false) {
+                    kmsg('请至少选择一条数据！', null, 1, 400, 120, 3, 1);
+                    return false;
+                } else {
+                    $.get("<root />?c=goods&a=customdata_callback1&id=" + id,data,function(d){
+                        window.location.reload();
+                    },'json');
+                }
+
+            });
+        });
+    };
+    
+    //--添加文章数据  下一页
+    publicMethod.nextpage = function(p, s) {
+        var pagesize = $("#pageSize").attr('value');
+        $.get( "<root />?c=goods&a=customdata_SpecifiesArticle&id={$info.id}&ta={$info.tablename}&dis=0&"+'p=' + p + '&pagesize=' + pagesize, function(d) {
+                var obj = $("#grantlisttable tbody");
+                obj.html("");
+                $(".SpecifiesGoodspage").html(d.page);
+                $.each(d.data, function(i, item) {
+                    obj.append('<tr> <td><input name="goodslistcheck[]" type="checkbox" value="' + item.id + '" /></td> <td>' + item.id + '</td> <td>' + item.title +'</td></tr> ');
+                });
+            },'json');
+    };
+    
+    //--编辑数据
+    publicMethod.edit = function(id) {
+        var html = '<div class="padding10" >' +
+                '<p>促销价：<input class="input3" type="text" name="price" /></p>' +
+                '</div>';
+        var msg = kmsg(html, '修改促销价', 1, 350, 120, null, 1, function() {
+            var price = $("input[name='price']").attr('value');
+            $.ajax({
+                url: "<root />?c=activity&a=salesGoodsEditgoodseditprice",
+                data: 'price=' + price + '&goodsid=' + id,
+                type: 'get',
+                dataType: 'json',
+                success: function(d) {
+                    if (d.status) {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    };
+    
+    //--删除数据 
+    publicMethod.delete = function(id) {
+        var html = '<p>确定要删除吗？</p>';
+        var msg = kmsg(html, '删除促销商品', 1, 350, 120, null, 1, function() {
+            $.ajax({
+                url: "<root />?c=goods&a=customdata_delete2",
+                data: 'id=' + id,
+                type: 'get',
+                dataType: 'json',
+                success: function(d) {
+                    if (d.status) {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    };
+    //--全选函数
+    publicMethod.listcheck = function(e, chk) {
+        var elems = document.getElementsByTagName("INPUT");
+        for (var i = 0; i < elems.length; i++) {
+            if (elems[i].name == chk || elems[i].name == chk + "[]") {
+                elems[i].checked = e.checked;
+            }
+        }
+    };
+    //--检测是否选择了
+    publicMethod.check = function(chk) {
+        var str = $("input[name='" + chk + "[]']:checked").serialize();
+        if (str == '') {
+            return false;
+        } else {
+            return str;
+        }
+    };
+</script>

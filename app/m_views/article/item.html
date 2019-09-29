@@ -1,0 +1,100 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="articleItem_area1" >
+    <div class="title w100" >{$info.title}</div>
+    <div class="info color444" >{$columName}&nbsp;&nbsp;&nbsp;&nbsp;{$info.addtime}</div>
+    <div class="content" >{$info.content}</div>
+</div>
+
+<div class="w100 hg40" ></div>
+<div class="hr" ></div>
+<!--如果没有关闭评论--> 
+<?php if($info['arcrank']!='oc'){ ?>
+<div class="w100 hg40" ></div>
+<div class="index_title2">评论 （{$info.comments}）</div>
+<div class="w100" >
+    <div class="articleItem_area3" ><a href="<?php echo createLink('article/comment',array('id'=>rget('id'),'m'=>rget('m')) ); ?>" >我来说两句…</a></div>
+    <?php if($list){ ?>
+    <div class='commentList clearfix' >
+        <?php foreach($list as $v){ ?>
+        <div class='li clearfix br1b' >
+            <div class='img fl' ><img src='http://<?php echo MAIN_DOMAIN."avatar/$v[avatar]"; ?>' /></div>
+            <div class='user fl' >{$v.nickname}</div>
+            <div class='date fl' >{$v.ctime}</div>
+            <div class='w100 fl' >
+                <div class='content fl' >{$v.content}</div>
+            </div>
+        </div>
+        <?php } ?>
+    </div>
+    <div class="articleItem_area2" ><a href="<?php echo createLink('article/comment',array('id'=>rget('id'),'m'=>rget('m')) ); ?>" >查看更多评论…</a></div>
+    <?php } ?>
+</div>
+<?php } ?>
+
+
+<!--一个文章列表  start-->
+<div class="w100 hg40" ></div>
+<div class="index_title2">相关阅读 </div>
+<div class="w100 hg10" ></div>
+<div class="indexArtcileArea1" >
+    
+        <?php foreach($o1 as $v){ ?>
+        <section class="clearfix" > 
+            <div class="l" style="background-color: <pr />;" >
+                <a href="<?php echo createLink('article/item',array('m'=>$v['mark'],'id'=>$v['id'])); ?>" >
+                    <?php if( !empty($v['picname']) ){ ?>
+                    <img src="<?php echo IMAGE_URL; ?>/{$v.picname}" />
+                    <?php }else{ ?>
+                    <div>{fun ysubstr($v[title],6)}</div>
+                    <?php } ?>
+                </a>
+            </div>
+            <div class="r" >
+                <a href="<?php echo createLink('article/item',array('m'=>$v['mark'],'id'=>$v['id'])); ?>" ><div class="text" >{fun ysubstr($v[title],28)}</div></a>
+                <div class="info" ><?php echo substr($v['addtime'],0,10); ?>&nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont">&#xe69b;</i>&nbsp;{$v.hits}</div>
+            </div>
+        </section>
+        <?php } ?>
+
+        
+        <?php foreach($o2 as $v){ ?>
+        <section class="clearfix" > 
+            <div class="l" style="background-color: <pr />;" >
+                <a href="<?php echo createLink('article/item',array('m'=>$v['mark'],'id'=>$v['id'])); ?>" >
+                    <?php if( !empty($v['picname']) ){ ?>
+                    <img src="<?php echo IMAGE_URL; ?>/{$v.picname}" />
+                    <?php }else{ ?>
+                    <div>{fun ysubstr($v[title],6)}</div>
+                    <?php } ?>
+                </a>
+            </div>
+            <div class="r" >
+                <a href="<?php echo createLink('article/item',array('m'=>$v['mark'],'id'=>$v['id'])); ?>" ><div class="text" >{fun ysubstr($v[title],28)}</div></a>
+                <div class="info" ><?php echo substr($v['addtime'],0,10); ?>&nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont">&#xe69b;</i>&nbsp;{$v.hits}</div>
+            </div>
+        </section>
+        <?php } ?>
+    
+</div>
+<!--一个文章列表  end-->
+
+<script>
+
+    privateMethod = {};
+    privateMethod.init = function() {
+
+        var v1 = $(".indexArtcileArea1 ul li").width();
+        var v = $(".indexArtcileArea1 ul li div.l").width();
+        var v2 = v1 - v;
+        $(".indexArtcileArea1 ul li div.r").css({width: v2});
+    };
+
+    $(window).resize(function() {
+        privateMethod.init();
+    });
+
+    $(function() {
+        privateMethod.init();
+    });
+</script>

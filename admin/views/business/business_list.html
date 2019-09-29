@@ -1,0 +1,89 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?business=list"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>所有商户</font></a>
+    <a href="<?php echo __ROOT__; ?>?business=list&type=2"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>待审核商户</font></a>
+    <a href="<?php echo __ROOT__; ?>?business=edit"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    
+    <div class="search" >
+        <span>商户号/商户名称/手机：</span>
+        <input type="text" class="input2" name="search_str" value="{$_GET.search_str}" onkeyup="keydown(function(){ privateMethod.search(); })" />
+        &nbsp;&nbsp;
+        <input type="button" class="bt1" onclick="privateMethod.search()" value="搜索" />
+    </div>
+</div>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>商户号</th>
+            <th>商户名称</th>
+            <th>运营者姓名</th>
+            <th>运营者手机</th>
+            <th>余额</th>
+            <th>注册时间</th>
+            <th>状态</th>
+        </tr>
+        <list name="list" item="v">
+            <?php if($v['sys_default']==1){ ?>
+            <tr class='c1'>
+            <?php }else{ ?>
+            <tr>
+            <?php } ?>
+                <td class='td1'>{$v.business_no}</td>
+                <td class='td1'>{$v.business_name}</td>
+                <td class='td1'>{$v.business_actual_name}</td>
+                <td class='td1'>{$v.business_mobile}</td>
+                <td class='td1'>{$v.business_balance}</td>
+                <td class='td1'>
+                    <?php if($v['sys_default']==1){ ?>
+                    <font class='c1'>系统商户，不能删除</font>
+                    <?php }else{ ?>
+                   <?php echo $v['createTime']; ?>
+                    <?php } ?>
+                </td>
+                <td class='td1'>
+                    <?php $b=1; ?>
+                    <?php if($v['business_status']&2): ?>
+                    <font class='cr'>未通过认证,</font>
+                    <?php $b=0; endif; ?>
+                    <?php if($v['business_status']&4): ?>
+                    <font class='cr'>已冻结,</font>
+                    <?php $b=0; endif; ?>
+                    <?php if($v['business_status']&8): ?>
+                    <font class='cy'>正在申请认证…</font>
+                    <?php $b=0; endif; ?>
+                    <?php if($v['business_status']&1 and $b): ?>
+                    <font class='cg'>正常</font>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7" style="text-align: right;" >
+                    <a href="<?php echo __ROOT__; ?>?business=edit&no={$v.business_no}">查看 | 修改 | 审核</a>&nbsp;&nbsp;
+                    <!--<a href="<?php echo __ROOT__; ?>?business=edit&no={$v.business_no}">账户记录</a>&nbsp;&nbsp;-->
+                    <a href="<?php echo __ROOT__; ?>?system=adminuser&no={$v.business_no}">管理账号</a>&nbsp;&nbsp;
+                    <a href="<?php echo __ROOT__; ?>?business=cashier&no={$v.business_no}">收银员账号</a>&nbsp;&nbsp;
+                    <!--<a href="<?php echo __ROOT__; ?>?jinxiaocun=m&no={$v.business_no}">旗下门店</a>&nbsp;&nbsp;-->
+                    <a href="<?php echo __ROOT__; ?>?business=edit&type=payedit&no={$v.business_no}">收银台支付配置</a>
+                    <!--<a href="javascript:confirm_('你确定要删除用户 [{$v['username']}] 吗？','<?php echo __ROOT__.'?user=delete&id='.$v['id']; ?>')" >删除</a>-->
+                </td>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+
+<script>
+        $(function(){
+            $("input[name='search_str']").focus();
+        });
+    privateMethod = {};
+    privateMethod.search = function(){
+        var data = '';
+        var search_str = $("input[name='search_str']").attr('value');
+        if(search_str!=''){
+            data += '&search_str='+search_str;
+        }
+        var url = '<root />?business=list' + data;
+        window.location.replace(url);
+    }
+</script>

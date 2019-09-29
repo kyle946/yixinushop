@@ -1,0 +1,33 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+
+<div class="w100" >
+    <div class="artcomment_area1" >
+        <?php foreach($list as $v){ ?>
+        <section class="clearfix">
+            <div class="a1 fl" ><font>时间：</font>{$v.ctime}</div>
+            <div class="a2 fl" ><font>状态：</font>{$v.status}</div>
+            <div class="a3 fl w100" ><font>内容：</font>{$v.content}</div>
+            <div class="a4 fr" ><a href=" <?php echo createLink('index/item',array('id'=>$v['goodsid2']) ); ?> " >查看商品</a></div>
+        </section>
+        <div class="hg10" ></div><div class="hr" ></div>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="hg10 w100" ></div>
+<div class="hg10 w100" ></div>
+<div class='pageinfo' >{$pageinfo}</div>
+
+<script>
+    yixinu = {};
+    yixinu.nextpage = function(p, s) {
+        $.get('<?php echo createLink("user/goodscomment"); ?>p_' + p, function(d) {
+            $.each(d.data, function(n, item) {
+                var html = '<section class="clearfix"> <div class="a1 fl"><font>时间：</font>' + item.ctime + '</div> <div class="a2 fl"><font>状态：</font>' + item.status + '</div> <div class="a3 fl w100"><font>内容：</font>' + item.content + '</div> <div class="a4 fr"><a href="<?php echo createLink("index/item"); ?>id_' + item.goodsid2+ '">查看商品</a></div> </section><div class="hg10" ></div><div class="hr" ></div>';
+                $(".artcomment_area1").append(html);
+            });
+            $(".pageinfo").html(d.page);
+        }, 'json');
+    }
+</script>

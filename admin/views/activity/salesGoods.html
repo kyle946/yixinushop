@@ -1,0 +1,31 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?activity=goodslist"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>活动列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?activity=goodslist&act=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加活动</font></a>  
+</div>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>活动名称</th>
+            <th>生效时间</th>
+            <th>到期时间</th>
+            <th>商品数</th>
+            <th style="text-align: center;" >操作</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td>{$v.id}</td>
+                <td>{$v.name}</td>
+                <td>{$v.starttime}</td>
+                <td>{$v.endtime}</td>
+                <td>{$v.nums}</td>
+                <td style="text-align: center;" >
+                    <a href="<root />?activity=goodslist&act=salesGoodsEditgoodslist&id={$v.id}">商品编辑</a>&nbsp;&nbsp;
+                    <a href="<root />?activity=goodslist&act=edit&id={$v.id}">修改</a>&nbsp;&nbsp;
+                    <a href="javascript:confirm_('你确定要删除这个活动吗？<br />删除活动后，商品恢复原价销售','<root />?activity=goodslist&act=delete&id={$v.id}')" >删除</a></td>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>

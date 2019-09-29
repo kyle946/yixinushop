@@ -1,0 +1,1 @@
+INSERT INTO `y_customdata` VALUES (1,'goods1','明星单品','首页用 商品',1,'goods'),(2,'article1','最新动态','首页用 文章',1,'channel-article'),(3,'goods2','刚刚上架','首页用',1,'goods'),(4,'goods3','店家推荐','手机端用',1,'goods'),(6,'goods4','推荐','首页顶部用的。。',1,'goods'),(7,'goods5','秒抢','手机端用的',1,'goods'),(9,'goods6','推荐','手机端 用',1,'goods');

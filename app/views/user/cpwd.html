@@ -1,0 +1,70 @@
+<layout name="layout/layout2" />
+<div class="area8" >
+    <div class="h10 w100" ></div>
+    <div style="background-color: #FFE1BE; color:#f00; padding: 10px; display: <?php if(isset($infoDisplay)): echo $infoDisplay; else: echo 'none'; endif; ?>;" >修改失败 ！ 原因可能验证码或旧密码不正确。</div>
+    <form action="" method="post" onsubmit="return icheck()" >
+    <table border="0" class="w100" cellspacing="5">
+        <tbody>
+            <tr>
+                <td class="tr" style="width:180px;"  >新密码：</td>
+                <td style="width:260px;" ><input type="password" name="password" class="input2" /></td>
+                <td class="tl"><span id="passwordtips" class="c2" >6 - 16个字符 ，区分大小写！</span></td>
+            </tr>
+            <tr>
+                <td class="tr" >确认密码：</td>
+                <td><input type="password" name="password2" class="input2" /></td>
+                <td class="tl"><span id="password2tips" class="c2" >请再次填写密码</span></td>
+            </tr>
+            <tr>
+                <td class="tr" >旧密码：</td>
+                <td><input type="password" name="oldpassword" class="input2" /></td>
+                <td class="tl"></td>
+            </tr>
+            <tr>
+                <td class="tr" >验证码：</td>
+                <td>
+                    <input type="text" onblur="ch.onecheck(this,rootPath+'u/checkVerify/verifystr/'+this.value,'图片验证码不正确！');" class="input1 fl" name="yzm" id="yzm" value="" />
+                    <a href="javascript:getverify()" style="width:80px; height: 28px;display: block;margin-left: 20px;" class="fl"  >
+                    <img title="点击更换图片" id="yzmi" style="width:80px; height: 28px;" src="/u/verifyCode"></a>
+                </td>
+                <td><span id="yzmtips" class="c2" >输入验证码</span></td>
+            </tr>
+            <tr>
+                <td class="tr" ></td>
+                <td><input type="submit" name="_submit_" class="bt2" value="保   存" /></td>
+                <td class="tl"></td>
+            </tr>
+        </tbody>
+    </table>
+    </form>
+<script>
+    
+    $(function(){
+        var option = new Array();
+        option[0] = {name:'password',type:'password',msg:'6 - 16个字符 ，区分大小写！',required:1};
+        option[1] = {name:'password2',type:'password2',msg:'两次密码输入不一致！'};
+        option[2] = {name:'yzm',type:'regexp',msg:'请填写正确的验证码！',rule:/^.{5,5}$/,required:1}; 
+        ch = new formCheck(option);
+        if(<if con="$status">1<else />0</if>){
+            confirm_('密码修改成功',function(){
+                window.location.reload(); 
+            }); 
+        }
+
+    });
+    //--更新验证码
+    function getverify(){
+        var imgyzm = document.getElementById('yzmi');
+        imgyzm.setAttribute('src',"<root />u/verifyCode");
+    }
+    //--检测字段
+    function icheck(){
+        var bool_ = false;
+        var res = ch.start();
+        if(res==1){
+            bool_ = true;
+        }
+        return bool_;
+    }
+</script>
+</div>

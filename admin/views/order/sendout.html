@@ -1,0 +1,11 @@
+
+<form id="order_sendout_form11" name="order_sendout_form11" onsubmit="return goodsorder.sendoutDone({$id})" >
+    <div style="padding: 8px;" >
+        <div style="width:130px;display: inline-block;text-align: right;" >订单号：</div>{$orderSn}
+    </div>
+    <div style="padding: 8px;" >
+        <div style="width:130px;display: inline-block;text-align: right;" >物流快递单号：</div>
+        <input style="height: auto;display: inline-block; padding: 7px; font-size: 14px; font-weight: bold; border:1px solid #e1e1e1; width:300px;" type="text" name="expressNo" id="expressNo" value="{$expressNo}" <if con="$expressNo" >readonly='readonly'</if> />
+        <input type="hidden" name="_submit_" value="1" />
+    </div>
+</form>

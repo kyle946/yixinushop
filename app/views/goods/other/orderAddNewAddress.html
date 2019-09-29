@@ -1,0 +1,21 @@
+<!--订单确认页面  ，添加新地址的HTML文件 ，用ajax 方式获取-->
+<div id="address1" class="clearfix" > 
+    <form method="post" action='<root />?c=goods&a=orderAddNewAddress' id="addNewAddress2" name="addNewAddress2" > 
+        <p class="clearfix"><font><b class='cr' >*</b>区域：</font>
+            <select id='proviceId' name="provice" ></select> 
+            <select id='cityId' name="city" ></select>
+            <select id='countyId' name="county" onchange="obj2.get_coordinate()" ></select> 
+            <!--<select id='townId' name="town" ></select>-->
+        </p> 
+        <p class="clearfix"><font><b class='cr' >*</b>街道地址：</font><input type="text" name="street" class="input3" value="" />&nbsp;&nbsp;不要重复填写上面选择的区域</p> 
+        <!--<p class="clearfix"><font>邮政编码：</font><input type="text" class="input2" name='zipcode' value="" /></p>--> 
+        <p class="clearfix"><font><b class='cr' >*</b>收货人姓名：</font><input type="text" name='recipients' class="input2" value="" onfocus="obj2.get_coordinate()" /></p>
+        <p class="clearfix"><font><b class='cr' >*</b>手机号码：</font><input type="text" name='mobile' class="input2" value=""onfocus="obj2.get_coordinate()" /></p> 
+<!--        <p class="clearfix"><font>经度：</font><input type="text" class="input2" style='background-color: #f1f1f1;' readonly="readonly" name='lat' value="" /></p> 
+        <p class="clearfix"><font>纬度：</font><input type="text" class="input2" style='background-color: #f1f1f1;' readonly="readonly" name='long' value="" /></p> -->
+        <p class="clearfix"><font>电话号码：</font><input type="text" class="input2" name='phone' value="" /></p> 
+        <p class="clearfix"><font></font><input type="button" class="bt1" onclick="goodsOrder.addNewAddressDone();" value="确  定" /></p> 
+        <input type="hidden" name='lat' value='' />
+        <input type="hidden" name='long' value='' />
+    </form>
+</div>

@@ -1,0 +1,28 @@
+<layout name="layout/layout1" />
+<style>
+#goodslisttable tr:hover{background-color: #FFE0CF;}
+</style>
+<include file='dev/head' />
+<div class="w100">
+    <table id="goodslisttable" class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>模块</th>
+            <th>操作</th>
+            <th>权限标签</th>
+            <th width="130">操作</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td>{$v['id']}</td>
+                <td>{$v['colltroller']}</td>
+                <td>{$v['action']}</td>
+                <td>{$v['mtag']}</td>
+                <td>
+                    <a href="<?php echo __ROOT__; ?>?system=devMenu&type=addaction&id={$v['id']}">修改</a>&nbsp;&nbsp;
+                    <a href="javascript:confirm_('你确定要删除商品分类 [{$v['name']}] 吗？','<?php echo __ROOT__.'?c=dev&a=delmenu&id='.$v['id']; ?>')" >删除</a></td>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>

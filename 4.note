@@ -1,0 +1,1 @@
+sed -i "s/<?php/<?php\n\n\n\/\*\n \*\n \*异新优商城\n \*版权所有 长沙异新优网络科技有限责任公司\n \*官方网站：http:\/\/www.yixinu.com\n \*开发文档：http:\/\/demo.yixinu.com\/doc\/\n *@author:青竹丹枫 , 微信 : xianglu , QQ : 316686606\n \*\/\n\n/g" /tmp/1.php

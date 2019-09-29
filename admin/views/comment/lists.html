@@ -1,0 +1,119 @@
+<layout name="layout/layout1" />
+<style>
+    #goodscommentlisttable tr th,#goodscommentlisttable tr td{text-align: center;}
+</style>
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?user=comment"><img src="<root />static/icon/a1.png" /><font>全部评论</font></a>
+    <a href="<?php echo __ROOT__; ?>?user=comment&s=2"><img src="<root />static/icon/a1.png" /><font>待审核评论</font></a>
+    
+    <a href="javascript:publicMethod.isok(1);"><img src="<root />static/icon/a4.png" /><font>通过审核</font></a>
+    <a href="javascript:publicMethod.isok(3);"><img src="<root />static/icon/a4.png" /><font>关闭评论</font></a>
+    <a href="javascript:publicMethod.isok(2);"><img src="<root />static/icon/a4.png" /><font>设为待审核</font></a>
+    <a href="javascript:publicMethod.delete();"><img src="<root />static/icon/a4.png" /><font>删除</font></a>
+</div>
+<div class="w100">
+    <table class="content_list w100" id="goodscommentlisttable" >
+        <tr>
+            <th style="width:50px;" ><input type="checkbox" onclick="publicMethod.listcheck(this,'goodscommentlist')"/></th>
+            <th style="width:450px;" >内容</th>
+            <th>用户</th>
+            <th>商品</th>
+            <th>评论时间</th>
+            <th>状态</th>
+            <!--<th>操作</th>-->
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td><input name="goodscommentlist[]" type="checkbox" value="{$v.id}" /></td>
+                <td style="text-align:left;" >{$v.content}</td>
+                <td><a title="查看用户详情" href="<root />?user=list&type=userinfo&id={$v.userid}" >{$v.username}</a></td>
+                <td><a title="查看商品详情" href="http://<?php echo MAIN_DOMAIN; ?>item/{$v.goodsid2}" target="_blank" >{$v.goodsname} {$v.spec}</a></td>
+                <td>{$v.ctime}</td>
+                <td>
+                    <?php if($v['status']==1): ?>
+                    <font class='cg'>显示</font>
+                    <?php elseif($v['status']==2): ?>
+                    <font class='cr'>待审核</font>
+                    <?php elseif($v['status']==3): ?>
+                    <font class='cr'>关闭</font>
+                    <?php endif; ?>
+                </td>
+<!--                <td>
+                    <a href="<?php echo __ROOT__; ?>?user=list&type=edit&id={$v['id']}">修改</a>&nbsp;&nbsp;
+                    <a href="javascript:confirm_('你确定要删除用户 [{$v['username']}] 吗？','<?php echo __ROOT__.'?user=delete&id='.$v['id']; ?>')" >删除</a>
+                </td>-->
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+<script>
+    publicMethod = {};
+    //--设置审核状态
+    publicMethod.isok = function(status){
+        var str = publicMethod.check('goodscommentlist');
+        if(str==false){
+            confirm_('请至少选择一条评论！');
+            return false;
+        }else{
+            $.ajax({
+                url:'<root />?c=comment&a=approve&status='+status,
+                dataType:'json',
+                data:str,
+                type:'get',
+                beforeSend:function(){ confirm_('正在设置，请稍后……');  },
+                success:function(d){
+                    window.location.reload();
+                }
+            });
+        }
+    };
+    
+    //--删除评论 start
+    publicMethod.delete = function(){
+        var str = publicMethod.check('goodscommentlist');
+        if(str==false){
+            confirm_('请至少选择一条评论！',null,380,100);
+            return false;
+        }
+        confirm_('你确定要删除吗？',function(){publicMethod.isdelete();},380,100);
+    };
+    publicMethod.isdelete = function(){
+        var str = publicMethod.check('goodscommentlist');
+        if(str==false){
+            confirm_('请至少选择一条评论！');
+            return false;
+        }else{
+            $.ajax({
+                url:'<root />?c=comment&a=isdelete',
+                dataType:'json',
+                data:str,
+                type:'get',
+                beforeSend:function(){ confirm_('正在删除，请稍后……');  },
+                success:function(d){
+                    window.location.reload();
+                }
+            });
+        }
+    };
+    //--删除评论 end
+    
+    //--全选函数
+    publicMethod.listcheck = function(e,chk){
+         var elems = document.getElementsByTagName("INPUT");
+          for (var i=0; i < elems.length; i++){
+                if (elems[i].name == chk || elems[i].name == chk + "[]") {
+                      elems[i].checked = e.checked;
+                }
+          }
+    };
+    //--检测是否选择了
+    publicMethod.check = function(chk){
+        var str=$("input[name='"+chk+"[]']:checked").serialize();
+        if(str==''){
+            return false;
+        }else{
+            return str;
+        }
+    };
+</script>

@@ -1,0 +1,36 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?system=role"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?system=role&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <a href="<?php echo __ROOT__; ?>"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+<div class="w100 clearfix">
+    <table class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>角色名</th>
+            <th>状态</th>
+            <th width="120">操作</th>
+        </tr>
+        <list name='data' item='v'>
+        <tr>
+            <td>{$v['id']}</td>
+            <td>{$v['name']}<?php if($v['sys_default']==1){ ?>&nbsp;&nbsp;<span class='c1'>(系统角色，不能删除)</span><?php } ?></td>
+            <td>
+                <?php if($v['status']==1): ?>
+                <font class='cg'>可用</font>
+                <?php else: ?>
+                <font class='cr'>禁用</font>
+                <?php endif; ?>
+            </td>
+            <td>
+                <a href="<?php echo __ROOT__.'?system=role&type=edit&id='.$v['id']; ?>" >修改</a>&nbsp;&nbsp;
+                <?php if($v['sys_default']!=1){ ?>
+                <a href="javascript:confirm_('你确定要删除角色 [<?php echo $v['name']; ?>] 吗？','<?php echo __ROOT__.'?system=role&type=delete&id='.$v['id']; ?>')">删除</a>
+                <?php } ?>
+            </td>
+        </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>

@@ -1,0 +1,40 @@
+<layout name="layout/layout2" />
+    <div class="h10 w100" ></div>
+    <div class="h10 w100 cr">提示：[需满金额] 表示订单需要满足金额优惠券才能使用，一个订单只能使用一张。</div>
+    <div class="h10 w100" ></div>
+    <div class="order_area1" >
+        <table border="0" cellspacing="5">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>面额</th>
+                    <th>需满金额</th>
+                    <th>发放时间</th>
+                    <th>有效期</th>
+                    <th>订单</th>
+                    <th style="width:8%;" >状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <list name="list" item="v" >
+                <tr>
+                    <td>{$v.id}</td>
+                    <td><font class='f2' >{$v.money}</font></td>
+                    <td>{$v.amount}</td>
+                    <td>{$v.rtime}</td>
+                    <td><span <?php if($v['status']==3): ?> class="cr" <?php endif; ?> >{$v.startTime} ~ {$v.endTime}</span></td>
+                    <td><?php if(!empty($v['orderSn'])): ?><a class="a1" href="<root />?c=user&a=orderinfo&sn={$v.orderSn}" >订单详情</a><?php endif; ?></td>
+                    <td>
+                        <switch name="$v['status']" >
+                        <case value="1"><font class='f1' >可用</font></case>
+                        <case value="2"><font class='f2' >禁用</font></case>
+                        <case value="3"><font class='f2' >已过期</font></case>
+                        <case value="4"><font class='f2' >已使用</font></case>
+                        </switch>
+                    </td>
+                </tr>
+                </list>
+            </tbody>
+        </table>
+        <div id="page" >{$pageinfo}</div>
+    </div>

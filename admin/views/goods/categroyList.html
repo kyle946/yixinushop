@@ -1,0 +1,94 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=categroyList"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?goods=categroyList&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <a href="javascript:void(0)" onclick="obj.deleteGoods()"><img src="<?php echo __ROOT__; ?>static/icon/recycle32.png" /><font>删除</font></a>
+</div>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th style="width:15px;"><input type="checkbox" onclick="obj.listcheck(this)" /></th>
+            <th>ID</th>
+            <th>名称<font class="c1">&nbsp;&nbsp;[&nbsp;类型&nbsp;]</font></th>
+            <th>状态</th>
+            <th>排序</th>
+            <!--<th>是否显示在导航</th>-->
+            <th width="80">操作</th>
+        </tr>
+        <list name="categroy_list" item="v">
+            <tr>
+                <?php if($v['id']==32||$v['id']==33){ ?>
+                <td></td>
+                <?php }else{ ?>
+                <td><input type="checkbox" name="listcheck11[]" value="{$v.id}" /></td>
+                <?php } ?>
+                
+                <td>{$v['id']}</td>
+                <td>{$v['name']}<?php if( $v['level'] == intval($GLOBALS['config']['catlevel']) ):  ?><font class="c1">&nbsp;&nbsp;[&nbsp;{$v.typeName}&nbsp;]</font><?php endif; ?></td>
+                <td>
+                    <?php if($v['status']==1): ?>
+                    <font class='cg'>可用</font>
+                    <?php else: ?>
+                    <font class='cr'>禁用</font>
+                    <?php endif; ?>
+                </td>
+                <td>{$v['sort']}</td>
+                <td>
+                    <a href="<?php echo __ROOT__; ?>?goods=categroyList&type=edit&id={$v['id']}">修改</a>&nbsp;&nbsp;
+                    
+                    <?php if($v['id']==32||$v['id']==33){ ?>
+                    &nbsp;&nbsp;
+                    <?php }else{ ?>
+                        <a href="javascript:confirm_('你确定要删除商品分类 [{$v['name']}] 吗？','<?php echo __ROOT__.'?goods=categroyList&type=delete&id='.$v['id']; ?>')" >删除</a>
+                    <?php } ?>
+                </td>
+            </tr>
+        </list>
+    </table>
+</div>
+
+<script>
+    
+        obj = {};
+        //--全选函数
+        obj.listcheck = function(e){
+            var chk = 'listcheck11';
+             var elems = document.getElementsByTagName("INPUT");
+              for (var i=0; i < elems.length; i++){
+                    if (elems[i].name == chk || elems[i].name == chk + "[]") {
+                          elems[i].checked = e.checked;
+                    }
+              }
+        };
+        //--检测是否选择了商品
+        obj.check = function(){
+            var str=$("input[name='listcheck11[]']:checked").serialize();
+            if(str==''){
+                return false;
+            }else{
+                return str;
+            }
+        };
+        obj.deleteGoods = function(){
+            var data = obj.check();
+            if(data==false){
+                confirm_('请选择要删除的分类！');
+                return false;
+            }else{
+                 var msg2 = new message();
+                 msg2.show('你确定要删除选择的分类吗？','警告！',null,320,90,null,1,function(){ 
+                     
+                            $.ajax({
+                                url:'?c=goods&a=categroydeletes',
+                                type:'get',
+                                data:data,
+                                dataType:'json',
+                                success:function(d){
+                                    window.location.reload();
+                                }
+                            });
+                            
+                 });
+            }
+        };
+</script>

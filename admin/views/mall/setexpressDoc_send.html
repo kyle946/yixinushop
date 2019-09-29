@@ -1,0 +1,37 @@
+<div class="setexpressDoc_send_area1" >
+    <form id="setexpressDoc_send_form1" name="setexpressDoc_send_form1" method="post" >
+        <table border="0" cellspacing="5" style="font-size: 12px;" >
+            <tbody>
+                <tr>
+                    <td>寄件人名称</td>
+                    <td><input type="text" name="senName" class="input2" value="{$info.senName}" /></td>
+                    <td>寄件人手机</td>
+                    <td><input type="text" name="senMobile" class="input2" value="{$info.senMobile}" /></td>
+                </tr>
+                <tr>
+                    <td>寄件人电话</td>
+                    <td><input type="text" name="senPhone" class="input2" value="{$info.senPhone}"  /></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>区域</td>
+                    <td colspan="3" >
+                        <div id="address1" >
+                            <select id='proviceId' name="provice" ></select>
+                            <select id='cityId' name="city" ></select>
+                            <select id='countyId' name="county" ></select>
+                            <select id='townId' name="town" ></select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>街道详细地址</td>
+                    <td colspan="3" ><input type="text" name="senAddress" class="input1" value="{$info.senAddress}"  /></td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="_submit_" value="1" />
+    </form>
+</div>
+

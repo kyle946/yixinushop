@@ -1,0 +1,12 @@
+<layout name="layout/layout1" />
+<div class="br2" >
+    <div class="commonMenu w100" >
+        <a href="<?php echo __ROOT__; ?>?activity=coupon" <if con="ACTION_NAME=='coupon' or ACTION_NAME=='couponAdd'" >class="hover"</if> href="javascript:void(0);" >优惠券</a>
+        <a href="<?php echo __ROOT__; ?>?activity=coupon&type=send" <if con="ACTION_NAME=='couponSend'" >class="hover"</if> href="javascript:void(0);" >已发放优惠券</a>
+    </div>
+    <div class="padding10">
+        <if con="ACTION_NAME=='coupon'" ><include file="activity/coupon" /></if>
+        <if con="ACTION_NAME=='couponSend'" ><include file="activity/couponSend" /></if>
+        <if con="ACTION_NAME=='couponAdd'" ><include file="activity/couponAdd" /></if>
+    </div>
+</div>

@@ -1,0 +1,449 @@
+<layout name="layout/layout1" />
+<div class='index_area5 w1 clearfix' >
+    <div style="width:205px;height:480px;margin-right: 10px;" class="fl" ></div>
+    <div class="a111 clearfix fl" >
+        <ul>
+            <li style="background:#FFE382;"><a><img src="<root />static/111.jpg" /></a></li>
+            <li style="background:#52A4ED;"><a><img src="<root />static/112.jpg" /></a></li>
+            <li style="background:#FFE3E7;"><a><img src="<root />static/113.jpg" /></a></li>
+        </ul>
+        <div class="iconfont left" style="display:none;" ><a href="javascript:void(0);" >&#xe6bc;</a></div>
+        <div class="iconfont right" style="display:none;" ><a href="javascript:void(0);" >&#xe6ab;</a></div>
+    </div>
+    <div class="v3area1 fr" >
+        <div class="v3area3" >
+            <a href="<root />{u u/login}" >登&nbsp;&nbsp;录</a>
+            <a href="<root />{u u/register}">注&nbsp;&nbsp;册</a>
+        </div>
+        <div class="v3area2" >
+            <h2>资讯快报</h2>
+            <?php $arr=getartlist('news',6,1); ?>
+            <?php foreach($arr as $v){ ?>
+            <p><a href="<root />{u m/$v[mark]/id_$v[id]}" >{fun ysubstr($v[title],20)}</a></p>
+            <?php } ?>
+        </div>
+    </div>
+    <div class="v3area4 fl" >
+        <?php $arr = getcustom1('goods4'); $list=$arr['list']; $info=$arr['info']; ?>
+        <?php foreach($list as $v){ ?>
+        <div class="b1" >
+            <a href="<root />{u item/$v[id] }" ><img init="1" border="0" src="<root />static/default.gif" xsrc="<root />image/{$v.thumb}"></a>
+        </div>
+        <?php } ?>
+    </div>
+    <div class="v3area5 fr" >
+        <img src="<root />static/117.jpg" />
+    </div>
+</div>
+<script>
+    $(function () {
+        $(".a111").css({'display':'block'});
+        $(".a111").KyleScroll({'width': '770px', 'height': '280', 'pause': '8000', 'w': 0.96});
+    });
+</script>
+
+<div class="w100 h10" ></div>
+<!--这一组商品从这里开始-->
+<div class="w1 index_goodslist clearfix" >
+    <div class="h10 w100" ></div>
+    <?php $arr = getcustom1('goods1'); $list=$arr['list']; $info=$arr['info']; ?>
+    <div class="index_goodslist_area1 w100 clearfix" >
+        <div class="a1 clearfix" >
+            <div class="a2 fl" >{$info.title}</div>
+            <!--<div class="a3 fr" ><a href="javascript:void(0)" >{$webconfig.webtitle}</a></div>-->
+        </div>
+    </div>
+    <div class="w100 h10" ></div>
+    <div class="index_goodslist_area2 w100 clearfix" >
+        <ul class="clearfix" >
+            <?php foreach($list as $v){ ?>
+            <li>
+            <if con="!empty($v['aid'])"><i></i></if>
+            <div class="thumb" ><a href="<root />{u item/$v[id] }" ><img init="1" border="0" src="<root />static/default.gif" xsrc="<root />image/{$v.thumb}"></a></div>
+            <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+            <div class="t2" >
+                ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+            </div>
+            </li>
+            <?php } ?>
+        </ul>
+    </div>
+</div>
+<!--在这里结束-->
+
+
+<!--这一组商品从这里开始-->
+<div class="w100 h30" ></div>
+<div class="h30 w1 bg2" ></div>
+<div class="h30 w1 bg2" ></div>
+<div class="w100 h30" ></div>
+<div class="w1 index_goodslist clearfix" >
+    <div class="index_goodslist_area1 w100 clearfix" id="indexaa11" >
+        <div class="a1 clearfix" >
+            <div class="a2 fl" >熟食类</div>
+            <div class="a3 fr clearfix" >
+                <?php $arr2 = getgoodssoncate(1); ?>
+                <a href="javascript:void(0);" class="group00" data-id="group00" >新品<div></div></a>
+                <?php foreach($arr2 as $v){ ?>
+                <a href="javascript:void(0);" data-id="group{$v.id}" >{$v.name}<div></div></a>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+    <!--<div class="w100 h10" ></div>-->
+    <div class="index_goodslist_area2 w100 clearfix" id="indexaa11" >
+        <div class="fl area11" style="background-color: <pr />" ><img src="<root />static/115.jpg" /></div>
+
+        <?php $arr = getonegoodscate(1,10); ?>
+        <ul class="clearfix fr" style="width:1010px;" id="group00" >
+            <?php foreach($arr as $v){ ?>
+            <li class="i2" >
+            <if con="!empty($v['aid'])"><i></i></if>
+            <div class="thumb" >
+                <a href="<root />{u item/$v[id] }" >
+                    <img init="1" border="0" src="<root />static/default.gif" xsrc="<root />image/{$v.thumb}">
+                </a>
+            </div>
+            <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+            <div class="t2" >
+                ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+            </div>
+            </li>
+            <?php } ?>
+        </ul>
+
+        <?php foreach($arr2 as $v2){ ?>
+        <?php $arr = getonegoodscate($v2['id'],10); ?>
+        <ul class="clearfix fr" style="width:1010px; height:0px;overflow: hidden;" id="group{$v2.id}" >
+            <?php foreach($arr as $v){ ?>
+            <li class="i2" >
+            <if con="!empty($v['aid'])"><i></i></if>
+            <div class="thumb" >
+                <a href="<root />{u item/$v[id] }" >
+                    <img init="1" border="0" src="<root />static/default.gif" xsrc="<root />image/{$v.thumb}">
+                </a>
+            </div>
+            <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+            <div class="t2" >
+                ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+            </div>
+            </li>
+            <?php } ?>
+        </ul>
+        <?php } ?>
+
+
+    </div>
+    <script>
+        $(".index_goodslist_area1#indexaa11 .a1 .a3 a").on('mouseenter', function () {
+            $('.index_goodslist_area1#indexaa11 .a1 .a3 a').css({
+                'border-top': '2px solid #fff',
+                'color': '#555',
+                'border-left': '1px solid #fff',
+                'border-right': '1px solid #fff',
+            }).find('div').css({'border-bottom': '1px solid #e1e1e1'});
+            $(this).css({
+                'border-top': '2px solid #25AB00',
+                'color': '#25AB00',
+                'border-left': '1px solid #25AB00',
+                'border-right': '1px solid #25AB00',
+            });
+            $(this).find('div').css({'border-bottom': '5px solid #fff'});
+            var groupid = $(this).data('id');
+            $(".index_goodslist_area2#indexaa11 ul").css({'height': '0px', 'overflow': 'hidden'});
+            $(".index_goodslist_area2#indexaa11 ul#" + groupid).css({'height': 'auto'});
+        });
+    </script>
+</div>
+<!--在这里结束-->
+
+
+
+<div class="w100 h30" ></div>
+<div class="w1" ><img src="<root />static/116.jpg" /></div>
+<div class="w100 h30" ></div>
+<div class="w1 index_goodslist clearfix" >
+    <!--这一组商品从这里开始-->
+    <div class="index_goodslist_area1 w100 clearfix" id="indexaa12" >
+        <div class="a1 clearfix" >
+            <div class="a2 fl" >糕点类</div>
+            <div class="a3 fr" >
+                <?php $arr2 = getgoodssoncate(12); ?>
+                <a href="javascript:void(0);" class="group00" data-id="group00"  >新品<div></div></a>
+                <?php foreach($arr2 as $v){ ?>
+                <a href="javascript:void(0);" data-id="group{$v.id}" >{$v.name}<div></div></a>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+    <!--<div class="w100 h10" ></div>-->
+    <?php $arr = getonegoodscate(12,10); ?>
+    <div class="index_goodslist_area2 w100 clearfix" id="indexaa12" >
+        <div class="fl area11" style="background-color: <pr />" ><img src="<root />static/115.jpg" /></div>
+
+        <ul class="clearfix fr" style="width:1010px;" id="group00" >
+            <?php foreach($arr as $v){ ?>
+            <li class="i2" >
+            <if con="!empty($v['aid'])"><i></i></if>
+            <div class="thumb" ><a href="<root />{u item/$v[id] }" ><img init="1" border="0" src="<root />static/default.gif" xsrc="<root />image/{$v.thumb}"></a></div>
+            <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+            <div class="t2" >
+                ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+            </div>
+            </li>
+            <?php } ?>
+        </ul> 
+
+        <?php foreach($arr2 as $v2){ ?>
+        <?php $arr = getonegoodscate($v2['id'],10); ?>
+        <ul class="clearfix fr" style="width:1010px; height:0px;overflow: hidden;" id="group{$v2.id}" >
+            <?php foreach($arr as $v){ ?>
+            <li class="i2" >
+            <if con="!empty($v['aid'])"><i></i></if>
+            <div class="thumb" >
+                <a href="<root />{u item/$v[id] }" >
+                    <img init="1" border="0" src="<root />static/default.gif" xsrc="<root />image/{$v.thumb}">
+                </a>
+            </div>
+            <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+            <div class="t2" >
+                ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+            </div>
+            </li>
+            <?php } ?>
+        </ul>
+        <?php } ?>
+
+
+    </div>
+    <script>
+        $(".index_goodslist_area1#indexaa12 .a1 .a3 a").on('mouseenter', function () {
+            $('.index_goodslist_area1#indexaa12 .a1 .a3 a').css({
+                'border-top': '0px solid #25AB00',
+                'color': '#555',
+                'border-left': '0px solid #25AB00',
+                'border-right': '0px solid #25AB00',
+            }).find('div').css({'border-bottom': '0px solid #fff'});
+            $(this).css({
+                'border-top': '2px solid #25AB00',
+                'color': '#25AB00',
+                'border-left': '1px solid #25AB00',
+                'border-right': '1px solid #25AB00',
+            });
+            $(this).find('div').css({'border-bottom': '5px solid #fff'});
+            var groupid = $(this).data('id');
+            $(".index_goodslist_area2#indexaa12 ul").css({'height': '0px', 'overflow': 'hidden'});
+            $(".index_goodslist_area2#indexaa12 ul#" + groupid).css({'height': 'auto'});
+        });
+        $(function () {
+            $('.group00').css({
+                'border-top': '2px solid #25AB00',
+                'color': '#25AB00',
+                'border-left': '1px solid #25AB00',
+                'border-right': '1px solid #25AB00',
+            }).find('div').css({'border-bottom': '5px solid #fff'});
+        });
+    </script>
+    <!--在这里结束-->
+</div>
+
+
+
+
+
+<!--这一组商品从这里开始-->
+<div class="w100 h30" ></div>
+<div class="w1" ><img src="<root />static/116.jpg" /></div>
+<div class="w100 h30" ></div>
+<div class="w1 index_goodslist clearfix" >
+    <div class="index_goodslist_area1 w100 clearfix" id="indexaa16" >
+        <div class="a1 clearfix" >
+            <div class="a2 fl" >糖/酒/饮料</div>
+            <div class="a3 fr clearfix" >
+                <?php $arr2 = getgoodssoncate(16); ?>
+                <a href="javascript:void(0);" class="group00" data-id="group00" >新品<div></div></a>
+                <?php foreach($arr2 as $v){ ?>
+                <a href="javascript:void(0);" data-id="group{$v.id}" >{$v.name}<div></div></a>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+    <!--<div class="w100 h10" ></div>-->
+    <div class="index_goodslist_area2 w100 clearfix" id="indexaa16" >
+        <div class="fl area11" style="background-color: <pr />" ><img src="<root />static/115.jpg" /></div>
+
+        <?php $arr = getonegoodscate(16,10); ?>
+        <ul class="clearfix fr" style="width:1010px;" id="group00" >
+            <?php foreach($arr as $v){ ?>
+            <li class="i2" >
+            <if con="!empty($v['aid'])"><i></i></if>
+            <div class="thumb" >
+                <a href="<root />{u item/$v[id] }" >
+                    <img init="1" border="0" src="<root />static/default.gif" xsrc="<root />image/{$v.thumb}">
+                </a>
+            </div>
+            <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+            <div class="t2" >
+                ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+            </div>
+            </li>
+            <?php } ?>
+        </ul>
+
+        <?php foreach($arr2 as $v2){ ?>
+        <?php $arr = getonegoodscate($v2['id'],10); ?>
+        <ul class="clearfix fr" style="width:1010px; height:0px;overflow: hidden;" id="group{$v2.id}" >
+            <?php foreach($arr as $v){ ?>
+            <li class="i2" >
+            <if con="!empty($v['aid'])"><i></i></if>
+            <div class="thumb" >
+                <a href="<root />{u item/$v[id] }" >
+                    <img init="1" border="0" src="<root />static/default.gif" xsrc="<root />image/{$v.thumb}">
+                </a>
+            </div>
+            <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+            <div class="t2" >
+                ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+            </div>
+            </li>
+            <?php } ?>
+        </ul>
+        <?php } ?>
+
+
+    </div>
+    <script>
+        $(".index_goodslist_area1#indexaa16 .a1 .a3 a").on('mouseenter', function () {
+            $('.index_goodslist_area1#indexaa16 .a1 .a3 a').css({
+                'border-top': '0px solid #25AB00',
+                'color': '#555',
+                'border-left': '0px solid #25AB00',
+                'border-right': '0px solid #25AB00',
+            }).find('div').css({'border-bottom': '0px solid #fff'});
+            $(this).css({
+                'border-top': '2px solid #25AB00',
+                'color': '#25AB00',
+                'border-left': '1px solid #25AB00',
+                'border-right': '1px solid #25AB00',
+            });
+            $(this).find('div').css({'border-bottom': '5px solid #fff'});
+            var groupid = $(this).data('id');
+            $(".index_goodslist_area2#indexaa16 ul").css({'height': '0px', 'overflow': 'hidden'});
+            $(".index_goodslist_area2#indexaa16 ul#" + groupid).css({'height': 'auto'});
+        });
+    </script>
+</div>
+<!--在这里结束-->
+
+
+
+<div class="w100 h30" ></div>
+<div class="w1" ><img src="<root />static/116.jpg" /></div>
+<div class="w100 h30" ></div>
+<div class="w1 index_goodslist clearfix" >
+    <!--这一组商品从这里开始-->
+    <?php $arr = getonegoodscate(12,5); ?>
+    <div class="index_goodslist_area1 w100 clearfix" >
+        <div class="a1 clearfix" >
+            <div class="a2 fl" >蛋糕/面食</div>
+            <div class="a3 fr" ><a href="<root />g/13" >更 多</a></div>
+        </div>
+    </div>
+    <div class="w100 h10" ></div>
+    <div class="index_goodslist_area2 w100 clearfix" >
+        <ul class="clearfix" >
+            <?php foreach($arr as $v){ ?>
+            <li>
+            <if con="!empty($v['aid'])"><i></i></if>
+            <div class="thumb" ><a href="<root />{u item/$v[id] }" ><img init="1" border="0" src="<root />static/default.gif" xsrc="<root />image/{$v.thumb}"></a></div>
+            <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+            <div class="t2" >
+                ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+            </div>
+            </li>
+            <?php } ?>
+        </ul>
+    </div>
+    <!--在这里结束-->
+</div>
+
+<div class="h30 w100" ></div>
+<div class="h30 w100 bg2" ></div>
+<div class="h30 w100" ></div> 
+<div class="w1 index_article_list clearfix" >
+    <div class='fl b' >
+        <h2>关于技术<font>更多……</font></h2>
+
+        <?php $arr=getartlist('technology',5,1); ?>
+        <?php foreach($arr as $v){ ?>
+        <a href="<root />{u m/$v[mark]/id_$v[id]}" >{fun ysubstr($v[title],25)}<font class='f1'>{fun substr($v[addtime],0,10)}</font></a>
+        <?php } ?>
+    </div>
+    <div class="fr a" >
+        <?php $arr = getcustom1('article1'); $list=$arr['list']; $info=$arr['info']; ?>
+        <h2>{$info.title}<font>更多……</font></h2>
+        <?php foreach($list as $v){ ?>
+        <a href="<root />{u m/$v[mark]/id_$v[id]}" >{fun ysubstr($v[title],25)}<font class='f1'>{fun substr($v[addtime],0,10)}</font></a>
+        <?php } ?>
+    </div>
+</div>
+<div class="h30 w100" ></div>
+<div class="h30 w100" ></div>
+
+
+<script>
+    privateMethod = {};
+    $(function () {
+
+        $(".index_area1 .area1").each(function () {
+            $(this).mouseenter(function () {
+                var c = $(this).attr('id') + '_hover';
+                $('.index_area1 .area1').attr('class', 'area1').find('.area5_hover').removeClass('area5_hover');
+                $(this).addClass(c).find('.area5').addClass('area5_hover');
+            });
+        });
+        //-- 图片延迟加载 start
+        privateMethod.loadimage();
+        $(window).scroll(function () {
+            privateMethod.loadimage();
+        });
+        //-- 图片延迟加载 end
+
+    });
+
+    //-- 图片延迟加载 start
+    privateMethod.loadimageAllimg = function () {
+        var allimg = document.getElementsByTagName('img');
+        var img_ = new Array();
+        for (x in allimg) {
+            var t1 = allimg.item(x).getAttribute('init');
+            if (t1 == 1) {
+                img_.push(allimg.item(x));
+            }
+        }
+        return img_;
+    };
+    privateMethod.loadimage = function () {
+        var img_ = privateMethod.loadimageAllimg();
+        var documentTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var documentHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        var dt = documentTop + documentHeight;
+        $.each(img_, function (i, n) {
+            var nodeTop = $(this).offset().top;
+            if (nodeTop <= dt) {
+                var src_ = $(this).attr('xsrc');
+                $(this).attr('src', src_);
+                $(this).attr('init', 0);
+            }
+        });
+    };
+    //-- 图片延迟加载 end
+</script>

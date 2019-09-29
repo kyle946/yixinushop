@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+<title><?php if( empty($webtitle_) ){  echo isset($webconfig['webtitle'])?$webconfig['webtitle']:'异新优商城内容系统'; }else{ echo $webtitle_; } ?></title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="Keywords" content="{$webconfig.keywords}" />
+<meta name="Description" content="{$webconfig.description}" />
+<script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+<script>imageUrl = '<?php echo IMAGE_URL; ?>'; rootPath = '<?php echo __ROOT__; ?>';</script>
+<script src="<?php echo __ROOT__; ?>static/main.js" type="text/javascript"></script>
+<link href="<?php echo __ROOT__; ?>static/style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div class="layout1_area1 w100 clearfix" >
+        <div class="area2" >
+            <?php if(isset($userinfo) and !empty($userinfo)): ?>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <font class="c1" >你好，{$userinfo.nickname}</font>&nbsp;&nbsp;
+            <a href='<root />{u user}' >用户中心</a>
+            <a href='<root />{u u/logout}' >退出</a>
+            <?php else: ?>
+            &nbsp;&nbsp;&nbsp;&nbsp;<a class='fg' href='/' >欢迎光临&nbsp;{$webconfig.webtitle}！</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a target="_blank" href='<root />{u u/login}' >登录</a>&nbsp;&nbsp;<a target="_blank" href='<root />{u u/register}' >注册</a>
+            <?php endif; ?>
+        </div>
+        <div class="area3" >
+            <a href='javascript:void(0);' >YixinU授权</a>&nbsp;|&nbsp;
+            <a href='javascript:void(0);' >帮助中心</a>&nbsp;|&nbsp;
+            <a href='javascript:void(0);' >联系我们</a>&nbsp;|&nbsp;
+            <a href='javascript:void(0);' class='fg' >客服热线：{$webconfig.wap}</a>
+        </div>
+    </div>
+    <div class="w100 clearfix" >{__CONTENT__}</div>
+    <include file='layout/footer' />
+<script>
+    $(function(){
+        <if con="isindex()==FALSE">
+        $('#menu').mouseenter(function(){ $('.layout1_area3 .area2').css({'display':'block'})});
+        $('#menu').mouseleave(function(){ $('.layout1_area3 .area2').css({'display':'none'})});
+        </if>
+    });
+</script>
+</body>
+</html>

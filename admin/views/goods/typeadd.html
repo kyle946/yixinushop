@@ -1,0 +1,244 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=type"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?goods=type&act=add&clear=all"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <a href="<?php echo __ROOT__; ?>"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+<div class="w100">
+    <?php if(isset($step) && $step==1): ?>
+    <form method="post" action="" name="iform" onsubmit="return icheck();" >
+    <table class="w100 content_list">
+        <tr>
+            <th width="180" style="text-align: left;">商品类型编辑 - <span class="cf60">基本信息</span></th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">&nbsp;</span></td>
+            <td colspan="2">
+                <div style="width:380px;" class="step_common clearfix">
+                    <div class="step_common3"></div>
+                    <div class="step_common1 step_bcolor_f60">1</div>
+                    <div class="step_common1 step_bcolor_bbb">2</div>
+                    <div class="step_common1 step_bcolor_bbb">3</div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">名称：</span></td>
+            <td><input type="text" class="input1" name="name" value="{$info.name}" /></td>
+            <td><span id="nametips" class="c1">商品类型的名称</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">标识id：</span></td>
+            <td><if con="$_GET['act']=='edit'" >{$info.mark}<else /><input type="text" class="input2" name="mark" value="{$info.mark}"  /></if></td>
+            <td><span id="marktips" class="c1">创建后不可修改</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">状态：</span></td>
+            <td>
+                <select name="status">
+                    <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                    <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                </select>
+            </td>
+            <td><span class="c1">商品类型状态</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">虚拟商品 / 实物：</span></td>
+            <td>
+                <select name="virtual">
+                    <option value="2" <?php if(isset($info['virtual']) && $info['virtual']==2): ?>selected='selected'<?php endif; ?> >实物</option>
+                    <option value="1" <?php if(isset($info['virtual']) && $info['virtual']==1): ?>selected='selected'<?php endif; ?> >虚拟商品</option>
+                </select>
+            </td>
+            <td><span class="c1">是虚拟商品还是实物 ，虚拟商品则不产生运费。</span></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="下一步" />
+                <!--<input type="submit" class="bt1" name="_save_" value="保存退出" />-->
+            </td>
+            <td><span class="c1">保存当前信息，下一步进入属性编辑。</span></td>
+        </tr>
+    </table>
+    </form>
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'name',type:'str30',msg:'名称应该为1-30个字符！'};
+            option[1] = {name:'mark',type:'regexp',msg:'大写英文字母，1-20个字符！',required:1,rule:/^[a-zA-z]{1,20}$/};
+            ch = new formCheck(option);
+        });
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                return bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+    
+    <?php elseif($step==2): ?>
+    <table class="w100 content_list">
+        <tr>
+            <th width="165" style="text-align: left;">商品类型编辑 - <span class="cf60">添加属性</span></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">&nbsp;</span></td>
+            <td colspan="2">
+                <div style="width:380px;" class="step_common clearfix">
+                    <div class="step_common3"></div>
+                    <div class="step_common1 step_bcolor_f60">1</div>
+                    <div class="step_common1 step_bcolor_f60">2</div>
+                    <div class="step_common1 step_bcolor_bbb">3</div>
+                </div>
+            </td>
+        </tr>
+        <?php $attrdata=null; $singledata = 0; ?>
+        <list name="list" item="v">
+        <?php if(isset($_GET['id']) && $v['id']==$_GET['id']){ $attrdata=$v;} ?>
+        <tr>
+            <td style="text-align: right;border-bottom-style: dashed;">{$v.name}：</td>
+            <td style="border-bottom-style: dashed;">
+                <?php if($v['mothod']==1): ?>[手工录入]&nbsp;<?php $singledata++; endif; ?>
+                <?php if($v['mothod']==2): ?>[单选]&nbsp;<?php $singledata++; endif; ?>
+                <!--<?php if($v['mothod']==3): ?>[多选]&nbsp;<?php endif; ?>-->
+                <a><?php echo str_replace(array("\\r\\n", "\\n", "\\r"),"</a>&nbsp;<a>",$v['attrValue']); ?></a>
+                &nbsp;{$v.mark}
+            </td>
+            <td style="border-bottom-style: dashed;"> 
+                <a href="<?php echo __ROOT__; ?>?goods=type&act=edit&step=2&id={$v.id}">修改</a>&nbsp;&nbsp; 
+                <?php if($v['mothod']==2): ?>
+                <a href="javascript:confirm_('<p>删除单选属性会导致该类型的商品规格重新生成！价格和库存清零重置！</p><p>你确定要删除商品类型 [{$v.name}] 吗？</p>','<?php echo __ROOT__; ?>?goods=type&act=attrdelete&id={$v.id}')">删除</a>
+                <?php else: ?>
+                <a href="javascript:confirm_('你确定要删除商品类型 [{$v.name}] 吗？','<?php echo __ROOT__; ?>?goods=type&act=attrdelete&id={$v.id}')">删除</a>
+                <?php endif; ?>
+            </td>
+        </tr>
+        </list>
+        <tr id='nohover' >
+            <td style="text-align: right; vertical-align: top;"></td>
+            <td>
+                <form name="iform2" action="" method="POST" onsubmit="return icheck();" >
+                <table border="0" style='width:100%;' >
+                    <tbody>
+                        <tr>
+                            <td colspan="3">
+                                <?php if(!empty($attrdata)): ?>
+                                <input type="button" class="bt1" onclick="window.location.href='<?php echo __ROOT__; ?>?goods=type&act=edit&step=2'" value="添加属性" />
+                                &nbsp;&nbsp;&nbsp;<span class='cg'>正在修改……</span>
+                                <?php else: ?><span class='fb'>添加属性</span>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;border-width: 0px;border-bottom-style: dashed;" >属性名称：</td>
+                            <td style="text-align:left;border-width: 0px;border-bottom-style: dashed;"> <input type="text" id='attrname' class="input2" name="name" value="{$attrdata.name}" /> </td>
+                            <td style="text-align:left;border-width: 0px;border-bottom-style: dashed;"><span id="nametips" class="c1">创建后不可修改</span></td>
+                        </tr>
+        <tr>
+            <td style="text-align:right;border-width: 0px;border-bottom-style: dashed;" >标识id：</td>
+            <td><if con="isset($_GET['id'])" >{$attrdata.mark}<else /><input type="text" class="input2" name="mark" value="{$attrdata.mark}"  /></if></td>
+            <td><span id="marktips" class="c1">创建后不可修改</span></td>
+        </tr>
+                        <tr>
+                            <td style="text-align:right;border-width: 0px;border-bottom-style: dashed;" >值录入方式：</td>
+                            <td style="text-align:left;border-width: 0px;border-bottom-style: dashed;">
+                                <input type="radio" name="mothod" onclick="setm(1)" value="1" <?php if(empty($attrdata) || $attrdata['mothod']==1): ?> checked="checked" <?php endif; ?> />手工录入
+                                <input type="radio" name="mothod" onclick="setm(2)" value="2" <?php if(!empty($attrdata) && $attrdata['mothod']==2): ?> checked="checked" <?php endif; ?>  />单选
+                                <!--<input type="radio" name="mothod" onclick="setm(3)" value="3" <?php if(!empty($attrdata) && $attrdata['mothod']==3): ?> checked="checked" <?php endif; ?>  />多选-->
+                            </td>
+                            <td style="text-align:left;border-width: 0px;border-bottom-style: dashed;"><span class="c1">&nbsp;</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;border-width: 0px;border-bottom-style: dashed; vertical-align: top;">可选值列表：</td>
+                            <td style="text-align:left;border-width: 0px;border-bottom-style: dashed;">
+                                <textarea name="attrValue" <?php if(empty($attrdata) || $attrdata['mothod']==1): ?>readonly="readonly"<?php endif ?> class="textarea2" style='background-color: #f7f7f7;' id='attrValue' rows="4" cols="20">{$attrdata.attrValue} <?php if(empty($attrdata['attrValue'])): echo "null"; endif; ?></textarea>
+                            </td>
+                            <td style="text-align:left;border-width: 0px;border-bottom-style: dashed;"><span id="attrValuetips" class="c1">一行代表一个可选值</span></td>
+                        </tr>
+                        <tr>
+                            <td style="border-width: 0px;"></td>
+                            <td colspan="2" style="border-width: 0px;text-align: left;">
+                                <input type="hidden" name="acttype" value="1" />
+                                <input type="submit" class="bt1" name="_submit_" value="保存" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </form>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <form name="iform" method="POST" action="" >
+                <input type="button" onclick="window.location.href='<?php echo __ROOT__; ?>?goods=type&act=edit&step=1'" class="bt1" value="上一步" />
+                <input type="button" onclick="submit1()" class="bt1" value="完成" />
+                </form>
+            </td>
+            <td width='35%'><span class="c1"></span></td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        function setm(type){
+            if(type==1){
+                $("#attrValue").attr("readonly","readonly");
+                $("#attrValue").css({"background-color":"#f1f1f1"});
+            }else{
+                $("#attrValue").removeAttr("readonly");
+                $("#attrValue").css({"background-color":"#fff"});
+            }
+        }
+        
+        $(function(){
+            document.getElementById("attrname").focus();
+            var option = new Array();
+            option[0] = {name:'name',type:'regexp',msg:'属性名称 1 - 30 个字符！',rule:/^.{1,30}$/,required:1}; 
+           <?php if(!isset($_GET['id'])): ?> option[1] = {name:'mark',type:'regexp',msg:'标识ID为 4 - 30 个英文字母或数字！！',rule:/^[a-z|A-Z|0-9]{4,30}$/,required:1}; <?php endif; ?>
+            ch = new formCheck(option);
+        });
+        
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                var mothod = $("input[name='mothod']:checked").attr('value');
+                if(mothod==2){
+                    var attrValue = $("textarea[name='attrValue']").attr('value');
+                    if(attrValue==''){
+                        confirm_('可选值列表不能为空');
+                        return false
+                    }else{
+                        var rule = new RegExp(/^([^?/&_|.]+|\r|\n){0,200}$/g);
+                        if(!rule.test(attrValue)){
+                            confirm_('不能使用  /  ?  & _ 等符号。');
+                            return false
+                        }
+                        bool_ = true;
+                    }
+                }else if(method==1){
+                        bool_ = true;
+                }
+            }
+            return bool_;
+        }
+        
+        function submit1(){
+            var singledata = {$singledata};
+            if(singledata==0){
+                confirm_('请至少添加属性！');
+                return false;
+            }else{
+                window.location.href='<?php echo __ROOT__; ?>?goods=type&act=add&step=4'
+            }
+        }
+    </script>
+    <?php endif; ?>
+</div>

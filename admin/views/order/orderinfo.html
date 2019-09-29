@@ -1,0 +1,152 @@
+<div class="orderinfo_area1">
+    <div class="title" ><i></i>基本信息</div>
+    <table class="orderinfo_table1" border="0" cellspacing="4">
+        <tbody>
+            <tr>
+                <td class="tar">订单号</td>
+                <td class="tal">{$info.orderSn}</td>
+                <td class="tar">订单类型</td>
+                <td class="tal">
+                    <switch name="$info['type']" >
+                    <case value="1"><font>普通订单</font></case>
+                    <case value="2"><font>团购</font></case>
+                    <case value="3"><font>限时抢购</font></case>
+                    </switch></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tar">下单时间</td>
+                <td class="tal">{$info.createTime}</td>
+                <td class="tar">支付状态</td>
+                <td class="tal">
+                    <switch name="$info['payStatus']" >
+                    <case value="1"><font class='cr' >未支付</font></case>
+                    <case value="2"><font class='cg' >已支付</font></case>
+                    <case value="3"><font class='cr' >退款</font></case>
+                    </switch>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tar">支付方式</td>
+                <td class="tal"><img style="width:100px; height: 40px; border:2px solid #e1e1e1;" src="<root />static/{$info.paytypelogo}" /></td>
+                <td class="tar">支付时间</td>
+                <td class="tal">{$info.payTime}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tar">配送方式</td>
+                <td class="tal">{$info.deltypename}</td>
+                <td class="tar">配送状态</td>
+                <td class="tal">
+                    <switch name="$info['delStatus']" >
+                    <case value="1"><font class='cr' >未发货</font></case>
+                    <case value="2"><font class='cg' >已发货</font></case>
+                    <case value="3"><font class='cg' >已签收</font></case>
+                    <case value="4"><font class='cr' >拒收</font></case>
+                    </switch></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tar">物流快递单号</td>
+                <td class="tal">{$info.expressNo}
+                    &nbsp;&nbsp;&nbsp;
+                    <if con="$info['delStatus']==2 " >
+                        <a href="javascript:void(0)" onclick="goodsorder.viewPhysical('{$info.expressNo}',{$info.deliveryId})" >查看物流</a>
+                    </if>
+                </td>
+                <td class="tar">发货时间</td>
+                <td class="tal">{$info.sendTime}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tar">用户(购买人)</td>
+                <td class="tal">{$userinfo.username}</td>
+                <td class="tar">用户昵称</td>
+                <td class="tal">{$userinfo.nickname}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tar">用户补充说明</td>
+                <td class="tal" colspan="3" >{$info.usernote}</td>
+                <td></td>
+            </tr>
+            </tbody>
+    </table>
+    <div class="h10 w100" ></div>
+    <div class="title" ><i></i>费用</div>
+    <table class="orderinfo_table1" border="0" cellspacing="4">
+        <tbody>
+            <tr>
+                <td class="tar">商品总额</td>
+                <td class="tal">{$info.goodsAmount}</td>
+                <td class="tar">运费</td>
+                <td class="tal">{$info.freight}&nbsp;&nbsp;(总重量 {$info.weight}kg)</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tar">调价</td>
+                <td class="tal">{$info.priceMod}</td>
+                <td class="tar">折扣优惠</td>
+                <td class="tal">-{$info.preferential}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tar">使用优惠券</td>
+                <td class="tal">-{$info.coupon}</td>
+                <td class="tar"></td>
+                <td class="tal"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tar">应付款</td>
+                <td class="tal" style="color:#f00;font-weight: bold;" >{$info.amount}</td>
+                <td class="tar"></td>
+                <td class="tal"></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="h10 w100" ></div>
+    <div class="title" ><i></i>收货人信息</div>
+    <table class="orderinfo_table1" border="0" cellspacing="4">
+        <tbody>
+            <tr>
+                <td class="tar">收货人</td>
+                <td class="tal">{$info.name}</td>
+                <td class="tar">手机号码</td>
+                <td class="tal">{$info.mobile}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tar">地址</td>
+                <td class="tal" colspan="3" >{$address.provice_name},{$address.city_name},{$address.county_name},{$info.address}</td>
+                <td></td>
+            </tr>
+    </table>
+    <div class="h10 w100" ></div>
+    <div class="title" ><i></i>商品信息</div>
+    <table class="orderinfo_table1" border="0" cellspacing="4">
+        <thead>
+            <tr>
+                <th>货号</th>
+                <th>名称</th>
+                <th>规格</th>
+                <th>单价</th>
+                <th>数量</th>
+                <th>小计</th>
+            </tr>
+        </thead>
+        <tbody>
+            <list name="goodlist" item="v" >
+            <tr>
+                <td>{$v.goodssn}</td>
+                <td>{$v.goodsname}</td>
+                <td>{$v.goodsattributeStr}</td>
+                <td>{$v.goodsprice}</td>
+                <td>{$v.goodsnum}</td>
+                <td><?php echo $v['goodsprice']*$v['goodsnum']; ?></td>
+            </tr>
+            </list>
+    </table>
+</div>

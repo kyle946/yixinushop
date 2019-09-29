@@ -1,0 +1,18 @@
+<div id="address1" >
+    <form method="post" id="iform2" name="iform2" > 
+        <p class="clearfix"><font><b class='cr' >*</b>区域：</font><select id='proviceId' name="provice" ></select> 
+            <select id='cityId' name="city" ></select><select id='countyId' name="county" ></select> 
+            <select id='townId' name="town" ></select></p> 
+        <p class="clearfix">
+            <font><b class='cr' >*</b>配送方式：</font>
+            <select id='delivery' name="delivery" >
+                <list name="delivery" item="v" >
+                <option value="{$v.id}" >{$v.name}</option>
+                </list>
+            </select>
+        </p> 
+        <input type="hidden" name="goodsid" value="{$goodsid}" />
+        <input type="hidden" name="nums" value="{$nums}" />
+        <input type="hidden" name="_submit_" value="1" />
+    </form>
+</div>

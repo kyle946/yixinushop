@@ -1,0 +1,36 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="articleItem_area1" >
+    <div><h3>{$info.title}</h3></div>
+    <div class="content" >
+        <div class="jobinfo" >
+            <p><font >发布时间：</font><?php echo substr($info['addtime'],0,10); ?></p>
+            <p><font >工作地点：</font>{$info.didian}</p>
+            <p><font >工作经验：</font>{$info.jinyan}</p>
+            <p><font >薪资：</font>{$info.xinzi}</p>
+            <p><font >学历要求：</font>{$info.xueli}</p>
+            <div class="a1"></div> 
+            <p><font >岗位职责：</font></p>
+            <div style='margin: 0px 15px;' >
+                <p>
+                    <?php 
+                    $order   = array("\r\n", "\n", "\r");
+                    echo str_replace($order,'</p><p>',$info['zhize']); 
+                    ?>
+                </p>
+            </div>
+            <div class="a1"></div> 
+            <p><font >任职资格：</font></p>
+            <div style='margin: 0px 15px;' >
+                <p>
+                    <?php 
+                    $order   = array("\r\n", "\n", "\r");
+                    echo str_replace($order,'</p><p>',$info['zige']); 
+                    ?>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="w100 hg40" ></div>

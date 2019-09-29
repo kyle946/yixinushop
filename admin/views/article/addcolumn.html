@@ -1,0 +1,237 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?article=column"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?article=column&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+</div>
+<style type="text/css" >
+.addfielddl1 dd{float: left;margin: 0px; line-height: 26px;padding: 0px;}    
+.addfielddl1 dd.t{text-align: right; color:#777;}
+.addfielddl1{margin: 0px; padding: 0px;}
+
+#addcolumn_r1 td{background-color: #fff; border-bottom: 1px solid #777; padding: 10px 0px;}
+#addcolumn_r1 td a.addcolumn_a1{display: inline-block;width: auto;padding: 6px;background-color: #e1e1e1;color: #555;margin-left: 4px;text-indent: 0px; text-decoration: none;}
+#addcolumn_r1 td a.addcolumn_a1:hover,#addcolumn_r1 td a.addcolumn_a2{display: inline-block;width: auto;padding: 6px;background-color: #0066AC;color: #fff;margin-left: 4px;text-indent: 0px; text-decoration: none;}
+#tab2,#tab3{height: 0px;}
+#tab1,#tab2,#tab3{ overflow: hidden;}
+</style>
+<div class="w100">
+    <?php $edit=false;  if(isset($_GET['type'])&&$_GET['type']=='edit'): $edit = true; endif; ?>
+    <form method="post" action="" name="iform" onsubmit="return icheck();" > 
+    <table class="w100 content_list">
+        <tr>
+            <th width="180" style="text-align: left;">栏目 编辑 </th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <tr id="addcolumn_r1" >
+            <td colspan="3">
+                <a class="addcolumn_a2" onclick="tabSwitch('tab1',this)" href="javascript:void(0);">基本设置</a>
+                <a class="addcolumn_a1" onclick="tabSwitch('tab2',this)" href="javascript:void(0);">栏目内容</a>
+                <a class="addcolumn_a1" onclick="tabSwitch('tab3',this)" href="javascript:void(0);">高级选项</a>
+            </td>
+        </tr>
+    </table>
+       
+    <div class="w100 tabswitch" id="tab1" >
+    <table class="w100 content_list">
+        <tr>
+            <td width="180" style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">名称：</span></td>
+            <td width="400"><input type="text" class="input1" name="name"  onblur="ch.onecheck(this);" value="{$info.name}" /></td>
+            <td><span id="nametips" class="c1">栏目 名称</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">标识id：</span></td>
+            <td>
+                <?php if($edit): ?>
+                 {$info.mark}
+                <?php else: ?> 
+                <input type="text" class="input2" onblur="ch.onecheck(this,'<?php echo __ROOT__; ?>?c=article&a=exemption&t=ajaxcolumn&value='+this.value,'该标识已被使用！请更换标识ID');" name="mark" value="{$info.mark}" />
+                <?php endif; ?>
+            </td>
+            <td><span id="marktips" class="c1">创建后不可修改，必须为英文和数字，并且只能以英文开头</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">上级栏目：</span></td>
+            <td>
+                <select name="pid">
+                    <option value="0" >顶级</option>
+                    <list name="clist" item="v">
+                    <option value="{$v.id}" >{$v.name}</option>
+                    </list>
+                </select>
+            </td>
+            <td><span class="c1"></span></td>
+        </tr>
+        
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">栏目属性：</span></td>
+            <td>
+                <input <if con="isset($info) and $info['type']==1">checked="checked"</if> name="type" type="radio" value="1">栏目列表&nbsp;&nbsp;
+                <select name="model">
+                    <list name="mlist" item="v">
+                    <option value="{$v.id}" >{$v.name}</option>
+                    </list>
+                </select>
+            </td>
+            <td><span class="c1">允许发布文章，启用频道模型</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"></td>
+            <td>
+                <input <if con="isset($info) and $info['type']==2">checked="checked"</if> name="type" type="radio" value="2">外部链接&nbsp;&nbsp;
+                <input type="text" class="input2" name="url"  onblur="ch.onecheck(this);" value="{$info.url}" />
+            </td>
+            <td><span class="c1">使用一个外部链接，例如：http://www.google.com.hk</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"></td>
+            <td><input <if con="!isset($info) or $info['type']==3">checked="checked"</if> name="type" type="radio" value="3">栏目内容</td>
+            <td><span class="c1">用栏目内容作为内容输出一个页面</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"></td>
+            <td>
+                <input <if con="isset($info) and $info['type']==4">checked="checked"</if> name="type" type="radio" value="4">商品分类&nbsp;&nbsp;
+                <select name="goodstype">
+                    <list name="glist" item="v">
+                    <option <if con="isset($info) and $info['goodstype']==$v['id']" >selected='selected'</if> value="{$v.id}" >{$v.name}</option>
+                    </list>
+                </select>
+            </td>
+            <td><span class="c1">本站的一个商品分类</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"></td>
+            <td>
+                <input <if con="isset($info) and $info['type']==5">checked="checked"</if> name="type" type="radio" value="5">促销活动&nbsp;&nbsp;
+                <select name="goodsactivity">
+                    <list name="galist" item="v">
+                    <option <if con="isset($info) and $info['goodsactivity']==$v['id']" >selected='selected'</if> value="{$v.id}" >{$v.name}</option>
+                    </list>
+                </select>
+            </td>
+            <td><span class="c1">本站的一个商品促销活动</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">摆放位置：</span></td>
+            <td>
+                <select name="location">
+                    <option <if con="isset($info) and $info['location']=='t'" >selected='selected'</if> value="t" >顶</option>
+                    <option <if con="isset($info) and $info['location']=='l'" >selected='selected'</if> value="l" >左</option>
+                    <option <if con="isset($info) and $info['location']=='r'" >selected='selected'</if> value="r" >右</option>
+                    <option <if con="isset($info) and $info['location']=='u'" >selected='selected'</if> value="u" >上</option>
+                    <option <if con="isset($info) and $info['location']=='m'" >selected='selected'</if> value="m" >中</option>
+                    <option <if con="isset($info) and $info['location']=='d'" >selected='selected'</if> value="d" >下</option>
+                    <option <if con="isset($info) and $info['location']=='b'" >selected='selected'</if> value="b" >底</option>
+                </select>
+            </td>
+            <td><span class="c1">创建后不可修改</span></td>
+        </tr>
+        <tr id="nohover" >
+            <td style="text-align: right; vertical-align: top;"><span class="fb">描述：</span></td>
+            <td><textarea name="description" class="textarea1" >{$info.description}</textarea></td>
+            <td style="vertical-align: top;" ><span id="nametips" class="c1"> </span></td>
+        </tr>
+<!--        <tr>
+            <td style="text-align: right;"><span class="fb">是否支持投稿：</span></td>
+            <td>
+                <select name="issend">
+                    <option value="2" <?php if(isset($info['issend']) && $info['issend']==2): ?>selected='selected'<?php endif; ?> >不支持</option>
+                    <option value="1" <?php if(isset($info['issend']) && $info['issend']==1): ?>selected='selected'<?php endif; ?> >支持</option>
+                </select>
+            </td>
+            <td><span class="c1"></span></td>
+        </tr>-->
+        <tr>
+            <td style="text-align: right;"><span class="fb">状态：</span></td>
+            <td>
+                <select name="status">
+                    <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                    <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                </select>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    </div>
+    
+    <div class="w100 tabswitch" id="tab2" >
+    <table class="w100 content_list">
+        <tr id="nohover" >
+            <td width="100px" style="text-align: right; vertical-align: top;"><span class="fb">栏目内容：</span></td>
+            <td><textarea name="content" class="textarea1" >{$info.content}</textarea></td>
+            <td style="vertical-align: top;" ><span id="nametips" class="c1"> </span></td>
+        </tr>
+    </table>
+    </div>
+    
+    <div class="w100 tabswitch" id="tab3" >
+        <table class="w100 content_list">
+        <tr>
+            <td width="180" style="text-align: right;"><span class="fb">内容模板：</span></td>
+            <td width="400"><input type="text" class="input1" name="tplContent"  onblur="ch.onecheck(this);" value="{$info.tplContent}" /></td>
+            <td><span id="nametips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td width="180" style="text-align: right;"><span class="fb">列表模板：</span></td>
+            <td width="400"><input type="text" class="input1" name="tplList"  onblur="ch.onecheck(this);" value="{$info.tplList}" /></td>
+            <td><span id="nametips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td width="180" style="text-align: right;"><span class="fb">文章模板：</span></td>
+            <td width="400"><input type="text" class="input1" name="tplArticle"  onblur="ch.onecheck(this);" value="{$info.tplArticle}" /></td>
+            <td><span id="nametips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td width="180" style="text-align: right;"><span class="fb">SEO标题：</span></td>
+            <td width="400"><input type="text" class="input1" name="seotitle"  onblur="ch.onecheck(this);" value="{$info.seotitle}" /></td>
+            <td><span id="nametips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td width="180" style="text-align: right;"><span class="fb">关键字：</span></td>
+            <td width="400"><textarea name="keyword" class="textarea1" >{$info.keyword}</textarea></td>
+            <td><span id="nametips" class="c1"></span></td>
+        </tr>
+        </table>
+    </div>
+        
+    <table class="w100 content_list">
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="保存" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    </form>
+    <script type="text/javascript" src="<?php echo __ROOT__; ?>static/k/kindeditor-min.js" ></script>
+    <script>
+        KindEditor.ready(function(K) {
+        editor = K.create('textarea[name="content"]', {
+                width: 700,
+                height: 400,
+                allowFileManager: true,
+                filterMode:false
+            });
+        });
+    </script>
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'name',type:'regexp',msg:'名称应该为1－22个字符！',rule:/^.{1,22}$/,required:1};
+            <?php if(!$edit): ?>
+            option[1] = {name:'mark',type:'regexp',msg:'标识id应该为1－16个英文和数字！创建后不可修改',rule:/^[a-z|A-z|0-9]{1,22}$/,required:1}; 
+            <?php endif; ?>
+            ch = new formCheck(option);
+        });
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+</div>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body> 
+        <?php $i=1; ?>
+        <?php foreach($list as $v){  ?>
+        <p>
+            {$v.name}：
+            <?php foreach($v['list'] as $k=>$h ){ ?>
+            <a <?php if( substr(rget('t'),$i-1,1)==$k){ ?>style="color:#f00;"<?php } ?> href="<?php echo createLink('index/test', array('t'=> replaceStr($link,$i,$k) ) ); ?>" >{$h}</a>
+            <?php } ?>
+        </p>
+        <?php 
+                $i++;
+            } 
+        ?>
+    </body>
+</html>

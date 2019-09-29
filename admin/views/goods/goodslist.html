@@ -1,0 +1,167 @@
+<layout name="layout/layout1" />
+<style>
+#goodslisttable tr th{text-align: center;}
+#goodslisttable tr td{border-bottom: 0px dashed #ECE7E7; text-align: center; padding: 14px 5px;}
+</style>
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=list"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表(全部)</font></a>
+    <a href="<?php echo __ROOT__; ?>?goods=list&numbers=1"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表(库存不足)</font></a>
+    <a href="javascript:void(0)" onclick="goodsfun.setonline(1)"><img src="<?php echo __ROOT__; ?>static/icon/papercheck32.png" /><font>上架</font></a>
+    <a href="javascript:void(0)" onclick="goodsfun.setonline(2)"><img src="<?php echo __ROOT__; ?>static/icon/block32.png" /><font>下架</font></a>
+    <a href="javascript:void(0)" onclick="goodsfun.deleteGoods()"><img src="<?php echo __ROOT__; ?>static/icon/recycle32.png" /><font>删除</font></a>
+    
+    <div class="search" >
+        <span>名称：</span>
+        <input type="text" class="input2" name="goodsname" value="{$_GET.goodsname}" onkeyup="keydown(function(){ privateMethod.search(); })" />
+        <span>分类：</span>
+        <select name="cateid">
+            <option value="0" >请选择</option>
+            <list name="categroy_list" item="v" >
+            <option value="{$v.id}" <?php if(@$_GET['cateid']==$v['id']){ ?>selected='selected'<?php } ?> >{$v.name}</option>
+            </list>
+        </select>
+        &nbsp;&nbsp;
+        <input type="button" class="bt1" onclick="privateMethod.search()" value="搜索" />
+    </div>
+    
+</div>
+<div class="w100">
+    <table id="goodslisttable" class="content_list w100">
+        <tr>
+            <th style="width:15px;"><input type="checkbox" onclick="goodsfun.listcheck(this)" /></th>
+            <th>商户</th>
+            <th>编号</th>
+            <th>名称</th>
+            <th>价格</th>
+            <th>总库存</th>
+            <th>类型</th>
+            <th style="width:80px;">状态</th>
+            <th style="width:80px;">操作</th>
+        </tr>
+        
+        <?php $tempId = null; $tmpvar = null; ?>
+        <list name="list" item="v">
+            <?php 
+                if( $tmpvar!=$v['business_no'] ){
+                    $color = printColor(); 
+                }
+            ?>
+            <tr style="
+                <?php if($tempId==$v['id']){ ?>
+                    color:{$color};
+                <?php }else{ ?>
+                    color:{$color};border-top:1px solid #DADADA;
+                <?php } ?>" >
+                    <td><input type="checkbox" name="goodslistcheck[]" value="{$v.gid}" /></td>
+                    <td>{$v.business_name}</td>
+                    <td>{$v.sn2}</td>
+                    <td>{$v.goodsName}  , <?php if( empty($v['attributeStr']) ): echo '其它规格'; else: echo $v['attributeStr']; endif; ?></td>
+                    <td>{$v.shopPrice}</td>
+                    <td><?php if($v['numbers']<=0){ ?><font class='cr fb'>{$v.numbers}</font><?php }else{ echo $v['numbers']; } ?></td>
+                    <td>{$v.cateName}</td>
+                    <td>
+                        <switch name="$v['addStatus']" >
+                        <case value="1"><font class='cg'>销售中…&nbsp;</font></case>  
+                        <case value="2"><font class='cr'>已下架&nbsp;</font></case>     
+                        </switch>
+                    </td>
+                    <td>
+                        <?php 
+                        if($tempId==$v['id']): 
+                        else:  ?>
+                        <a href="<?php echo __ROOT__; ?>?goods=edit&id={$v.id}<?php if( isset($_GET['p']) ): echo '&p='.$_GET['p']; endif; ?>">修改</a>&nbsp;&nbsp;
+                        <a href="javascript:confirm_('你确定要删除商品[ {$v.goodsName} ] 吗？','<?php echo __ROOT__; ?>?c=goods&a=goodsdelete&id={$v.id}<?php if( isset($_GET['p']) ): echo '&p='.$_GET['p']; endif; ?>')" >删除</a>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php $tempId = $v['id']; $tmpvar = $v['business_no']; ?>
+            
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+    <script>
+        $(function(){
+            $("input[name='goodsname']").focus();
+        });
+        goodsfun = {};
+        //--全选函数
+        goodsfun.listcheck = function(e){
+            var chk = 'goodslistcheck';
+             var elems = document.getElementsByTagName("INPUT");
+              for (var i=0; i < elems.length; i++){
+                    if (elems[i].name == chk || elems[i].name == chk + "[]") {
+                          elems[i].checked = e.checked;
+                    }
+              }
+        };
+        //--检测是否选择了商品
+        goodsfun.check = function(){
+            var str=$("input[name='goodslistcheck[]']:checked").serialize();
+            if(str==''){
+                return false;
+            }else{
+                return str;
+            }
+        };
+        goodsfun.deleteGoods = function(){
+            var data = goodsfun.check();
+            if(data==false){
+                confirm_('请选择要删除的商品！');
+                return false;
+            }else{
+                 var msg2 = new message();
+                 msg2.show('你确定要删除选择的商品吗？','警告！',null,320,90,null,1,function(){ 
+                     
+                            $.ajax({
+                                url:'?c=goods&a=goodsdelete',
+                                type:'get',
+                                data:data,
+                                dataType:'json',
+                                success:function(d){
+                                    //--msg2.hide();
+                                    window.location.reload();
+                                }
+                            });
+                            
+                 });
+            }
+        };
+        goodsfun.setonline = function(s){
+            var data = goodsfun.check();
+            if(data==false){
+                confirm_('请选择商品！');
+                return false;
+            }else{
+                confirm_('正在设置……');
+                $.ajax({
+                    url:'?c=goods&a=setonline&status='+s,
+                    type:'get',
+                    data:data,
+                    dataType:'json',
+                    success:function(d){
+                        //--console.log(d);
+                        window.location.reload();
+                    }
+                });
+            }
+        };
+        
+        
+    privateMethod = {};
+    privateMethod.search = function(){
+        var data = '';
+        
+        var goodsname = $("input[name='goodsname']").attr('value');
+        if(goodsname!=''){
+            data += '&goodsname='+goodsname;
+        }
+        
+        var cateid = $("select[name='cateid']").attr('value');
+        if(cateid!=0){
+            data += '&cateid='+cateid;
+        }
+        var url = '<root />?goods=list' + data;
+        window.location.replace(url);
+    }
+    </script>
+</div>

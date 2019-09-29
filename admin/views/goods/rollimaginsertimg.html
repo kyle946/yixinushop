@@ -1,0 +1,86 @@
+<layout name="layout/layout1" />
+<style type="text/css">
+ul.area1{ padding: 0px;}
+ul.area1 li{ list-style-type: none; width: 180px; float: left; padding: 6px 0px;}
+.aaa111{ color:#555; text-decoration: none; }
+</style>
+
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=rollimage"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?goods=rollimage&type=edit"><img src="<?php echo __ROOT__; ?>static/icon/papercheck32.png" /><font>添加</font></a>
+</div>
+
+<div class="commonMenu w100" style='background-color: #F0F0F0;'>
+    <a href="javascript:void(0)">[<span class="cf60" >{$info.title}</span>] 插入图片……</a>
+    <input type="button" onclick="publicMethod.add()" value="<< 返回图片编辑" class="bt1" /> 
+</div>
+<div class="w100 h10" ></div>
+<div class="w100">
+    <form method="post" action="" onsubmit="return icheck();" >
+    <table class="w100 content_list">
+        <tr>
+            <th width="150" style="text-align: left;"></th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <!--########################################################-->
+        <tr>
+            <td style="text-align: right;"><span class="cr">*</span>&nbsp;链接：</td>
+            <td><input class="input1" type="text" name="link"  onblur="ch.onecheck(this);" value="{$info.link}" /></td>
+            <td><span id="titletips" class="c1"></span></td>
+        </tr>
+        <!--########################################################-->
+        <tr>
+            <td style="border-bottom: 1px dashed #e1e1e1;text-align: right;">滚动图片：</td>
+            <td style="border-bottom: 1px dashed #e1e1e1;">
+                <input class="bt1" onclick="insertImage({'mode':'single','divid':'logoFile','level':'4'})" type="button" value="添加图片" />
+            </td>
+            <td style="border-bottom: 1px dashed #e1e1e1;"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <div id='logoFile'>
+                    <?php if(isset($info['img']) && !empty($info['img'])): ?>
+                    <div>
+                        <img src="<?php echo IMAGE_URL; ?>{$info.img}">
+                        <input type="hidden" name="imgfile" value="{$info.img}">
+                        <a href="javascript:void(0);" onclick="deleteImgSingle(this)">删除图片</a>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </td>
+            <td><span class="c1">滚动图片</span></td>
+        </tr>
+        <!--########################################################-->
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="提交" />
+            </td>
+            <td><span></span></td>
+        </tr>
+    </table>
+    </form>
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'title',type:'str30',msg:'标题应该为1-30个字符！'};
+            option[1] = {name:'mark',type:'str30',msg:'30个字符以内！'};
+            ch = new formCheck(option);
+        });
+        publicMethod = {};
+        publicMethod.add = function(){
+            window.location.href='<root />?goods=rollimage&type=dataedit&id={$_GET.id}';
+        };
+        //--检测 表单
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+</div>

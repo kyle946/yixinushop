@@ -1,0 +1,140 @@
+<layout name="layout/layout_null" />
+<script src="<?php echo __ROOT__; ?>static/screenshot-paste.js" type="text/javascript"></script>
+<script src="<?php echo __ROOT__; ?>static/jquery.serializejson.min.js" type="text/javascript"></script>
+<div class="w1 clearfix" > 
+    <div class="h10 w100" ></div>
+    <div class='business_info_area2' >
+        <a href='#' >商户基本信息</a>
+        <!--<a href='#' >登录管理后台</a>-->
+        <a href='<root />u/business_logout' class="fr" >退出登录</a>
+    </div>
+    <div class="h10 w100" ></div>
+    <div class="business_info_area1">
+        <div class="title" >商户基本信息</div>
+        <div class="h10 w100" ></div>
+        <div class="h10 w100" ></div>
+        <?php if( $info['business_status']&2 or $info['business_status']&4 ){ ?>
+        <div class="errorinfo" >注册未通过审核，或账号被冻结，原因是 ：{$info.business_freeze_cause} (请重新提交资料)</div>
+        <?php }elseif($info['business_status']&8){ ?>
+        <div class="errorinfo" >正在申请认证…</div>
+        <?php } ?>
+        <div class="row">
+            <div class="column1">商户号：</div>
+            <div class="column2">{$info.business_no}</div>
+        </div>
+        <div class="row">
+            <div class="column1">商户号 16位：</div>
+            <div class="column2">{$info.business_no_hex}</div>
+        </div>
+        <div class="row">
+            <div class="column1">手机号码：</div>
+            <div class="column2">{$info.business_mobile}</div>
+        </div>
+        
+        <form method="POST" action="" onsubmit="return icheck()" id="form1" >
+        <div class="row">
+            <div class="column1">商户名称：</div>
+            <div class="column2">{$info.business_name}</div>
+            <div class="column3">
+                <input name="business_name" placeholder="商户名称" value="{$info.business_name}" onblur="ch.onecheck(this);" />
+                <span class="c1" id="business_nametips"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column1">真实姓名：</div>
+            <div class="column2">{$info.business_actual_name}</div>
+            <div class="column3">
+                <input name="business_actual_name" placeholder="真实姓名" value="{$info.business_actual_name}" onblur="ch.onecheck(this);" />
+                <span class="c1" id="business_actual_nametips"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column1">身份证号码：</div>
+            <div class="column2">{$info.business_id_number}</div>
+            <div class="column3"><input name="business_id_number" placeholder="身份证号码"= value="{$info.business_id_number}" onblur="ch.onecheck(this);" />
+                <span class="c1" id="business_id_numbertips"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column1">主体信息：</div>
+            <div class="column2">{$info.business_subject_information}</div>
+            <div class="column3"><input name="business_subject_information" placeholder="主体信息" value="{$info.business_subject_information}" onblur="ch.onecheck(this);" />
+                <span class="c1" id="business_subject_informationtips"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column1">注册时间：</div>
+            <div class="column2">{$info.createTime}</div>
+            <div class="column3"><input name="image" id="imagepaste" placeholder="上传证件照片(ctrl+v)" /></div>
+        </div>
+        <div class="row">
+            <div class="column1">&nbsp;</div>
+            <div class="column2">&nbsp;</div>
+            <div class="column3"><button class='bt1' type="button" onclick="submit1()">重新提交资料</button></div>
+        </div>
+        </form>
+        
+        <div class="h10 w100" ></div>
+        <div class="h10 w100" ></div>
+        <div class="row">
+            <div class="column1">&nbsp;</div>
+            <div style="display: inline-block;text-indent: 1em;"  id="imgPreview">
+                <img style="max-width: 520px;" src="/idnumberimg/{$info.idnumberimg}?rand=<?php echo rand(111,9999); ?>" />
+            </div>
+        </div>
+        <div class="h10 w100" ></div>
+    </div>
+    <div class="h10 w100" ></div>
+    <div class="h10 w100" ></div>
+</div>
+<script>
+    $('#imagepaste').screenshotPaste({
+        imgContainer:'#imgPreview'
+    });
+    $(function() {
+        var option = new Array();
+        option[0] = {name: 'business_name',type:'regexp', msg: '1到16个字符，不能包含： < > \ = / . ? \'  | & \" ! @ # $ % *', rule: /^[^<>\\=/.?+'|&\"!@#$%*]{1,16}$/, required: 1};
+        option[1] = {name: 'business_actual_name',type:'regexp', msg: '1到16个字符，不能包含： < > \ = / . ? \'  | & \" ! @ # $ % *', rule: /^[^<>\\=/.?+'|&\"!@#$%*]{1,16}$/, required: 1};
+        option[2] = {name: 'business_id_number',type:'regexp', msg: '请输入正确的身份证号码！', rule: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/, required: 1};
+        option[3] = {name: 'business_subject_information',type:'regexp', msg: '1到16个字符，不能包含： < > \ = / . ? \'  | & \" ! @ # $ % *', rule: /^[^<>\\=/.?+'|&\"!@#$%*]{1,35}$/, required: 1};
+        ch = new formCheck(option);
+    });
+
+    //--检测字段
+    function icheck() {
+        var bool_ = false;
+        var res = ch.start();
+        if (res == 1) {
+            bool_ = true;
+        }
+        return bool_;
+    }
+    
+    function submit1(){
+        if( icheck() ){
+            var data = $("#form1").serializeJSON();
+            data.image = $("#imgPreview img").attr('src');
+            $.ajax({
+                url:"<root />u/business_info",
+                type:"POST",
+                data:data,
+                dataType:"text",
+                beforeSend:function(){
+                    $("#form1 button").text("正在提交…").attr('disabled','disabled');
+                },
+                error:function(){
+                    $(".errorinfo").text("提交资料发生错误！").css({display:'block'});
+                    $("#form1 button").text("重新提交资料").removeAttr('disabled');
+                },
+                success:function(d){
+                    if(d!=1){
+                        $(".errorinfo").text(d).css({display:'block'});
+                    } else if(d==1){
+                        //--confirm_("商户申请注册成功,正在等待审核。");
+                        window.location.href = "/u/business_info";
+                    }
+                }
+            });
+        }
+    }
+</script>

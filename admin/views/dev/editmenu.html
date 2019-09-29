@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+        <link href="<?php echo __ROOT__; ?>static/style.css" rel="stylesheet" type="text/css"/>
+        <style type="text/css">
+           table.content_list{font-size: 14px;}
+           table.content_list td{ height: 40px; color:#555; }
+           table.content_list input.input1{ width: 200px; padding: 6px; height: auto; border:1px solid #dedede; }
+        </style>
+    </head>
+    <body>
+        <div class="w100">
+            <form method="post" action="">
+                <table class="w100 content_list">
+                    <tr>
+                        <td width="150"  style="text-align: right;">url：</td>
+                        <td><input class="input1" type="text" name="url" value="{$info.url}" /></td>
+                        <td><span class="c1"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">名称：</td>
+                        <td><input class="input1" type="text" name="name" value="{$info.name}" /></td>
+                        <td><span class="c1">名称</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">权限模块：</td>
+                        <td>
+                            <select name="mtagId">
+                                <list name="mtaglist" item="v">
+                                <option <?php if( $_GET['mtagid']==$v['id']): ?>selected='selected'<?php endif; ?> value="{$v.id}">{$v.name}</option>
+                                </list>
+                            </select>
+                        </td>
+                        <td><span></span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">排序：</td>
+                        <td><input class="input1" type="text" name="sort" value="<?php if(isset($info['sort'])): echo $info['sort']; else: echo 150; endif;?>" /></td>
+                        <td><span class="c1">11位以内的整数</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">分组：</td>
+                        <td><input class="input1" type="text" name="g" value="<?php if(isset($info['g'])): echo $info['g']; else: echo 0; endif;?>" /></td>
+                        <td><span class="c1">2位以内的整数</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">上级菜单：</td>
+                        <td>
+                            <select name="parentId">
+                                <option value="0">顶级菜单</option>
+                                <list name="menulist" item="v">
+                                <option <?php if(isset($info['parentId']) && $info['parentId']==$v['id']): ?>selected='selected'<?php endif; ?> value="{$v.id}">{$v.name}</option>
+                                </list>
+                            </select>
+                        </td>
+                        <td><span></span></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" class="bt1" name="_submit_" value="提交" />&nbsp;&nbsp;
+                            <button  class="bt1" onclick="window.history.go(-1)" >返回关联菜单</button>
+                        </td>
+                        <td><span></span></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </body>
+</html>

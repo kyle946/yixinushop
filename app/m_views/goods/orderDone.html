@@ -1,0 +1,45 @@
+<layout name="layout/layout_mobile2" />
+<!--<div class="bg2 padding10 color9" >提示：系统会根据环境自动修改支付方式 </div>-->
+<div class="orderdone_area1" >
+        <!--<div class="area1"><font class="f1" >订单提交成功</font>，&nbsp;&nbsp;<font class="f2" >请尽快完成支付！</font></div>-->
+        <div class="area2">
+            请在120分钟内完成支付，否则系统将自动取消。
+        </div>
+        <div class="hg10 w100 br1b" ></div>
+<!--        <div>订单号：<a href="<root  />?c=user&a=orderinfo&id={$orderid}" ><font class="f4" >{$orderSn}</font></a></div>
+        <div>支付方式：<div class="img1" ><img style='max-width:8rem;' src="<root />static/{$payment.logo}" /></div> </div>
+        <div class="hg10 w100 br1b" ></div>-->
+        <?php if(@$payment['sn'] == 'transfer'){ ?>
+        <div class="text" >识别二维码加好友完成支付</div>
+        <!--<div>转账时请告诉我订单 短号：<font class="f3">{$sortsn}</font></div>-->
+        <div class="text" >微信号：<font class="f3">{$payment.myweixin}</font></div>
+        <div><img id="qrcode" style="width: 280px; height: auto;" src='<?php echo IMAGE_URL; ?>{$payment.weixinqrcode}' /></div>
+        <div class="hg10 w100 br1b" ></div>
+        <?php } ?>
+        
+        <?php if( isset($order_list) && !empty($order_list) ){ ?>
+            <?php foreach($order_list as $order){ ?>
+            <div>商户：<font class="f3" >{$order.business_name}</font></div>
+            <div>订单号：<font class="f4" >{$order.orderSn}</font></div>
+            <div>应付款：<font class="f3" >&yen;{$order.amount}</font></div>
+            <div>配送方式：<font class="f4" >{$order.del_method_name}</font></div>
+            <div>支付方式：<font class="f4" >{$order.pay_method_name}</font></div>
+            <div>收货人：<font class="f4" >{$order.name}&nbsp;&nbsp;&nbsp;&nbsp;({$order.mobile})</font> </div>
+            <div class="area3 clearfix" >
+                <a href="<root />pay/collectMoney/id_{$order.orderSn}" class="a1" >立即支付</a>
+                <a href="<root  />?c=user&a=orderinfo&id={$order.id}" >查看订单</a>
+            </div>
+            <?php } ?>
+        <?php }else{ ?>
+        <div>应付款：<font class="f3" >&yen;{$total}</font></div>
+        <div>配送方式：<font class="f4" >{$deliveryMethod}</font></div>
+        <div>收货人：<font class="f4" >{$info.name}&nbsp;&nbsp;&nbsp;&nbsp;({$info.mobile})</font> </div>
+        <div class="area3 clearfix" >
+            <?php if(@$payment['sn'] != 'transfer'){ ?>
+            <a href="<root />pay/alipaym/id_{$info.id}" class="a1" >立即支付</a>
+            <?php } ?>
+            <a href="<root  />?c=user&a=orderinfo&id={$info.id}" >查看订单</a>
+        </div>
+        <?php } ?>
+        
+</div>

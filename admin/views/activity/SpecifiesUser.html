@@ -1,0 +1,25 @@
+<div class="content" >
+    <table id="grantlisttable" class="content_list w100">
+        <thead>
+        <tr>
+            <th style="wdith:15px" ><input type="checkbox" onclick="publicMethod.listcheck(this,'userlistcheck')"/></th>
+            <th>用户名</th>
+            <th>手机</th>
+            <th>昵称</th>
+            <th>注册时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        <list name="list" item="v" >
+        <tr>
+            <td><input name="userlistcheck[]" type="checkbox" value="{$v.id}" /></td>
+            <td>{$v.username}</td>
+            <td>{$v.mobile}</td>
+            <td>{$v.nickname}</td>
+            <td>{$v.regTime}</td>
+        </tr>
+        </list>
+        </tbody>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>

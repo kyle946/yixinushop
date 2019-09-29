@@ -1,0 +1,104 @@
+<layout name="layout/layout1" /> 
+<div class="w100">
+    <table class="w100 content_list">
+        <tr>
+            <th width="180" style="text-align: left;"><font class="cr fb" >[&nbsp;{$info.name}&nbsp;]</font>&nbsp;&nbsp; 属性列表&nbsp;编辑</th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+    </table>
+</div>
+<div class="h10 w100" ></div>
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=type&act=typeAttrlist&id={$info.id}"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>属性列表</font></a>
+    <a href="<root />?goods=type&act=typeAttrlistEdit"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加属性</font></a>
+</div>
+<div class="w100">
+    <form method="post" action="" name="iform" onsubmit="return icheck();" >
+    <table class="w100 content_list">
+        <tr>
+            <td style="text-align: right; width:150px;"><span class="fb">名称：</span></td>
+            <td style="width:320px;"><input type="text" id='attrname' class="input2" name="name" value="{$attrdata.name}" /></td>
+            <td><span id="nametips" class="c1">属性名称</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">标识id：</span></td>
+            <td><if con="isset($_GET['attrid'])" >{$attrdata.mark}<else /><input type="text" class="input2" name="mark" value="{$attrdata.mark}"  /></if></td>
+            <td><span id="marktips" class="c1">创建后不可修改</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">值录入方式：</span></td>
+            <td>
+                <input type="radio" name="mothod" onclick="setm(1)" value="1" <?php if(empty($attrdata) || $attrdata['mothod']==1): ?> checked="checked" <?php endif; ?> />手工录入
+                <input type="radio" name="mothod" onclick="setm(2)" value="2" <?php if(!empty($attrdata) && $attrdata['mothod']==2): ?> checked="checked" <?php endif; ?>  />单选
+            </td>
+            <td><span class="c1">单选能生成新的商品规格，<br />并设置不同的价格和库存</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">可选值列表：</span></td>
+            <td>
+                <textarea name="attrValue" class="textarea2" style='background-color: #f7f7f7;' id='attrValue' rows="4" cols="20">{$attrdata.attrValue}</textarea>
+            </td>
+            <td><span id="attrValuetips" class="c1">一行代表一个可选值</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb"> 是否为主体参数：</span></td>
+            <td>
+                <select name="mainpar">
+                    <option value="2" <?php if(isset($attrdata['mainpar']) && $attrdata['mainpar']==2): ?>selected='selected'<?php endif; ?> >否</option>
+                    <option value="1" <?php if(isset($attrdata['mainpar']) && $attrdata['mainpar']==1): ?>selected='selected'<?php endif; ?> >是</option>
+                </select>
+            </td>
+            <td><span class="c1">是否为主体参数</span></td>
+        </tr>
+<!--        <tr>
+            <td style="text-align: right;"><span class="fb">状态：</span></td>
+            <td>
+                <select name="status">
+                    <option value="1" <?php if(isset($attrdata['status']) && $attrdata['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                    <option value="2" <?php if(isset($attrdata['status']) && $attrdata['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                </select>
+            </td>
+            <td><span class="c1">商品类型状态</span></td>
+        </tr>-->
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="保存" />
+            </td>
+            <td><span class="c1"></span></td>
+        </tr>
+    </table>
+    </form>
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'name',type:'regexp',msg:'属性名称 1 - 30 个字符！',rule:/^.{1,30}$/,required:1}; 
+           <?php if(!isset($_GET['attrid'])): ?> option[1] = {name:'mark',type:'regexp',msg:'标识ID为 4 - 30 个英文字母或数字！！',rule:/^[a-zA-Z0-9]{4,30}$/,required:1}; <?php endif; ?>
+            ch = new formCheck(option);
+        });
+        
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                var mothod = $("input[name='mothod']:checked").attr('value');
+                if(mothod==2){
+                    var attrValue = $("textarea[name='attrValue']").attr('value');
+                    if(attrValue==''){
+                        confirm_('可选值列表不能为空');
+                        return false
+                    }else{
+                        var rule = new RegExp(/^([^?/&_|.]+|\r|\n){0,200}$/g);
+                        if(!rule.test(attrValue)){
+                            confirm_('不能使用  /  ?  & _ 等符号。');
+                            return false
+                        }
+                    }
+                }
+                bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+</div>

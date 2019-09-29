@@ -1,0 +1,84 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+    <div class='commentList clearfix' >
+        <?php if( loginJudbe() ){ ?>
+        <div class='write clearfix' >
+            <form method="post" id='form1' action="<?php echo createLink('user/wcomment',array('goodsid'=>rget('id')) ); ?>" onsubmit="return publicMethod.icheck()" >
+                <textarea name="commentContent" placeholder="发表评论……" ></textarea>
+                <select name='commentlevel' class="fl" >
+                    <option value="1" >好评</option>
+                    <option value="2" >中评</option>
+                    <option value="3" >差评</option>
+                </select>
+                <input type='submit' class="i1 fr" name='_submit_' value="发表" class='fr' />
+            </form>
+        </div>
+        <div class='hg10 br1b' ></div>
+        <?php } ?>
+        <?php foreach($list as $v){ ?>
+        <div class='li clearfix br1b' >
+            <div class='w100 clearfix'>
+                <div class='img fl' ><img src='http://<?php echo MAIN_DOMAIN."avatar/$v[avatar]"; ?>' /></div>
+                <div class='user fl' >{$v.nickname}</div>
+                <switch name="$v['level']" >
+                <case value="1"><div class="level fr" ><b>好评</b></div></case>  
+                <case value="2"><div class="level2 fr" >中评</div></case>  
+                <case value="3"><div class="level3 fr" >差评</div></case>   
+                </switch>
+                <div class='date fl' ><?php echo substr($v['ctime'],0,10); ?></div>
+            </div>
+            
+            <div class='w100' >
+                <div class='content' >{$v.content}</div>
+            </div>
+            <div class='color9 fr' ><?php echo substr($v['buytime'],0,10); ?> 购买 {$v.spec}</div>
+        </div>
+        <?php } ?>
+    </div>
+</div>
+<div class="hg10 w100" ></div>
+<div class='pageinfo' >{$pageinfo}</div>
+<div></div>
+<script>
+    publicMethod = {};
+    $(function() {
+        //--
+    });
+    
+    //--
+    publicMethod.icheck = function(){
+        var c = document.getElementsByName('commentContent').item(0).value;
+        var rule = new RegExp(/^.{1,200}$/);
+        if( rule.test(c)==false ){
+            layer.open({
+                content:'评论内容不合法！',
+                time:5
+            });
+            return false;
+        }else{
+            return true;
+        }
+    };
+    
+    publicMethod.replace = function(str){
+        switch(str){
+            case '1': return  '好评'; break;
+            case '2': return  '中评'; break;
+            case '3': return  '差评'; break;
+            default: return  '好评'; break;
+        }
+    };
+
+    //--下一页
+    publicMethod.nextpage = function(p, c) {
+        $.get('<?php echo createLink("goods/comment"); ?>p/'+ p+'/goodsid/<?php echo rget("goodsid"); ?>', function(d) {
+            $.each(d.data, function(n, item) {
+                var html = '<div class="li clearfix br1b"> <div class="img fl"><img src="http://<?php echo MAIN_DOMAIN."avatar/"; ?>'+item.avatar+'"></div> <div class="user fl">'+item.nickname+'</div> <div class="level3 fr">'+publicMethod.replace(item.level)+'</div> <div class="date fl">'+item.ctime.substr(0,10)+'</div> <div class="w100 fl"> <div class="content fl">'+item.content+'</div> </div> <div class="color9 fr">'+item.buytime.substr(0,10)+' 购买 '+item.spec+'</div> </div>';
+                $(".commentList").append(html);
+                $(".pageinfo").html(d.page);
+            });
+        }, 'json');
+    };
+
+</script>

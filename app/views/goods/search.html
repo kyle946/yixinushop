@@ -1,0 +1,101 @@
+<layout name="layout/layout1" />
+<div class="h10 w100" ></div>
+<div class="w1 clearfix" >
+    <div class="goodsCatetroyPos" >
+        正在搜索：
+        <div class="a1" >
+            <a href="<root />" >{$searchGoodsKeywords}&nbsp;&nbsp;</a>
+        </div>
+    </div>
+    
+    <div class="h10 w100" ></div>
+    <!--如果选择参数为空，才设置高度-->
+    <div class="glist_area3 w100 clearfix" > 
+        <div class="a1 clearfix" >
+            <div class="a2 fl" >{$info.name}&nbsp;&nbsp; <font class="c1" >商品搜索……</font></div>
+            <div class="a3 fr" >
+                <font class="c1 f12" >排序：</font>
+                <a <if con="empty($attrurl['sort'])" >class="hover"</if> href="<root />{u goods/search/".goodsurlattr($attrurl,'sort')." }" >默认</a>
+                
+                <?php if( @$attrurl['sort']=='priceS' or @$attrurl['sort']=='priceJ' ): ?>
+                    <?php if( $attrurl['sort']=='priceS' ): ?>
+                    <a class="hover" href="<root />{u goods/search/".goodsurlattr($attrurl,'sort')."sort_priceJ }" >价格&nbsp;&nbsp;↓</a>
+                    <?php else: ?>
+                    <a class="hover" href="<root />{u goods/search/".goodsurlattr($attrurl,'sort')."sort_priceS }" >价格&nbsp;&nbsp;↑</a>
+                    <?php endif; ?>
+                <else />
+                <a href="<root />{u goods/search/".goodsurlattr($attrurl,'sort')."sort_priceS }" >价格&nbsp;&nbsp;↓</a>
+                <?php endif; ?>
+                
+                <?php if( @$attrurl['sort']=='rS' or @$attrurl['sort']=='rJ' ): ?>
+                    <?php if( $attrurl['sort']=='rS' ): ?>
+                    <a class="hover" href="<root />{u goods/search/".goodsurlattr($attrurl,'sort')."sort_rJ }" >人气&nbsp;&nbsp;↓</a>
+                    <?php else: ?>
+                    <a class="hover" href="<root />{u goods/search/".goodsurlattr($attrurl,'sort')."sort_rS }" >人气&nbsp;&nbsp;↑</a>
+                    <?php endif; ?>
+                <else />
+                <a href="<root />{u goods/search/".goodsurlattr($attrurl,'sort')."sort_rJ }" >人气&nbsp;&nbsp;↓</a>
+                <?php endif; ?>
+                
+            </div>
+        </div>
+        <p>
+            <font>价格：</font>
+            <a <if con="empty($attrurl['price'])" >class="hover"</if> href="<root />{u goods/search/".goodsurlattr($attrurl,'price')." }" >不限</a>
+            <input type="text" class="input1" id="priceMin" name="priceMin" value="{$priceMin}" />&nbsp;-&nbsp;
+            <input type="text" class="input1" id='priceMax' name="priceMax" value="{$priceMax}" />&nbsp;&nbsp;
+            <a class="hover" onclick="onclickPrice()" href="javascript:void(0);" >确定</a>
+        </p>
+        
+    </div>
+    <div class="h10 w100" ></div>
+    <div class="glist_area2 w100" >
+        <ul>
+            <list name="list" item="v" >
+            <li>
+                <if con="!empty($v['aid'])"><i></i></if>
+                <div class="thumb" ><a href="<root />{u item/$v[id] }" ><img border="0" src="<root />image/{$v.thumb}"></a></div>
+                <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+                <div class="t2" >
+                    ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                    <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+                </div>
+                <div class="t3" > 人气：<font>{$v.clickCount}</font>&nbsp;&nbsp;&nbsp;评论：<font>{$v.comments}</font></div>
+                <div class="t4 clearfix" >
+                    <!--<a href="javascript:goodsfun.buy('{$v.id}');" >立即购买</a>-->
+                    
+                    <!--库存不足和限购判断  --> 
+                    <?php if( $v['numbers']<KUCUNBUZU ){ ?>
+                    <a href="javascript:void(0);" >库存不足,再等等吧</a>
+                    <?php }elseif( $v['xiangou']>0 && $v['xiangouuser']>0 && $v['xiangouuser']>=$v['xiangou'] ){ ?>
+                    <a href="javascript:void(0);" >[限购] 今天已经买过了</a>
+                    <?php }else{ ?>
+                    <a href="javascript:goodsfun.addcart('{$v.id}');" >加入购物车</a>
+                    <?php } ?>
+                
+                    <!--<a href="javascript:void(0);" >关注</a>-->
+                </div>
+            </li>
+            </list>
+        </ul>
+    </div>
+</div>
+<div class="h10 w100" ></div>
+<div id="page" class="clearfix w100">{$pageinfo}</div>
+<div class="h10 w100" ></div>
+<script type="text/javascript">
+    function onclickPrice(){
+        var min = $("input[name='priceMin']").attr("value"); 
+        var max = $("input[name='priceMax']").attr("value"); 
+        window.location.href = "<root />goods/search/<?php echo goodsurlattr($attrurl); ?>price_"+min+"-"+max; 
+    }
+    
+    function loginMinCallback(param,goodsid){
+        if(param==1){
+            goodsfun.buy(goodsid);
+        }else if(param==2){
+            goodsfun.addcart(goodsid);
+            <!-- window.location.reload(); -->
+        }
+    }
+</script>

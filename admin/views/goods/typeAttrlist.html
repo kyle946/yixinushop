@@ -1,0 +1,56 @@
+<layout name="layout/layout1" /> 
+<div class="w100">
+    <table class="w100 content_list">
+        <tr>
+            <th width="180" style="text-align: left;"><font class="cr fb" >[&nbsp;{$info.name}&nbsp;]</font>&nbsp;&nbsp; 属性列表&nbsp;编辑</th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+    </table>
+</div>
+<div class="h10 w100" ></div>
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=type&act=typeAttrlist&id={$info.id}"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>属性列表</font></a>
+    <a href="<root />?goods=type&act=typeAttrlistEdit&id={$info.id}"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加属性</font></a>
+</div>
+<div class="w100">
+    <table class="content_list w100" >
+        <tr>
+            <th></th>
+            <th>名称</th>
+            <th>值录入方式</th>
+            <th>可选值</th>
+            <th>标识</th>
+            <th width="10%">是否主参</th>
+            <th width="10%">操作</th>
+        </tr>
+        <list name="list" item="v" >
+            <tr>
+            <td></td>
+            <td>{$v.name}</td>
+            <td>
+                <?php if($v['mothod']==1): ?>手工录入&nbsp;<?php endif; ?>
+                <?php if($v['mothod']==2): ?>单选&nbsp;<?php endif; ?>
+            </td>
+            <td>
+                <a><?php echo str_replace(array("\\r\\n", "\\n", "\\r"),"</a>&nbsp;&nbsp;<a>",$v['attrValue']); ?></a>
+            </td>
+            <td>{$v.mark}</td>
+            <td>
+                <switch name="$v['mainpar']" >
+                <case value='1' ><font class='cg' >是</font></case>
+                <case value='2' ><font class='cr' >否</font></case>
+                </switch>
+            </td>
+            <td> 
+                <a href="<root />?goods=type&act=typeAttrlistEdit&id={$info.id}&attrid={$v.id}">修改</a>&nbsp;&nbsp; 
+                <?php if($v['mothod']==2): ?>
+                <a href="javascript:confirm_('删除单选属性会导致该类型的商品规格重新生成！价格和库存清零重置！<br />你确定要删除商品类型 [{$v.name}] 吗？','<root />?goods=type&act=typeAttrlistDelete&id={$info.id}&attrid={$v.id}');">删除</a>
+                <?php else: ?>
+                <a href="javascript:confirm_('你确定要删除商品类型 [{$v.name}] 吗？','<root />?goods=type&act=typeAttrlistDelete&id={$info.id}&attrid={$v.id}')">删除</a>
+                <?php endif; ?>
+            </td>
+            </tr>
+        </list>
+    </table>
+</div>

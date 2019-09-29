@@ -1,0 +1,119 @@
+<layout name="layout/layout2" />
+<script src="<root />static/jquery.form.js" type="text/javascript"></script>
+<script src="<root />static/WdatePicker.js" type="text/javascript"></script>
+<div class="area5 clearfix" >
+    
+    <div class="avatar clearfix" >
+        <img class="fl" src="<root />avatar/{$info.avatar}" /><input style="position: absolute;top: 40px; left: 151px;" type="button" onclick="infofun.changeAvatar()" class="bt1" value="更换头像" />
+    </div>
+    <div class="h10 w100" ></div>
+    
+    <form method="post" action="" onsubmit="return icheck();" >
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" >用户名：</div>
+        <div class="row1area2 common" >{$info.username}</div>
+    </div>
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" >手机号码：</div>
+        <div class="row1area2 common" >{$info.mobile} <input type="button" class="bt1" value="更换" /></div>
+    </div>
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" >注册时间：</div>
+        <div class="row1area2 common" >{$info.regTime}</div>
+    </div>
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" >生日：</div>
+        <div class="row1area2 common" ><input type="text" class="input2 Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" name="birthday" value="{$info.birthday}" /></div>
+    </div>
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" >昵称：</div>
+        <div class="row1area2 common" ><input type="text" class="input2" name="nickname" value="{$info.nickname}" /></div>
+        <div class="hint" id="nicknametips" >1 - 16个中文或英文或数字组成的昵称</div>
+    </div>
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" >邮箱：</div>
+        <div class="row1area2 common" ><input type="text" class="input2" name="email" value="{$info.email}" /></div>
+        <div class="hint" id="emailtips" >有效的邮件地址</div>
+    </div>
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" >找回密码问题：</div>
+        <div class="row1area2 common" ><input type="text" class="input2" name="question" value="{$info.question}" /></div>
+        <div class="hint" id="questiontips" >1 - 30个中文或英文或数字</div>
+    </div>
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" >问题答案：</div>
+        <div class="row1area2 common" ><input type="text" class="input2" name="answer" value="{$info.answer}" /></div>
+        <div class="hint" id="answertips" >1 - 30个中文或英文或数字</div>
+    </div>
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" >性别：</div>
+        <div class="row1area2 common" >
+            <label><input name="sex" type="radio" value="1" <if con="$info['sex']==1" >checked="checked"</if> >男</label>
+            <label><input name="sex" type="radio" value="2" <if con="$info['sex']==2" >checked="checked"</if> >女</label>
+        </div>
+    </div>
+<!--    <div class="row1 clearfix" >
+        <div class="row1area1 common" >支付宝：</div>
+        <div class="row1area2 common" ><input type="text" class="input2" name="nickname" /></div>
+    </div>
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" >微信：</div>
+        <div class="row1area2 common" ><input type="text" class="input2" name="nickname" /></div>
+    </div>-->
+    <div class="row1 clearfix" >
+        <div class="row1area1 common" ></div>
+        <div class="row1area2 common" ><input type="submit" name="_submit_" class="bt1" value="保存设置" /></div>
+    </div>
+    </form>
+</div>
+
+<script>
+    infofun = {};
+    $(function(){
+        var option = new Array();
+        option[0] = {name:'nickname',type:'regexp',msg:'1 - 16个中文或英文或数字组成的昵称！',rule:/^.{1,16}$/,required:1}; 
+        option[1] = {name:'email',type:'email',msg:'请填写一个有效的邮件地址！',required:1}; 
+        option[2] = {name:'question',type:'regexp',msg:'1 - 30个中文或英文或数字！',rule:/^.{1,30}$/,required:1}; 
+        option[3] = {name:'answer',type:'regexp',msg:'1 - 30个中文或英文或数字！',rule:/^.{1,30}$/,required:1}; 
+        option[4] = {name:'qq',type:'regexp',msg:'请填写一个正确QQ号码！',rule:/^[0-9]{3,11}$/,required:1}; 
+        ch = new formCheck(option);
+
+    });
+    
+    infofun.changeAvatar = function(){
+        $.get('?c=user&a=changeAvatar',function(d){
+                var msg2 = kmsg(d,'更换头像',1,350,100,null,1,function(){
+                    $("#form1").ajaxSubmit({
+                     type:'post',
+                     url:'?c=user&a=changeAvatar',
+                     dataType:'json',
+                     /*beforeSubmit:function(){
+                         
+                     },*/
+                     success:function(d){
+                         if(d.info==401){
+                             confirm_('文件超过规定大小!');
+                         }else if(d.info==402){
+                             confirm_('文件类型不符!!');
+                         }else if(d.info==403){
+                             confirm_('移动文件出错!');
+                         }else{
+                             $(".userindex .area5 .avatar img").attr('src',d.path);
+                         }
+                         msg2.hide();
+                     }
+                     });
+                });
+            });
+    };
+    
+    //--检测字段
+    function icheck(){
+        var bool_ = false;
+        var res = ch.start();
+        if(res==1){
+            bool_ = true;
+        }
+        return bool_;
+    }
+    </script>

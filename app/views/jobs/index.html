@@ -1,0 +1,80 @@
+<layout name="layout/layout1" />
+<div class="h10 w100" ></div>
+<div class="w1 clearfix">
+    <div class="artlist_area3 clearfix" >
+
+        <div class="br1 clearfix " >
+            <h3 >热门招聘职位</h3>
+            <ul>
+                <?php $arr=getartlist2('channel-renshi'); ?>
+                <?php foreach($arr as $v){ ?>
+                <li>
+                    <div class="area1 fl" >
+                        <a href="<root />{u m/$v[mark]/id_$v[id]}" >
+                            <if con="empty($v['picname'])">
+                                <div style='background-color: <pr />' class='nothumb' ><div class="title" >{fun ysubstr($v[title],8)}</div></div>
+                                <else />
+                                <img border="0" src="<root />image/{$v.picname}" />
+                            </if>
+                        </a>
+                    </div>
+                    <div class="area2 fr" ><p><a href="<root />{u m/$v[mark]/id_$v[id]}" >{fun ysubstr($v[title],18)}</a></p></div>
+                    <div class="area3 fr" ><p><?php echo substr($v['addtime'],0,10); ?></p></div>
+                </li>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
+
+    <div class="artlist_area2 clearfix" >
+        <div class="area71" >
+            <div class="area7" >
+
+                <?php $i=1; ?>
+                <?php foreach($list2 as $v){  ?>
+                <p>
+                    {$v.name}：
+                    <?php foreach($v['list'] as $k=>$h ){ ?>
+                    <a <?php if( substr(rget('t'),$i-1,1)==$k){ ?>class="cur"<?php } ?> href="<?php echo createLink('jobs/index', array('t'=> replaceStr($link,$i,$k) ) ); ?>" >{$h}</a>
+                    <?php } ?>
+                </p>
+                <?php 
+                    $i++;
+                    } 
+                ?>
+                
+            </div>
+        </div>
+        <div class="h10 w100" ></div>
+        <ul>
+            <if con="empty($list)" ><li class="nocontent" >暂无内容，敬请期待。</li></if>
+            <list name="list" item="v" >
+            <li class="clearfix" >
+                <div class="area1 fl" >
+                    <a href='<?php echo createLink("jobs/info",array("id"=>$v["id"])); ?>'>
+                        <if con="empty($v['picname'])">
+                            <div style='background-color: <pr />' class='nothumb' ><div class="title" ><?php echo ysubstr($v['title'],22); ?></div></div>
+                            <else />
+                            <img border="0" src="<root />image/{$v.picname}" />
+                        </if>
+                    </a>
+                </div>
+                <div class="area2 fl w6" ><a style="color:<2pr />" href='<?php echo createLink("jobs/info",array("id"=>$v["id"])); ?>'>{$v.title}</a></div>
+                <div class="area3 fl w6" >
+                    <p>发布时间：<font>{$v.addtime}</font></p>
+                    <p>工作地点：{$v.didian}</p>
+                    <p>薪资：{$v.xinzi}</p>
+                </div>
+                <div class="area4 fl w6" ><p>任职资格：<?php echo ysubstr($v['zige'],88); ?></p></div>
+                <a class="button1" href='<?php echo createLink("jobs/info",array("id"=>$v["id"])); ?>' >查看详情</a>
+                <a class="button2" href='<?php echo createLink("jobs/info",array("id"=>$v["id"])); ?>#jump1' >申请职位</a>
+            </li>
+            </list>
+        </ul>
+        <div id="page" class="clearfix w100">{$pageinfo}</div>
+    </div>
+</div>
+<div class="h10 w100" ></div>
+<script type="text/javascript" >
+
+</script>

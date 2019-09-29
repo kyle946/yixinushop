@@ -1,0 +1,37 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?article={$_GET.article}"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+</div>
+<div class="content_title w100 clearfix"><a>投递职位：<b class="cf60" >{$name}</font></b></div>
+
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>手机</th>
+            <th>学历</th>
+            <th>投递时间</th>
+            <th>联系地址 </th>
+            <th>工作经验</th>
+            <th>自我评价 </th>
+            <th>操作</th>
+        </tr>
+        <list name="list" item="v">
+            <tr id="nohover" >
+                <td>{$v.name}</td>
+                <td>{$v.age}</td>
+                <td>{$v.mobile}</td>
+                <td>{$v.xueli}</td>
+                <td>{$v.addtime}</td>
+                <td>{$v.address}</td>
+                <td><?php echo nl2br($v['works']); ?></td>
+                <td><?php echo nl2br($v['pingjia']); ?></td>
+                <td>
+                    <a href="javascript:confirm_('你确定要删除这个招聘信息吗？','<root />?article={$_GET.article}&type=delete&id={$v['id']}')" >删除</a></td>
+            </tr>
+        </list>
+    </table>
+    <!--################################################################-->
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>

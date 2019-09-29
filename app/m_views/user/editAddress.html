@@ -1,0 +1,145 @@
+<layout name="layout/layout_mobile2" />
+<script type="text/javascript" src="https://apis.map.qq.com/tools/geolocation/min?key=UKOBZ-QLMWX-IEF4G-7WDPG-DMKH7-MRBGT&referer=myapp"></script>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=UKOBZ-QLMWX-IEF4G-7WDPG-DMKH7-MRBGT"></script>
+
+<div class="hr" ></div>
+<form method="post" action="" onsubmit="return publicMethod.icheck(this);">
+
+    <div class="w100" >
+        <div class='editaddress' id="editaddress" >
+            <input type="hidden" name="lat" value="{$info.lat}" />
+            <input type="hidden" name="lng" value="{$info.lng}" />
+            <div><button type="button" onclick="publicMethod.set_address()" style="width:100%; text-align: center; padding: 8px 0px; background-color: #00c1de;border:0px; color:#fff; margin-bottom: 10px;">自动定位当前地址</button></div>
+            <div class='a1' ><font>收货人：</font><input placeholder="……" name="recipients" value="{$info.recipients}" /></div>
+            <div class='a2' ><font>手机号码：</font><input placeholder="……" type="tel" name="mobile" value="{$info.mobile}" /></div>
+            <div class='a3 clearfix' >
+                <font>区域：</font>
+                <div >
+                    <p><select id='proviceId' name='provice' ><option value='0' >…</option><option>湖南省</option></select></p>
+                    <p><select id='cityId' name='city' ><option value='0' >…</option><option>长沙市</option></select> </p>
+                    <p><select id='countyId' name='county' onchange="publicMethod.get_coordinate()"><option value='0' >…</option><option>开福区</option></select> </p>
+                    <!--<select id='townId' name='town'><option value='0' >…</option><option>四方坪街道</option> </select>-->
+                </div>
+            </div>
+            <div class='a4' ><font>详细地址：</font><input placeholder="……" style="width:70%;" name="street" value="{$info.street}" onfocus='publicMethod.get_coordinate()' onblur="publicMethod.get_coordinate()" /></div>
+            <div class='a4' ><input class='fl' name="isdefault" value="1" <?php if($info['isdefault']){ ?>checked="checked"<?php } ?>  type="checkbox" />&nbsp;&nbsp;&nbsp;设置为默认地址</div>
+        </div>
+    </div>
+    <div class="hg10 w100" ></div>
+    <div class="w100 editaddress_area1" ><input class="i1" value="保  存" type="submit" name="_submit_" /></div>
+
+</form>
+<div></div>
+<script>
+    publicMethod = {};
+    $(function() {
+        $("#editaddress").setaddr({proviceSn:{$info.proviceSn}, citySn:{$info.citySn}, countySn:{$info.countySn} });
+        var geolocation = new qq.maps.Geolocation();
+        geolocation.getIpLocation(set_latlng, showErr);
+    });
+    
+    
+    geocoder = new qq.maps.Geocoder({
+        complete : function(result){
+            //--console.log(result);
+            $("input[name='lat']").val(result.detail.location.lat);
+            $("input[name='lng']").val(result.detail.location.lng);
+        }
+    });
+
+    publicMethod.get_coordinate = function(){
+        var provice = $("select[name=provice] option:selected").text();
+        var city = $("select[name=city] option:selected").text();
+        var county = $("select[name=county] option:selected").text();
+        var address = provice +','+ city +','+county;
+        geocoder.getLocation(address);
+    };
+        
+    //-- 定位地址 经纬度，用于计算距离
+    function set_latlng(p){
+        //--console.log(p);
+        var lat = $("input[name=lat]").val();
+        if( !lat ){
+            $("input[name=lat]").val(p.lat);
+            $("input[name=lng]").val(p.lng);
+        }
+        var pr = $("select[name=provice] option:selected").val();
+        if(pr==0){
+                $.getJSON("<root />?c=u&a=address",{province: p.province ,city: p.city , district: p.district },function(d){
+                     $("#editaddress").setaddr({proviceSn:d.p, citySn:d.c, countySn:d.d });
+                });
+        }
+    }
+        
+    //--定位后的回调函数
+    function showPosition(p) {
+        $.getJSON("<root />?c=u&a=address",{province: p.province ,city: p.city , district: p.district },function(d){
+             $("#editaddress").setaddr({proviceSn:d.p, citySn:d.c, countySn:d.d });
+        });
+        $("input[name='street']").attr('value',p.addr);
+    };
+    //--定位失败后的回调函数
+    function showErr() {
+        //--alert('定位失败！');
+    };
+    publicMethod.set_address = function(){
+            var geolocation = new qq.maps.Geolocation();
+            geolocation.getLocation(showPosition, showErr, {timeout: 9000} );
+            //--geolocation.getIpLocation(showPosition, showErr);
+    };
+    
+    publicMethod.icheck = function(obj) {
+        var result = 1;
+        var info = '';
+        //--详细地址
+        var ad = obj.street.value;
+        var rule = new RegExp(/^.{1,80}$/);
+        if (rule.test(ad) == false) {
+            result = 0;
+            info = '请填写详细地址(80个字以内)，不要重复上面的区域！';
+        }
+        //--区
+        var a = obj.county.value;
+        if (!a || a == 0) {
+            result = 0;
+            info = '请选择一个区域！';
+        }
+        //--市
+        var c = obj.city.value;
+        if (!c || c == 0) {
+            result = 0;
+            info = '请选择一个城市！';
+        }
+        //--省
+        var p = obj.provice.value;
+        if (!p || p == 0) {
+            result = 0;
+            info = '请选择省份！';
+        }
+        //--手机号码
+        var m = obj.mobile.value;
+        var rule = new RegExp(/^1[0-9]{10,10}$/);
+        if (rule.test(m) == false) {
+            result = 0;
+            info = '手机号码格式不正确！';
+        }
+        //--收货人
+        var n = obj.recipients.value;
+        var rule = new RegExp(/^.{1,20}$/);
+        if (rule.test(n) == false) {
+            result = 0;
+            info = '请填写收货人姓名(20字以内)！';
+        }
+
+        if (!result) {
+            layer.open({
+                content: info,
+                time: 8
+            });
+            return false;
+        } else {
+            return true;
+        }
+    };
+
+</script>

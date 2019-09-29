@@ -1,0 +1,162 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?article=field"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?article=field&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+</div>
+<style type="text/css" >
+.addfielddl1 dd{float: left;margin: 0px; line-height: 26px;padding: 0px;}    
+.addfielddl1 dd.t{text-align: right; color:#777;}
+.addfielddl1{margin: 0px; padding: 0px;}
+</style>
+<div class="w100">
+    <?php $edit=false;  if(isset($_GET['type'])&&$_GET['type']=='edit'): $edit = true; endif; ?>
+    <form method="post" action="" name="iform" onsubmit="return icheck();" >
+    <table class="w100 content_list">
+        <tr>
+            <th width="180" style="text-align: left;">字段 编辑 </th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">名称：</span></td>
+            <td><input type="text" class="input1" name="name"  onblur="ch.onecheck(this);" value="{$info.name}" /></td>
+            <td><span id="nametips" class="c1">频道名称</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">标识id：</span></td>
+            <td>
+                <?php if($edit): ?>
+                 {$info.mark}
+                <?php else: ?> 
+                <input type="text" class="input2" onblur="ch.onecheck(this,'<?php echo __ROOT__; ?>?c=article&a=exemption&t=ajaxfield&value='+this.value,'该标识已被使用！请更换标识ID');" name="mark" value="{$info.mark}" />
+                <?php endif; ?>
+            </td>
+            <td><span id="marktips" class="c1">创建后不可修改，必须为英文和数字，并且只能以英文开头</span></td>
+        </tr>
+        <tr id="nohover" >
+            <td style="text-align: right; vertical-align: top;"><span class="cr fb" >*&nbsp;</span><span class="fb">字段类型：</span></td>
+            <td>
+                <?php if($edit): ?>
+                <switch name="$info['type']" >
+                <case value='varchar' >简单文本</case>
+                <case value='text' >多行文本</case> 
+                <case value='html' >HTML类型</case> 
+                <case value='int' >整数类型</case> 
+                <case value='float' >小数类型</case> 
+                <case value='datetime' >时间戳类型</case> 
+                <case value='thumb' >缩略图</case>  
+                <case value='image' >图片</case>  
+                <case value='select' >select下拉框</case>  
+                <case value='checkbox' >Checkbox多选框</case>     
+                </switch>
+                <?php else: ?>
+                        <dl class="clearfix addfielddl1">
+                        <dt>&nbsp;</dt>
+                        <dd><input checked="checked" name="type" type="radio" value="varchar">简单文本</dd>
+                        <dd class="t">255字符以内的单行文本</dd>
+                        <br>
+                        <dt>&nbsp;</dt>
+                        <dd><input name="type" type="radio" value="text">多行文本</dd>
+                        <dd class="t">多行文本输入框</dd>
+                        <br>
+                        <dt>&nbsp;</dt>
+                        <dd><input name="type" type="radio" value="html">HTML类型</dd>
+                        <dd class="t">带编辑器的大型文本输入框</dd>
+                        <br>
+                        <dt>&nbsp;</dt>
+                        <dd><input name="type" type="radio" value="int">整数类型</dd>
+                        <dd class="t">不带小数点的整数</dd>
+                        <br>
+                        <dt>&nbsp;</dt>
+                        <dd><input name="type" type="radio" value="float">小数类型</dd>
+                        <dd class="t">带四位小数点的数字</dd>
+                        <br>
+                        <dt>&nbsp;</dt>
+                        <dd><input name="type" type="radio" value="datetime">时间戳类型</dd>
+                        <dd class="t">时间戳类型，可以记录日期和时间</dd>
+                        <br>
+                        <dt>&nbsp;</dt>
+                        <dd><input name="type" type="radio" value="thumb">缩略图</dd>
+                        <dd class="t">用来上传一张缩略图</dd>
+                        <br>
+                        <dt>&nbsp;</dt>
+                        <dd><input name="type" type="radio" value="image">图片</dd>
+                        <dd class="t">用来上传多张图片</dd>
+                        <br>
+<!--                        <dt>&nbsp;</dt>
+                        <dd><input name="type" type="radio" value="file">附件</dd>
+                        <dd class="t">用来上传文件</dd>
+                        <br>-->
+                        <dt>&nbsp;</dt>
+                        <dd><input name="type" type="radio" value="checkbox">Checkbox多选框</dd>
+                        <dd class="t">可多选的选择框</dd>
+                        <br>
+                        <dt>&nbsp;</dt>
+                        <dd><input name="type" type="radio" value="select">select下拉框</dd>
+                        <dd class="t">多选一的下拉选择框</dd>
+                        </dl>
+                <?php endif; ?>
+            </td>
+            <td style="vertical-align: top;"><span id="nametips" class="c1">创建后不可修改</span></td>
+        </tr>
+        <tr id="nohover" >
+            <td style="text-align: right; vertical-align: top;"><span class="fb">选项值：</span></td>
+            <td>
+                <textarea <if con='$edit' >readonly='readonly' style='background-color:#f1f1f1;'</if> name="val" class="textarea2" ><?php if(!empty($info['val'])):echo $info['val']; else: echo "1=成功"; endif; ?></textarea>
+            </td>
+            <td style="vertical-align: top;" ><span id="valtips" class="c1">定义数据类型为select、checkbox时，此处填写被选择的项目，一行一个。<br />创建后不可修改</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">频道模型：</span></td>
+            <td>
+                <select name="model">
+                    <list name="list" item="v">
+                    <option value="{$v.id}" >{$v.name}</option>
+                    </list>
+                </select>
+            </td>
+            <td><span class="c1">创建后不可修改</span></td>
+        </tr>
+        <tr id="nohover" >
+            <td style="text-align: right; vertical-align: top;"><span class="fb">简介：</span></td>
+            <td><textarea name="description" class="textarea1" >{$info.description}</textarea></td>
+            <td style="vertical-align: top;" ><span id="nametips" class="c1"> </span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">状态：</span></td>
+            <td>
+                <select name="status">
+                    <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                    <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                </select>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="保存" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    </form>
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'name',type:'regexp',msg:'频道名称应该为1－22个字符！',rule:/^.{1,22}$/,required:1}; 
+            <?php if(!$edit): ?>
+            option[1] = {name:'mark',type:'regexp',msg:'标识id应该为1－16个英文和数字！创建后不可修改',rule:/^[a-z|A-z|0-9]{1,22}$/,required:1}; 
+            <?php endif; ?>
+            ch = new formCheck(option);
+        });
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+</div>

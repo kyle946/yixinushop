@@ -1,0 +1,204 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="hg10" ></div>
+<?php if(@$jinggaoci){ ?><div class="login_area6" >首次登录，请绑定手机号！</div><?php } ?>
+<div class="login_content" >
+    <form method="post" action="" onsubmit="return icheck()" >
+        <div class="username">
+            <input name="uname" type="tel"  autocomplete="off"  onblur='privateMethod.checkmobile()' tabindex="1" placeholder="手机号码" />
+            <div class="iconfont" onclick="privateMethod.clear('uname')" >&#xe69a</div>
+        </div>
+        <div class="pwd" >
+            <input name="pwd" type="password" autocomplete="off" tabindex="2"  placeholder="请输入密码" />
+            <div class="iconfont" onclick="privateMethod.clear('pwd')" >&#xe69a</div>
+        </div>
+        <div class="username">
+            <input name="nickname" type="text"  autocomplete="off" tabindex="3" value="{$nickname}" placeholder="昵称" />
+            <div class="iconfont" onclick="privateMethod.clear('nickname')" >&#xe69a</div>
+        </div>
+        <div class="yzm br1b" style="display: none" >
+            <input name="yzm2" type="number" tabindex="4" autocomplete="off" onkeyup="privateMethod.checkyzm(this)"  placeholder="输入验证码" />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a id='button1' href='javascript:privateMethod.sendmsg();' >发送短信验证码</a>
+            <div class="iconfont" onclick="privateMethod.clear('yzm2')" >&#xe69a</div>
+        </div>
+        
+        
+        <!--如果是在微信环境下则显示  绑定微信号   start-->
+        <?php if( judgeMicroMessenger() ){ ?>
+        <div class="bdweixin" >
+            <label><input type="checkbox" checked="checked" name="bdweixin" value="1" onclick="publicMethod.bdweixin(this)"  />同时绑定微信号</label>
+            &nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:privateMethod.bdweixinshuoming()" >(阅读绑定说明)</a>
+        </div> 
+        <?php }else{ ?>
+        <div class="br1t" ></div>
+        <?php } ?>
+        <!--如果是在微信环境下则显示  绑定微信号   end-->
+        
+        <div class="h10" ></div>
+        <div class="btn" >
+            <input type="submit" class="i1" style='background-color: #888;' name="_submit_" value="注册" />
+        </div>
+    </form>
+    <div class="h10" ></div>
+    <div class="login_register" >
+        <a href="<?php echo createLink('u/login'); ?>" >我有账号，现在登录</a>
+    </div>
+    <div class="h10" ></div>
+</div>
+<script>
+    
+    
+
+    function icheck() {
+        if (privateMethod.checkmobile() == false) {
+            privateMethod.icheckres = 0;
+        } else {
+            if (privateMethod.checkpwd() == false) {
+                privateMethod.icheckres = 0;
+            } else {
+                if (privateMethod.checknickname() == false) {
+                    privateMethod.icheckres = 0;
+                } else {
+                    privateMethod.checkyzm1();
+                }
+            }
+        }
+        if (privateMethod.icheckres == 1) {
+            return true;
+        }
+        return false;
+    }
+    
+    privateMethod = {};
+    privateMethod.icheckres = 1;
+    privateMethod.clear = function(name) {
+        document.getElementsByName(name).item(0).value = '';
+    };
+    privateMethod.checkmobile = function() {
+        if (privateMethod.checkmobile1()) {
+            privateMethod.checkmobile2();
+            return true;
+        } else {
+            return false;
+        }
+    };
+    privateMethod.checkmobile1 = function() {
+        var name = document.getElementsByName('uname').item(0).value;
+        var rule = new RegExp(/^1[1-9][0-9]\d{8}$/);
+        if (rule.test(name)) {
+            return true;
+        } else {
+            layer.open({
+                content: '手机号码格式不正确！',
+                time: 5
+            });
+            privateMethod.icheckres = 0;
+            return false;
+        }
+    };
+    privateMethod.checkmobile2 = function() {
+        var name = document.getElementsByName('uname').item(0).value;
+        $.get("<?php echo createLink('u/checkUsername'); ?>name/" + name, function(d) {
+            if (d.status == 1) {
+                privateMethod.icheckres = 0;
+                layer.open({
+                    content: '该手机号已经注册！',
+                    time: 5
+                });
+            } else {
+                $(".yzm").css({'display': 'block'});
+            }
+        }, 'json');
+    };
+    privateMethod.checkpwd = function() {
+        var name = document.getElementsByName('pwd').item(0).value;
+        var rule = new RegExp(/^.{6,16}$/);
+        if (rule.test(name)) {
+            return true;
+        } else {
+            privateMethod.icheckres = 0;
+            layer.open({
+                content: '密码为6到16个字符！',
+                time: 5
+            });
+            return false;
+        }
+    };
+    privateMethod.checknickname = function() {
+        var name = document.getElementsByName('nickname').item(0).value;
+        var rule = new RegExp(/^.{1,16}$/);
+        if (rule.test(name)) {
+            return true;
+        } else {
+            privateMethod.icheckres = 0;
+            layer.open({
+                content: '昵称为1到16个字符！',
+                time: 5
+            });
+            return false;
+        }
+    };
+    privateMethod.checkyzm = function(e) {
+        if (e.value.length == 6) {
+            privateMethod.checkyzm1();
+        }
+    };
+    privateMethod.checkyzm1 = function() {
+        var name = document.getElementsByName('yzm2').item(0).value;
+        $.get("<?php echo createLink('u/checkVerifyMsg'); ?>verifystr/" + name, function(d) {
+            if (d.status != 1) {
+                privateMethod.icheckres = 0;
+                layer.open({
+                    content: '验证码不正确！',
+                    time: 5
+                });
+            } else {
+                privateMethod.icheckres = 1;
+                $(".login_content .yzm .iconfont").html('&#xe6ad').css({'color':'#43DF04'});
+                $("input[name='_submit_']").css({'background-color': '#ca0000'});
+            }
+        }, 'json');
+    };
+
+    //--发送短信验证码
+    privateMethod.sendmsg = function() {
+        var mobile = document.getElementsByName('uname').item(0).value;
+        $.get("<?php echo createLink('u/sendmsg'); ?>" + 'mobile/' + mobile, function(d) {
+            if (d.status == 1) {
+                var note1 = document.getElementById('button1');
+                note1.style.color = '#646464';
+                note1.style.border = '1px solid #646464';
+                var wait = 120;
+                var interval = setInterval(function() {
+                    var time = --wait;
+                    document.getElementById('button1').innerHTML = '发送短信验证码 ' + wait;
+                    if (time == 0) {
+                        var note1 = document.getElementById('button1');
+                        note1.style.border = '#CA0000';
+                        note1.style.color = '1px solid #ca0000';
+                        clearInterval(interval);
+                    }
+                }, 1000);
+            } else {
+                layer.open({
+                    content: d.msg,
+                    time: 5
+                });
+            }
+        }, 'json');
+    };
+    privateMethod.bdweixinshuoming = function(){
+        var content = '<div style="text-align:left;" >注意事项：<br />1、请确认帐号和微信号都是你本人使用'+
+                //--'<br />(因帐号绑定错误发生的财产损失本店概不负责)' + 
+                '<br />2、不要重复绑定<br />3、绑定微信后可在微信客户端自动登录</div>';
+            layer.open({
+                content: content,
+            });
+    };
+
+    $(function() {
+        //--var createTime = parseInt( new Date().getTime() / 1000 );
+        //--if(createTime><?php echo time() + 5; ?>) window.location.reload();
+    });
+</script>

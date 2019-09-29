@@ -1,0 +1,50 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?system=adminuser"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?system=adminuser&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <a href="<?php echo __ROOT__; ?>"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>角色</th>
+            <th>关联商户</th>
+            <th>上次登录</th>
+            <th>状态</th>
+            <th width="130">操作</th>
+        </tr>
+        <?php if( @$founder ){ ?>
+        <tr>
+            <td></td>
+            <td>{$founder['name']}</td>
+            <td><font class='cr'>网站创始人</font></td>
+                <td>{$founder['business_no']}</td>
+            <td></td>
+            <td><font class='cg'>可用</font></td>
+            <td><a href="<?php echo __ROOT__; ?>?system=adminuser&type=edit&id={$founder.id}">修改</a>&nbsp;&nbsp;</td>
+        </tr>
+        <?php } ?>
+        <list name="user_list" item="v">
+            <tr>
+                <td>{$v['id']}</td>
+                <td>{$v['name']}</td>
+                <td>{$v['roleName']}</td>
+                <td>{$v['business_no']}</td>
+                <td>{$v['lastTime']}</td>
+                <td>
+                    <?php if($v['status']==1): ?>
+                    <font class='cg'>可用</font>
+                    <?php else: ?>
+                    <font class='cr'>禁用</font>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <a href="<?php echo __ROOT__; ?>?system=adminuser&type=edit&id={$v['id']}">修改</a>&nbsp;&nbsp;
+                    <a href="javascript:confirm_('你确定要删除管理员 [{$v['name']}] 吗？','<?php echo __ROOT__.'?system=adminuser&type=delete&id='.$v['id']; ?>')" >删除</a></td>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>

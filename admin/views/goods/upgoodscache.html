@@ -1,0 +1,29 @@
+<layout name="layout/layout1" />
+<div class="content" >
+    <div class="content_title w100 clearfix"> 
+        <a href="javascript:void(0);" onclick="window.privateMethod.upgoodscache();" ><img src="/static/icon/a1.png"><font>开始更新&nbsp;[所有商品缓存]</font></a>
+    </div>
+    <table class="w100 content_list" >
+<!--        <thead>
+            <tr>
+                <th>更新商品缓存 </th>
+            </tr>
+        </thead>-->
+        <tbody>
+            <tr>
+                <td>上一次更新时间：<font class='c1' >(<?php if($uptime){ echo date('Y-m-d H:i:s',$uptime); }else{ echo '缓存不存在！'; } ?>)</font></td>
+            </tr>
+            <tr id="nohover" >
+                <td id='iframe' >
+                    已经做好更新准备 ，点击  开始  吧！
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    privateMethod = {};
+    privateMethod.upgoodscache = function(){
+        $("td#iframe").html("").append('<iframe width="80%" height="350" style="border:0px;" src="<root />?c=goods&a=upgoodscache2" ></iframe>');
+    }
+</script>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+<title>{$webtitle_} {$webconfig.webtitle}</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="Keywords" content="{$webconfig.keywords}" />
+<meta name="Description" content="{$webconfig.description}" />
+<script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+<script src="<?php echo __ROOT__; ?>static/main.js" type="text/javascript"></script>
+<link href="<?php echo __ROOT__; ?>static/style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div class="login_area1 clearfix" style="width:400px;" >
+    <div class="area2 clearfix" >
+        <div class="area3 br2" style="margin-top: 0px;" >
+                <div class="head" >用户登录</div>
+                <div class="h10 w100" ></div>
+                <div class="main clearfix" >
+                    <form action="" method="post" name="form1" id="form1" >
+                        <div><input class="i1" type="text" name="username" value="" /></div>
+                    <div><input class="i1" type="password" name="pwd" value="" /></div>
+                    <div class="clearfix">
+                        <input class="i2 fl" name="verifyStr" onkeypress="keydown(function(){priveteMethod.submit1();})" type="text" />
+                        <a class="a1 fl" href="javascript:priveteMethod.getverify();" ><img id="yzm" class="yzm" src="<root />u/verifyCode" /></a>
+                        <a href="javascript:priveteMethod.getverify();" class="a2 fl">看不清</a>
+                    </div>
+                    <input type="hidden" name="_submit_" value="1" />
+                    <div><input class="i3" type="button" onclick="priveteMethod.submit1()" value="登             录" /></div>
+                    <div class="d1" >
+                        <a href="<root />u/register" target="_blank" >注册</a>
+                        <a href="javascript:void(0);" >忘记密码</a>
+                    </div>
+                    <div class="d2" >
+                        <p>你可以使用</p>
+                        <div class="d3" >
+                            <a href="javascript:void(0)" >QQ登录</a>
+                            <a href="javascript:void(0)" >微信登录</a>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="h10 w100" ></div>
+            </div>
+        </div>
+</div>
+
+<script>
+    priveteMethod = {};
+    priveteMethod.getverify = function (){
+        var imgyzm = document.getElementById('yzm');
+        imgyzm.setAttribute('src',"<root />u/verifyCode/id_"+Math.random());
+    };
+    
+    priveteMethod.submit1 = function (){
+        $.ajax({
+            url:'',
+            data:$("#form1").serialize(),
+            type:'POST',
+            cache:false,
+            dataType:'json',
+            success:function(data){
+                //--$("input[name='_verifyKey_']").attr('value',data.verifyKey);
+                priveteMethod.getverify();
+                if(data.status!='ok'){
+                    confirm_(data.msg,function(){
+                        window.location.reload();
+                    },200,90);
+                }else{
+                    //--window.parent.location.reload();
+                    if( typeof(window.parent.loginMinCallback)=='function' ){
+                        window.parent.loginMinCallback({$param} <?php if( isset($goodsid) ): ?>,{$goodsid} <?php endif; ?>);
+                    }
+                }
+            }
+        });
+    };
+</script>
+</body>
+</html>
+

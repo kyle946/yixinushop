@@ -1,0 +1,72 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?user=rank"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?user=rank&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <a href="<?php echo __ROOT__; ?>"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+<div class="w100">
+    <form method="post" action="" name="iform" onsubmit="return icheck();" >
+    <table class="w100 content_list">
+        <tr>
+            <th width="180" style="text-align: left;">编辑 - 用户等级</th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">等级名称：</span></td>
+            <td><input type="text" class="input1" name="name"  onblur="ch.onecheck(this)" value="{$info.name}" /></td>
+            <td><span id="nametips" class="c1">等级名称</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">别名：</span></td>
+            <td><input type="text" class="input1" name="alias"  onblur="ch.onecheck(this)" value="{$info.alias}" /></td>
+            <td><span id="aliastips" class="c1">别名</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">等级积分：</span></td>
+            <td><input type="text" class="input1" name="points"  onblur="ch.onecheck(this)" value="{$info.points}" /></td>
+            <td><span id="pointstips" class="c1">达到该等级需要多少积分</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">折扣：</span></td>
+            <td><input type="text" class="input1"  onblur="ch.onecheck(this)" name="discount" value="<?php if(isset($info['discount']) && !empty($info['discount']) ):echo $info['discount']; else: echo 100; endif; ?>" />%</td>
+            <td><span id="discounttips" class="c1">该等级购买商品的折扣； 这里写百分比</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">状态：</span></td>
+            <td>
+                <select name="status">
+                    <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                    <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                </select>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="保存" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    </form>
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'name',type:'regexp',msg:'名称应该为1－12个字符！',rule:/^.{1,12}$/,required:1};
+            option[1] = {name:'points',type:'regexp',msg:'请输入一个11位以内的整数！',rule:/^[0-9]{1,11}$/,required:1};
+            option[2] = {name:'discount',type:'regexp',msg:'请输入一个3位以内的整数！',rule:/^[0-9]{1,4}$/,required:1};
+            option[3] = {name:'alias',type:'regexp',msg:'别名应该为1－12个字符！',rule:/^.{1,12}$/,required:1};
+            ch = new formCheck(option);
+        })
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+</div>

@@ -1,0 +1,37 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?system=area"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>上一级</font></a>
+</div>
+<div class="w100 clearfix">
+<!--    <form method="post" action="" name="iform" onsubmit="return icheck();">
+        <table class="w100 content_list">
+        <tbody>
+            <tr>
+                <td style="text-align: right;"><span class="cr">*</span>&nbsp;<span class="fb">添加地区：</span></td>
+                <td><input type="text" class="input2" name="name" onblur="ch.onecheck(this);" value="">&nbsp;&nbsp;&nbsp;<input type="submit" class="bt1" name="_submit_"></td>
+                <td><span id="nametips" class="c1">添加一个 省/市/县/村 区域</span></td>
+            </tr>
+        </tbody>
+        </table>
+    </form>-->
+    <div class="w100 clearfix">
+        <div class="padding10">
+            当前位置：{$address}
+        </div>
+        <ul class="list1" >
+        <list name="list" item="v" >
+        <if con="$live==1">
+        <li><span><a class="a1" href="<?php echo __ROOT__; ?>?system=area&live=2&id={$v.provice_id}" >{$v.provice_name}</a></span><span><a class="a2" href="javascript:void(0);" >修改</a></li>
+        <elseif con="$live==2" />
+        <li><span><a class="a1" href="<?php echo __ROOT__; ?>?system=area&live=3&id={$v.city_id}" >{$v.city_name}</a></span><span><a class="a2" href="javascript:void(0);" >修改</a></li>
+        <elseif con="$live==3" />
+        <li><span><a class="a1" href="<?php echo __ROOT__; ?>?system=area&live=4&id={$v.county_id}" >{$v.county_name}</a></span><span><a class="a2" href="javascript:void(0);" >修改</a></li>
+        <elseif con="$live==4" />
+        <li><span><a class="a1" href="javascript:void(0);" >{$v.town_name}</a></span><span><a class="a2" href="javascript:void(0);" >修改</a></li>
+        </if>
+        </list>
+        </ul>
+    </div>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>

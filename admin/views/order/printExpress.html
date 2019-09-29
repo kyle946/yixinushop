@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>打印快递单</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+        <style type="text/css" >
+            body{
+                margin: 0px; padding: 0px; font-size: 14px; 
+                font-family: "微软雅黑","黑体",sans-serif,"Times New Roman", Times, serif; 
+            }
+            div{ margin: 0px auto; height: auto; position: relative; }
+            .setexpressDoc_area1{position: absolute; left: 0px; top: 0px;}
+            .setexpressDoc_area2{}
+            .setexpressDoc_area2 .templateArea div{position: absolute; width:auto; border: 0px solid #e1e1e1;left:0px; top:0px; color:#00f; max-width: 330px; }
+        </style>
+    </head>
+    <body>
+        <div class="setexpressDoc_area1" >
+            <div class="setexpressDoc_area2" >
+                <div class="h10 w100" ></div>
+                <div id="templateArea" class="templateArea" style="border: 1px solid #e1e1e1;" >{$info.expressDoc}</div>
+            </div>
+        </div>
+        <script>
+
+    $(function(){
+            //--初始化区域方法 
+            initTemplateArea = {};
+            initTemplateArea.width = {$info.ex_width};
+            initTemplateArea.height = {$info.ex_height};
+            initTemplateArea.bg = '<?php echo IMAGE_URL; ?>{$info.ex_background}';
+            initTemplateArea.start = function() {
+
+                var obj = this;
+                $('#templateArea').css({
+                    'width': obj.width,
+                    'height': obj.height,
+                    'background-size': obj.width + 'px ' + obj.height + 'px',
+                    'background-image': 'url(' + obj.bg + ')'
+                });
+                $('body').css({
+                    'width': obj.width,
+                    'height': obj.height
+                });
+
+            };
+            initTemplateArea.getdata = function(id){
+                $.getJSON('?c=order&a=printExpressGetjson',{'id':id},function(d){
+                    $('.conName').html(d.name);
+                    $('.conMobile').html(d.mobile);
+                    $('.conProvice').html(d.provice_name);
+                    $('.conCity').html(d.city_name);
+                    $('.conCounty').html(d.county_name);
+                    $('.conTown').html(d.town_name);
+                    $('.conAddress').html(d.address);
+                    
+                    $('.senName').html(d.senName);
+                    $('.senMobile').html(d.senMobile);
+                    $('.senPhone').html(d.senPhone);
+                    $('.senProvice').html(d.senProvice);
+                    $('.senCity').html(d.senCity);
+                    $('.senCounty').html(d.senCounty);
+                    $('.senTown').html(d.senTown);
+                    $('.senAddress').html(d.senAddress);
+                    
+                    $('.orderSn').html(d.orderSn);
+                    $('.orderfreight').html(d.freight);
+                    $('.orderweight').html(d.weight);
+                    $('.orderamount').html(d.amount);
+                    $('.orderusernote').html(d.usernote);
+                    $('.select1').html('√');
+                    
+                    $('.webName').html(d.webName);
+                    $('.webAddress').html(d.webAddress);
+                    $('.webPhone').html(d.webPhone);
+                    
+                    $('.timeYear').html(d.year);
+                    $('.timeMonth').html(d.month);
+                    $('.timeDay').html(d.day);
+                    
+                    $('#templateArea div').css({border:'0px'});
+                })
+            };
+
+            initTemplateArea.start();
+            initTemplateArea.getdata({$_GET.id});
+            
+    });
+        </script>
+    </body>
+</html>

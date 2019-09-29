@@ -1,0 +1,68 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?article=column"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?article=column&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+</div>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>标识</th>
+            <th>位置</th>
+            <th>属性</th>
+            <!--<th>是否支持投稿</th>-->
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td>{$v.id}</td>
+                <td>{$v.name}</td>
+                <td>{$v.mark}</td>
+                <td>
+                    <font style="color:<?php echo printColor(); ?>">
+                    <switch name="$v['location']">
+                    <case value="t" >顶</case>
+                    <case value="l" >左</case>
+                    <case value="r" >右</case>
+                    <case value="u" >上</case>
+                    <case value="m" >中</case>
+                    <case value="d" >下</case>
+                    <case value="b" >底</case>
+                    </switch>
+                    </font>
+                </td>
+                <td>
+                    <font style="color:<?php echo printColor(); ?>">
+                    <switch name="$v['type']">
+                        <case value='1'>栏目列表 </case>
+                        <case value='2'>外部链接 </case>
+                        <case value='3'>栏目内容 </case>
+                        <case value='4'>商品分类 </case>
+                        <case value='5'>促销活动 </case>
+                    </switch>
+                    </font>
+                </td>
+<!--                <td>
+                    <?php if($v['issend']==1): ?>
+                    <font class='cg'>支持</font>
+                    <?php else: ?>
+                    <font class='cr'>不支持</font>
+                    <?php endif; ?>
+                </td>-->
+                <td>
+                    <?php if($v['status']==1): ?>
+                    <font class='cg'>可用</font>
+                    <?php else: ?>
+                    <font class='cr'>禁用</font>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <a href="<?php echo __ROOT__; ?>?article=column&type=edit&id={$v['id']}">修改</a>&nbsp;&nbsp;
+                    <a href="javascript:confirm_('你确定要删除栏目 [{$v['name']}] 吗？','<?php echo __ROOT__.'?article=column&type=delete&id='.$v['id']; ?>')" >删除</a></td>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>

@@ -1,0 +1,124 @@
+<layout name="layout/layout2" />
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=UKOBZ-QLMWX-IEF4G-7WDPG-DMKH7-MRBGT"></script>
+
+<div class="area7 " >
+    <div class="h10 w100" ></div>
+    <div class="row1"><a href="<root />user/address" class="bt2" >返回地址管理</a></div>
+    <div class="h10 w100" ></div>
+
+    <div id="address1" class="clearfix" > 
+        <form method="post" action='' name="form1" onsubmit="return icheck()" > 
+            <p class="clearfix"><font><b class='cr' >*</b>区域：</font>
+                <select id='proviceId' name="provice" ></select>
+                <select id='cityId' name="city" ></select>
+                <select id='countyId' name="county"  onchange="obj2.get_coordinate()" ></select>
+                <!--<select id='townId' name="town" ></select>-->
+            </p>
+            <p class="clearfix">
+                <font><b class='cr' >*</b>
+                街道地址：</font><input type="text" name="street" class="input3" value="{$info.street}" />
+                &nbsp;&nbsp;不要重复填写上面选择的区域
+            </p> 
+            <!--<p class="clearfix"><font>邮政编码：</font><input type="text" class="input2" name='zipcode' value="{$info.zipcode}" /></p>--> 
+            <p class="clearfix"><font><b class='cr' >*</b>收货人姓名：</font><input type="text" name='recipients' class="input2" value="{$info.recipients}"  onfocus="obj2.get_coordinate()" /></p> 
+            <p class="clearfix"><font><b class='cr' >*</b>手机号码：</font><input type="text" name='mobile' class="input2" value="{$info.mobile}"  onfocus="obj2.get_coordinate()" /></p> 
+            <p class="clearfix"><font>经度：</font><input type="text" class="input2" style='background-color: #f1f1f1;' readonly="readonly" name='lat' value="{$info.lat}" /></p> 
+            <p class="clearfix"><font>纬度：</font><input type="text" class="input2" style='background-color: #f1f1f1;' readonly="readonly" name='long' value="{$info.long}" /></p> 
+            <p class="clearfix"><font>电话号码：</font><input type="text" class="input2" name='phone' value="{$info.phone}" /></p> 
+            <p class="clearfix">
+                <font></font>
+                <input type="submit" name="_submit_" class="bt1" value="确  定" />
+            </p> 
+        </form>
+    </div>
+</div>
+<script>
+    
+        $(function(){
+            $("#address1").setaddr({proviceSn:{$info.proviceSn},citySn:{$info.citySn},countySn:{$info.countySn}});
+        });
+        
+        
+        obj2 = {};
+        geocoder = new qq.maps.Geocoder({
+            complete : function(result){
+                //--console.log(result);
+                $("input[name='lat']").val(result.detail.location.lat);
+                $("input[name='long']").val(result.detail.location.lng);
+            }
+        });
+        
+        obj2.get_coordinate = function(){
+            $("input[name='lat']").val('正在定位…');
+            $("input[name='long']").val('正在定位…');
+            var provice = $("select[name=provice] option:selected").text();
+            var city = $("select[name=city] option:selected").text();
+            var county = $("select[name=county] option:selected").text();
+            var street = $("input[name=street]").val();
+            var address = provice +','+ city +','+county+','+street;
+            geocoder.getLocation(address);
+        };
+        
+        //--添加新地址  -  检查数据
+        function icheck(){
+
+            var t = document.getElementsByName('provice').item(0).value;
+            if(!t || t==0){
+                confirm_('请完善区域信息！',null,300,120);
+                return false;
+            }
+            var t = document.getElementsByName('city').item(0).value;
+            if(!t || t==0){
+                confirm_('请完善区域信息！',null,300,120);
+                return false;
+            }
+            var t = document.getElementsByName('county').item(0).value;
+            if(!t || t==0){
+                confirm_('请完善区域信息！',null,300,120);
+                return false;
+            }
+//--            var t = document.getElementsByName('town').item(0).value;
+//--            if(!t || t==0){
+//--                confirm_('请完善区域信息！',null,300,120);
+//--                return false;
+//--            }
+
+            var t = document.getElementsByName('street').item(0).value;
+            var rule = new RegExp(/^.{1,120}$/);
+            if( rule.test(t)==false ){
+                confirm_('请填写街道地址，1-120个字符！',null,300,120);
+                return false;
+            }
+            var t = document.getElementsByName('recipients').item(0).value;
+            var rule = new RegExp(/^.{1,120}$/);
+            if( rule.test(t)==false ){
+                confirm_('请填写收货人姓名，1-20个字符！',null,300,120);
+                return false;
+            }
+            var t = document.getElementsByName('mobile').item(0).value;
+            var rule = new RegExp(/^[0-9]{11,11}$/);
+            if( rule.test(t)==false ){
+                confirm_('请填写手机号码！',null,300,120);
+                return false;
+            }
+
+            var t = document.getElementsByName('phone').item(0).value;
+            var rule = new RegExp(/^[0-9]{2,4}?\-?[0-9]{5,10}$/);
+            if(t!=''){
+                if( rule.test(t)==false ){
+                    confirm_('请填写正确的电话号码！',null,300,120);
+                    return false;
+                }
+            }
+
+            var t = document.getElementsByName('zipcode').item(0).value;
+            var rule = new RegExp(/^[0-9]{2,8}$/);
+            if(t!=''){
+                if( rule.test(t)==false ){
+                    confirm_('请填写正确的邮政编码！',null,300,120);
+                    return false;
+                }
+            }
+
+        };
+</script>

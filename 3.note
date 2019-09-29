@@ -1,0 +1,16 @@
+<xml>
+<appid><![CDATA[wxa99fe17032d02c24]]></appid>
+<attach>160713185547174</attach>
+<body><![CDATA[[yixinu] 思朗 纤麸酥性消化饼干（高纤）456g/袋,数量:1.000……]]></body>
+<mch_id>1225312702</mch_id>
+<nonce_str><![CDATA[hpq83osri4nwn2v4leyo29kldlfxcsv4]]></nonce_str>
+<notify_url><![CDATA[http://js.yixinu.com/pay/callbackwxpay/]]></notify_url>
+<openid><![CDATA[omOJSwXyj9DNIJIUwVOoFjGdxMLY]]></openid>
+<out_trade_no>160713185547174</out_trade_no>
+<spbill_create_ip><![CDATA[111.23.149.61]]></spbill_create_ip>
+<time_expire>20160713221922</time_expire>
+<time_start>20160713201922</time_start>
+<total_fee>1</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<sign><![CDATA[A6EF0CCE41218E9D1726351F29A9C0C5]]></sign>
+</xml>

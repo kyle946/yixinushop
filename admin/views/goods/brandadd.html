@@ -1,0 +1,75 @@
+<layout name="layout/layout1" />
+<style type="text/css">
+ul.area1,ul#imglist{ padding: 0px;}
+ul.area1 li{ list-style-type: none; width: 180px; float: left; padding: 6px 0px;}
+
+#logoFile div,#logoFile img{ width: 150px; height: 110px;margin:0px;}
+#logoFile div{overflow: hidden;}
+#logoFile div:hover{height: auto; overflow-y: auto;}
+#logoFile a{display: block; width:80%; margin: 0px auto; text-align: center; text-decoration: underline; cursor: pointer;color:#008DFC;}
+</style>
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=brand"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?goods=brand&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <a href="<?php echo __ROOT__; ?>"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+<div class="w100">
+    <form method="post" action="">
+    <table class="w100 content_list">
+        <tr>
+            <th width="220" style="text-align: left;">品牌编辑</th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td style="text-align: right;">名称：</td>
+            <td><input class="input1" type="text" name="name" value="{$info.name}" /></td>
+            <td><span class="c1">商品分类名称</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">链接：</td>
+            <td><input class="input1" type="text" name="link" value="{$info.link}" /></td>
+            <td><span class="c1">品牌的官方网站链接</span></td>
+        </tr>
+        <tr>
+            <td style="border-bottom: 1px dashed #e1e1e1;text-align: right;">LOGO：</td>
+            <td style="border-bottom: 1px dashed #e1e1e1;">
+                <input class="bt1" onclick="insertImage({'mode':'single','divid':'logoFile','level':'1'})" type="button" value="添加图片" />
+            </td>
+            <td style="border-bottom: 1px dashed #e1e1e1;"></td>
+        </tr>
+        <tr>
+            <td></td>
+                    <td>
+                        <div id='logoFile'>
+                        <?php if(isset($info['logo']) && !empty($info['logo'])): ?>
+                        <div>
+                                <img src="<?php echo IMAGE_URL; ?>{$info.logo}">
+                                <input type="hidden" name="imgfile" value="{$info.logo}">
+                                <a onclick="deleteImgSingle(this)">删除图片</a>
+                        </div>
+                        <?php endif; ?>
+                        </div>
+                    </td>
+            <td><span class="c1">品牌LOGO</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">状态：</td>
+            <td>
+                <select name="status">
+                    <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                    <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                </select>
+            </td>
+            <td><span></span></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="提交" />
+            </td>
+            <td><span></span></td>
+        </tr>
+    </table>
+    </form>
+</div>

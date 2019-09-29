@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+        <link href="<?php echo __ROOT__; ?>static/style.css" rel="stylesheet" type="text/css"/>
+        <style>
+            table{ width:100%; }
+            table thead th{ height: 32px; background-color: #f4f4f4; }
+            table tbody td{ border-bottom: 1px solid #f4f4f4; height: 36px; text-align: center; }
+            table tbody td a{     color: #009AFF; display: inline-block; }
+        </style>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>URL</th>
+                    <!--<th>上级</th>-->
+                    <th>分组</th>
+                    <th>排序</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(isset($list) && $list){ foreach($list as $v){ ?>
+                <tr>
+                    <td style="text-align:left; text-indent: 1em;">{$v.name}</td>
+                    <td>{$v.url}</td>
+                    <!--<td>{$v.parentId}</td>-->
+                    <td>{$v.g}</td>
+                    <td>{$v.sort}</td>
+                    <td><a href="<root />?c=dev&a=editmenu&id={$v.id}&mtagid={$v.mtagId}" >修改菜单</a>&nbsp;&nbsp;<a href="#" class="c1" onclick="if(confirm('确定要删除吗？')){ window.location.href='<root />?c=dev&a=delmenu&id={$v.id}&mtagid={$v.mtagId}' }" >删除菜单</a></td>
+                </tr>
+                <?php } } ?>
+                
+                <?php if($_GET['mtagid']){ ?>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <!--<td></td>-->
+                    <td></td>
+                    <td></td>
+                    <td><a href="<root />?c=dev&a=editmenu&mtagid={$_GET.mtagid}" >添加菜单</a></td>
+                </tr>
+                <?php } ?>
+                
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,147 @@
+<layout name="layout/layout_null" />
+<div class="w1 clearfix" > 
+    <div class="h10 w100" ></div>
+    <form method="post" action="" onsubmit="return icheck();" >
+        <div class="register_area1 clearfix" >
+            <div class="title" >{$webconfig.webtitle} - 用户注册</div>
+            <div class="h10 w100" ></div>
+            <div style="background-color: #FFE1BE; color:#f00; padding: 10px; display: <?php if(isset($infoDisplay)): echo $infoDisplay; else: echo 'none'; endif; ?>;" >注册失败 ！ 原因可能是用户名或手机号已经被注册，或者验证码不正确。</div>
+            <div class="row" >
+                <div class="a1" ><font>*</font>手机号码：</div>
+                <div class="a2" > <input type="text" onblur="ch.onecheck(this, rootPath + 'u/checkUsername/name/' + this.value, '该用户名已经存在，请更换！',privateMethod.setsendmsgbutton)" name="username" value="" /> </div>
+                <div class="a3" ><span id="usernametips" >11位数字的手机号码！</span></div>
+            </div>
+            <!--        <div class="row" >
+                        <div class="a1" ><font>*</font>手机号码：</div>
+                        <div class="a2" > <input type="text" name="mobile" value="" /> </div>
+                        <div class="a3" ><span id="mobiletips" >11位数字的手机号码</span></div>
+                    </div>-->
+            <!--        <div class="row" >
+                        <div class="a1" >邮箱：</div>
+                        <div class="a2" > <input type="text" name="mail" value="" /> </div>
+                        <div class="a3" >有效的邮件地址</div>
+                    </div>-->
+            <div class="row" >
+                <div class="a1" ><font>*</font>昵称：</div>
+                <div class="a2" > <input type="text" style="color:#888" onblur="ch.onecheck(this);" name="nickname" value="{$netname}" /></div>
+                <div class="a3" ><input type="button" class="bt1" value="更换" onclick="privateMethod.getnickname()" />&nbsp;&nbsp;<span id="nicknametips" > 1 - 16个中文或英文或数字组成的昵称</span></div>
+            </div>
+            <div class="row" >
+                <div class="a1" ><font>*</font>密码：</div>
+                <div class="a2" > <input type="password" onblur="ch.onecheck(this);" name="password" value="" /> </div>
+                <div class="a3" ><span id="passwordtips" >6 - 16个字符 ，区分大小写</span></div>
+            </div>
+            <div class="row" >
+                <div class="a1" ><font>*</font>确认密码：</div>
+                <div class="a2" > <input type="password" onblur="ch.onecheck(this);" name="password2" value="" /> </div>
+                <div class="a3" ><span id="password2tips" >请再次填写密码</span></div>
+            </div>
+            <!--        <div class="row" >
+                        <div class="a1" ><font>*</font>图片验证码：</div>
+                        <div class="a2" >
+                            <input type="text" onblur="ch.onecheck(this,rootPath+'u/checkVerify/verifystr/'+this.value,'图片验证码不正确！');" name="yzm" id="yzm" value="" />&nbsp;&nbsp;&nbsp; 
+                            <a href="javascript:privateMethod.getverify()" ><img border="0" title="点击更换图片" id="yzmi" class="yzmi" src="/u/verifyCode"></a>
+                        </div>
+                        <div class="a3" ><span id="yzmtips" >填写图片中的字符，点击图片更换验证码</span></div>
+                    </div>-->
+            <div class="row" id="setsendmsgbutton" style="display: none;" >
+                <div class="a1" ><font>*</font>短信验证码：</div>
+                <div class="a2" > <input type="text" style="color:#888" onblur="ch.onecheck(this,rootPath+'u/checkVerifyMsg/verifystr/'+this.value,'验证码不正确！');" name="yzm2" id="yzm2" value="" /></div>
+                <div class="a3" ><input type="button" class="bt1" id="button1"  value="发送短信验证码" onclick="privateMethod.sendmsg()" />&nbsp;&nbsp;<span id="yzm2tips" ></span></div>
+            </div>
+            <div class="row" >
+                <div class="a1" ></div>
+                <div class="a2" >
+                    <input style="padding: 0px; width: auto;" type="checkbox" name="protocol" value="1" />
+                    同意&nbsp;&nbsp;<a href="javascript:void(0)" >用户注册协议</a>
+                </div>
+                <div class="a3" ><span id="protocoltips" ></span></div>
+            </div>
+            <div class="row" >
+                <div class="a1" ></div>
+                <div class="a2" > <input type="submit" class="bt1" style="width:120px;" name="_submit_" value="立即注册" /> </div>
+                <div class="a3" ></div>
+            </div>
+            <div class="row" >
+                <div class="a1" ></div>
+                <div class="a2" ><a href='<root />u/login' >我有账号，现在去登录</a></div>
+                <div class="a3" ></div>
+            </div>
+        </div>
+    </form>
+    <div class="h10 w100" ></div>
+    <div class="h10 w100" ></div>
+</div>
+
+<script>
+    privateMethod = {};
+    $(function() {
+        var option = new Array();
+        //--option[0] = {name:'username',type:'regexp',msg:'4 - 16个由英文字母或数字组成的用户名！',rule:/^.{4,16}$/,required:1}; 
+        option[0] = {name: 'username', type: 'mobile', msg: '请填写有效的手机号码！', required: 1};
+        option[1] = {name: 'nickname', type: 'regexp', msg: '1 - 16个中文或英文或数字组成的昵称！', rule: /^.{1,16}$/, required: 1};
+        option[2] = {name: 'password', type: 'password', msg: '6 - 16个字符 ，区分大小写！', required: 1};
+        option[3] = {name: 'password2', type: 'password2', msg: '两次密码输入不一致！'};
+        //--option[4] = {name:'yzm',type:'regexp',msg:'请填写正确的验证码！',rule:/^.{5,5}$/,required:1}; 
+        option[4] = {name: 'yzm2', type: 'regexp', msg: '请填写正确的验证码！', rule: /^.{6,6}$/, required: 1};
+        option[5] = {name: 'protocol', type: 'check', msg: '请阅读并同意 用户注册协议！'};
+        ch = new formCheck(option);
+
+    });
+    
+    privateMethod.setsendmsgbutton = function(s){
+        if(s==1){
+            document.getElementById('setsendmsgbutton').style.display = 'block';
+        }else{
+            document.getElementById('setsendmsgbutton').style.display = 'none';
+        }
+    };
+
+    //--检测字段
+    function icheck() {
+        var bool_ = false;
+        var res = ch.start();
+        if (res == 1) {
+            bool_ = true;
+        }
+        return bool_;
+    }
+
+    //--更新验证码
+    //--privateMethod.getverify = function() {
+    //--    var imgyzm = document.getElementById('yzmi');
+    //--    imgyzm.setAttribute('src', "<root />u/verifyCode/rand_" + Math.random());
+    //--};
+
+    //--发送短信验证码
+    privateMethod.sendmsg = function() {
+        var mobile = document.getElementsByName('username').item(0).value;
+        $.get("<?php echo createLink('u/sendmsg'); ?>" + 'mobile/' + mobile, function(d) {
+            if (d.status == 1) {
+                var note1 = document.getElementById('button1');
+                note1.style.backgroundColor = '#646464';
+                var wait = 120;
+                var interval = setInterval(function() {
+                    var time = --wait;
+                    document.getElementById('button1').value = '发送短信验证码 ' + wait;
+                    if (time == 0) {
+                        var note1 = document.getElementById('button1');
+                        note1.setAttribute("disabled", false);
+                        note1.style.backgroundColor = '#CA0000';
+                        clearInterval(interval);
+                    }
+                }, 1000);
+            } else {
+                confirm_(d.msg, null, 300, 80);
+            }
+        }, 'json');
+    };
+
+    //--更换昵称
+    privateMethod.getnickname = function() {
+        $.getJSON(rootPath + 'u/getNicknameJson', function(d) {
+            $("input[name='nickname']").attr('value', d.name);
+        });
+    };
+</script>
+

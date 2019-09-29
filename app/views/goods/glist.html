@@ -1,0 +1,175 @@
+<layout name="layout/layout1" />
+<div class="h10 w100" ></div>
+<div class="w1 clearfix" >
+    <div class="glist_area1 w100" >广告招商：18684694187</div>
+    <div class="h10 w100" ></div>
+
+    <!--商品分类position  开始--> 
+    <div class="goodsCatetroyPos" >
+        <list name="goodsCatetroyPosData" item="v1" >
+        <div class="a1" >
+            <a href="<root />{u g/$v1[id]}" >{$v1.name}&nbsp;&nbsp;↓</a>
+            <div class="a3" ></div>
+            <div class="a2" >
+                <?php if( isset($v1['list']) ): foreach($v1['list'] as $v2): ?>
+                <a href="<root />{u g/$v2[id]}" >{$v2.name}</a>
+                <?php endforeach; endif; ?>
+            </div>
+        </div>
+        &nbsp;&nbsp;>&nbsp;&nbsp;
+        </list>
+    </div>
+    <script>
+        $(".goodsCatetroyPos .a1").mouseenter(function() {
+            $(this).find('.a3').css({'display': 'block'});
+            $(this).find('.a2').css({'display': 'block', "border": "1px solid #EAAE34"});
+            $(this).css({"border": "1px solid #EAAE34"});
+        });
+        $(".goodsCatetroyPos .a1").mouseleave(function() {
+            $('.goodsCatetroyPos .a3').css({'display': 'none'});
+            $('.goodsCatetroyPos .a2').css({'display': 'none', "border": "1px solid #FFE2A6"});
+            $('.goodsCatetroyPos .a1').css({"border": "1px solid #FFE2A6"});
+        });
+    </script>
+    <!--商品分类position  结束-->
+
+    <div class="h10 w100" ></div>
+    <!--如果选择参数为空，才设置高度-->
+    <div <if con="empty($attrurl)" >style="height: 130px; overflow: hidden;"</if>  class="glist_area3 w100 clearfix" > 
+        <div class="a1 clearfix" >
+            <div class="a2 fl" >{$info.name}&nbsp;&nbsp; <font class="c1" >商品筛选</font></div>
+            <div class="a3 fr" >
+                <font class="c1 f12" >排序：</font>
+                <a <if con="empty($attrurl['sort'])" >class="hover"</if> href="<root />{u g/$info[id]/".goodsurlattr($attrurl,'sort')." }" >默认</a>
+
+                <?php if( @$attrurl['sort']=='priceS' or @$attrurl['sort']=='priceJ' ): ?>
+                <?php if( $attrurl['sort']=='priceS' ): ?>
+                <a class="hover" href="<root />{u g/$info[id]/".goodsurlattr($attrurl,'sort')."sort_priceJ }" >价格&nbsp;&nbsp;↓</a>
+                <?php else: ?>
+                <a class="hover" href="<root />{u g/$info[id]/".goodsurlattr($attrurl,'sort')."sort_priceS }" >价格&nbsp;&nbsp;↑</a>
+                <?php endif; ?>
+                <else />
+                <a href="<root />{u g/$info[id]/".goodsurlattr($attrurl,'sort')."sort_priceS }" >价格&nbsp;&nbsp;↓</a>
+                <?php endif; ?>
+
+                <?php if( @$attrurl['sort']=='rS' or @$attrurl['sort']=='rJ' ): ?>
+                <?php if( $attrurl['sort']=='rS' ): ?>
+                <a class="hover" href="<root />{u g/$info[id]/".goodsurlattr($attrurl,'sort')."sort_rJ }" >人气&nbsp;&nbsp;↓</a>
+                <?php else: ?>
+                <a class="hover" href="<root />{u g/$info[id]/".goodsurlattr($attrurl,'sort')."sort_rS }" >人气&nbsp;&nbsp;↑</a>
+                <?php endif; ?>
+                <else />
+                <a href="<root />{u g/$info[id]/".goodsurlattr($attrurl,'sort')."sort_rJ }" >人气&nbsp;&nbsp;↓</a>
+                <?php endif; ?>
+
+            </div>
+        </div>
+        <p>
+            <font>价格：</font>
+            <a <if con="empty($attrurl['price'])" >class="hover"</if> href="<root />{u g/$info[id]/".goodsurlattr($attrurl,'price')." }" >不限</a>
+            <list name="priceSection" item="v" >
+            <a <if con="$attrurl['price']==$v" >class="hover"</if> href="<root />{u g/$info[id]/".goodsurlattr($attrurl,'price')."price"."_"."$v }" >{$v}</a>
+            </list>
+            <input type="text" class="input1" id="priceMin" name="priceMin" value="{$priceMin}" />&nbsp;-&nbsp;
+            <input type="text" class="input1" id='priceMax' name="priceMax" value="{$priceMax}" />&nbsp;&nbsp;
+            <a class="hover" onclick="onclickPrice()" href="javascript:void(0);" >确定</a>
+        </p>
+        <!--        <p>
+                    <font>品牌：</font>
+                    <a class="hover" href="javascript:void(0);" >综合排序</a>
+                    <a href="javascript:void(0);" >价格</a>
+                </p>-->
+
+        <list name="attrD" item="v" >
+        <?php  if(empty($v['list'])) : continue;  endif; ?>
+        <p>
+            <font>{$v.name}：</font>
+            <a <if con="empty($attrurl[$key])" >class="hover"</if>  href="<root />{u g/$info[id]/".goodsurlattr($attrurl,$key)." }" >不限</a>
+            <?php foreach($v['list'] as $v1): ?>
+            <a <if con="$attrurl[$key]==$v1" >class="hover"</if>  href="<root />{u g/$info[id]/".goodsurlattr($attrurl,$key)."$key"."_$v1"."}" >{$v1}</a>
+            <?php endforeach;?>
+        </p>
+        </list>
+
+    </div>
+    <div class="h10 w100" ></div>
+    <!--如果属性不为空才显示这个按钮-->
+    <if con="!empty($attrD)" >
+        <?php if( empty($attrurl) ): ?>
+        <a class="glist_area4_a1" href="javascript:void(0);" read="0" onclick="onclickAttr(this)" >
+            <div class="glist_area4 w100" >
+                <div class="text1" >更多选项(…)&nbsp;&nbsp;&nbsp;↓</div>
+            </div>
+        </a>
+        <else />
+        <a class="glist_area4_a1" href="javascript:void(0);" read="1" onclick="onclickAttr(this)" >
+            <div class="glist_area4 w100" >
+                <div class="text1" >收起&nbsp;&nbsp;&nbsp;&nbsp;↑</div>
+            </div>
+        </a>
+        <?php endif; ?>
+    </if>
+    <div class="h10 w100" ></div>
+    <div class="glist_area2 w100" >
+        <ul>
+            <list name="list" item="v" >
+            <li>
+            <if con="!empty($v['aid'])"><i></i></if>
+            <div class="thumb" ><a href="<root />{u item/$v[id] }" ><img border="0" src="<root />image/{$v.thumb}"></a></div>
+            <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+            <div class="t2" >
+                ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+            </div>
+            <div class="t3" > 人气：<font>{$v.clickCount}</font>&nbsp;&nbsp;&nbsp;评论：<font>{$v.comments}</font></div>
+            <div class="t4 clearfix" >
+                <!--<a href="javascript:goodsfun.buy('{$v.id}');" >立即购买</a>-->
+                
+                <!--库存不足和限购判断  --> 
+                <?php if( $v['numbers']<KUCUNBUZU ){ ?>
+                <a href="javascript:void(0);" >库存不足,再等等吧</a>
+                <?php }elseif( $v['xiangou']>0 && $v['xiangouuser']>0 && $v['xiangouuser']>=$v['xiangou'] ){ ?>
+                <a href="javascript:void(0);" >[限购] 今天已经买过了</a>
+                <?php }else{ ?>
+                <a href="javascript:goodsfun.addcart('{$v.id}');" >加入购物车</a>
+                <?php } ?>
+                
+                <!--<a href="javascript:void(0);" >关&nbsp;&nbsp;注/a>-->
+            </div>
+            </li>
+            </list>
+        </ul>
+    </div>
+</div>
+<div class="h10 w100" ></div>
+<div id="page" class="clearfix w100">{$pageinfo}</div>
+<div class="h10 w100" ></div>
+<script type="text/javascript">
+    function onclickAttr(e) {
+        var read = e.getAttribute("read");
+        if (parseInt(read) == 0) {
+            $(".glist_area3").css({"height": "auto"});
+            $(".glist_area4_a1 .glist_area4 .text1").html("收起&nbsp;&nbsp;&nbsp;&nbsp;↑");
+            e.setAttribute("read", 1);
+        } else {
+            $(".glist_area3").css({"height": "130px", "overflow": "hidden"});
+            $(".glist_area4_a1 .glist_area4 .text1").html("更多选项(…)&nbsp;&nbsp;&nbsp;↓");
+            e.setAttribute("read", 0);
+        }
+    }
+
+    function onclickPrice() {
+        var min = $("input[name='priceMin']").attr("value");
+        var max = $("input[name='priceMax']").attr("value");
+        window.location.href = "<root />?c=goods&a=glist&g={$info['id']}&price=" + min + "-" + max;
+    }
+
+    function loginMinCallback(param, goodsid) {
+        if (param == 1) {
+            goodsfun.buy(goodsid);
+        } else if (param == 2) {
+            goodsfun.addcart(goodsid);
+            //--window.location.reload();
+        }
+    }
+</script>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+<title><?php if( empty($webtitle_) ){  echo isset($webconfig['webtitle'])?$webconfig['webtitle']:'异新优商城内容系统'; }else{ echo $webtitle_; } ?></title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="Keywords" content="{$webconfig.keywords}" />
+<meta name="Description" content="{$webconfig.description}" />
+<script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+<script>imageUrl = '<?php echo IMAGE_URL; ?>'; rootPath = '<?php echo __ROOT__; ?>';</script>
+<script src="<?php echo __ROOT__; ?>static/main.js" type="text/javascript"></script>
+<link href="<?php echo __ROOT__; ?>static/style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!--    <div class="layout1_area1 w100 clearfix" >
+        <div class="area2" >
+        &nbsp;&nbsp;&nbsp;&nbsp;<a class='fg' href='javascript:void(0);' >欢迎光临异新优官网！</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a target="_blank" href='<root />{u user/login}' >登录</a>&nbsp;&nbsp;<a target="_blank" href='<root />{u user/region}' >注册</a>
+        </div>
+        <div class="area3" ><a href='javascript:void(0);' >购物车(0)</a>&nbsp;|&nbsp;<a href='javascript:void(0);' >YixinU授权</a>&nbsp;|&nbsp;<a href='javascript:void(0);' >帮助中心</a>&nbsp;|&nbsp;<a href='javascript:void(0);' >联系我们</a>&nbsp;|&nbsp;<a href='javascript:void(0);' class='fg' >客服热线：0731-88888888</a>
+        </div>
+    </div>-->
+    <div class='layout1_area2 clearfix w100' >
+        <div class="area1 w1 clearfix" >
+            <a class="logo" href='<root />' ><img border='0' src='<?php echo __ROOT__; ?>static/logo.png' /></a>
+            <!--<div class="area2" ><input type="text" name="search" class='search' value="" /><input class="bt1" type="submit" name="_submit_" value="" /></div>-->
+        </div>
+    </div>
+    <div class='layout1_area3 w100' >
+        <div class="area1 w1 clearfix" style="height: 1px;" >
+<!--            <ul class='clearfix'>
+                <li id="menu">
+                    <a class="a1" href='<root />'>异新优商城系统</a>
+                    <if con="isindex()"><div class="area2 clearfix" ><else /><div class="area2 clearfix" style="display: none;" ></if>
+                        <ul class="clearfix">
+                            <li class='clearfix' >
+                                <div class="icon"><img src="<root />static/icon/clock32.png" /></div>
+                                <div class='text'>
+                                    <goodstype id="19" ><a class='a2' href='<root />{u g/$v[id]}' >{$v.name}</a></goodstype>
+                                    <a class='a3' href='javascript:void(0);' >正版授权+精美模板</a>
+                                </div>
+                            </li>
+                            <li class='clearfix' >
+                                <div class="icon"><img src="<root />static/icon/clock32.png" /></div>
+                                <div class='text'>
+                                    <a class='a2' href='javascript:void(0);' >商城系统</a>
+                                    <a class='a3' href='javascript:void(0);' >PC版+微商城+官网</a>
+                                </div>
+                            </li>
+                            <li class='clearfix' >
+                                <div class="icon"><img src="<root />static/icon/clock32.png" /></div>
+                                <div class='text'>
+                                    <goodstype id="20" ><a class='a2' href='<root />{u g/$v[id]}' >{$v.name}</a></goodstype>
+                                    <a class='a3' href='javascript:void(0);' >企业官网 PC+手机版</a>
+                                </div>
+                            </li>
+                            <li class='clearfix' >
+                                <div class="icon"><img src="<root />static/icon/clock32.png" /></div>
+                                <div class='text'>
+                                    <goodstype id="14" ><a class='a2' href='<root />{u g/$v[id]}' >{$v.name}</a></goodstype>
+                                    <a class='a3' href='javascript:void(0);' >商城系统</a>
+                                    <a class='a3' href='javascript:void(0);' >内容管理系统</a>
+                                </div>
+                            </li>
+                            <li class='clearfix' >
+                                <div class="icon"><img src="<root />static/icon/clock32.png" /></div>
+                                <div class='text'>
+                                    <goodstype id="18" ><a class='a2' href='<root />{u g/$v[id]}' >{$v.name}</a></goodstype>
+                                    <a class='a3' href='javascript:void(0);' >前端/设计/服务器 ....</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href='<root />'>首页</a></li>
+                <column location='u'>
+                    <cur>  <li><a class='acur' href='{$v.url}'>{$v.name}</a></li>   <curelse/>    <li><a href='{$v.url}'>{$v.name}</a></li>      </cur>
+                </column>
+            </ul>-->
+        </div>
+    </div>
+    <div class="w100 clearfix" >{__CONTENT__}</div>
+    <include file='layout/footer' />
+<script>
+    $(function(){
+        <if con="isindex()==FALSE">
+        $('#menu').mouseenter(function(){ $('.layout1_area3 .area2').css({'display':'block'})});
+        $('#menu').mouseleave(function(){ $('.layout1_area3 .area2').css({'display':'none'})});
+        </if>
+    });
+</script>
+</body>
+</html>

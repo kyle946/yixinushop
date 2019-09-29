@@ -1,0 +1,72 @@
+<layout name="layout/layout2" />
+<div class="h10 w100" ></div>
+<div class="h10 w100 cr">提示：&nbsp;</div>
+<div class="h10 w100" ></div>
+<div class="usercenterIntegralArea1 br1" >
+    <table border="0" cellspacing="0" >
+        <thead>
+            <tr>
+                <th width='25%' >积分总数：<span class='cf60' >{$info.payPoints}</span></th>
+                <th width='25%'>等级：<span class='cf60' >{$info.rankName}</span></th>
+                <th width='25%'>已兑换积分：<span class='cf60' >{$info.usepayPoints}</span></th>
+                <th width='25%'>可兑换积分：<span class='cf60' ><?php echo $info['payPoints'] - $info['usepayPoints']; ?></span></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr><td colspan="4"><div class='bg2 w100' >&nbsp;</div></td></tr>
+            <tr>
+                <td colspan="4">
+                    最近一次积分增加记录：<span class='cf60' ><?php if($info['pointslog']){ echo $info['pointslog'];  }else{ echo '无'; } ?></span>
+                </td>
+            </tr>
+            <tr><td colspan="4"><div class='bg2 w100' >&nbsp;</div></td></tr>
+            <tr>
+                <td colspan="4" >
+                    <div>积分与等级：</div>
+                    <div class='usercenterIntegralArea2' >
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>等级</th>
+                                    <th>别名</th>
+                                    <th>达到等级的积分</th>
+                                    <th>等级折扣</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <list name='list' item="v" >
+                                <tr>
+                                    <td>{$v.name}</td>
+                                    <td>{$v.alias}</td>
+                                    <td>{$v.points}</td>
+                                    <td>{$v.discount}%</td>
+                                </tr>
+                                </list>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr><td colspan="4"><div class='bg2 w100' >&nbsp;</div></td></tr>
+            <tr>
+                <td colspan="4" >
+                    <div>什么时候增加积分：</div>
+                    <div class='usercenterIntegralArea3' >
+                        <ol>
+                            <li>新用户注册</li>
+                            <li>PC端下单并支付</li>
+                            <li>PC端发表商品好评</li>
+                            <li>登录微商城</li>
+                            <li>微商城下单并支付</li>
+                            <li>微商城发表商品好评</li>
+                        </ol>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class='w100 hg40' >&nbsp;</div>
+<div class='w100 hg40' >&nbsp;</div>
+<div class='w100 hg40' >&nbsp;</div>

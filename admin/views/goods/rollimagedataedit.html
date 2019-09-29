@@ -1,0 +1,77 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=rollimage"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?goods=rollimage&type=edit"><img src="<?php echo __ROOT__; ?>static/icon/papercheck32.png" /><font>添加</font></a>
+</div>
+<div class="commonMenu w100" style='background-color: #F0F0F0;'>
+    <a href="javascript:void(0)">[<span class="cf60" >{$info.title}</span>] 图片编辑……</a>
+    <input type="button" onclick="publicMethod.add({$info.id})" value="插入图片 >>" class="bt1" /> 
+</div>
+<div class="w100 h10" ></div>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>编号</th>
+            <th>链接</th>
+            <th>图片</th>
+            <th style="text-align: center;" >操作</th>
+        </tr>
+        <list name="list" item="v">
+        <tr>
+            <td>{$v.id}</td>
+            <td>{$v.link}</td>
+            <td>
+                <!--<img src="<?php echo IMAGE_URL; ?><?php echo str_replace('thumb_','',$v['img']);?>" style='max-height: 100px;'  />-->
+                <img src="<?php echo IMAGE_URL; ?>{$v.img}" style='max-height: 100px;'  />
+            </td>
+            <td style="text-align: center;" >
+                <a target="_blank" href="<?php echo IMAGE_URL; ?><?php echo str_replace('thumb_','',$v['img']);?>" >查看原图</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="javascript:publicMethod.delete({$v.id})" >删除</a>
+            </td>
+        </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+<script>
+    publicMethod = {};
+    publicMethod.add = function(){
+        window.location.href="<root />?goods=rollimage&type=rollimaginsertimg&id={$info.id}";
+    };
+    //--删除数据 
+    publicMethod.delete = function(id) {
+        var html = '<p>确定要删除吗？</p>';
+        var msg = kmsg(html, '删除滚动图片', 1, 350, 120, null, 1, function() {
+            $.ajax({
+                url: "<root />?c=goods&a=rollimagdelete2",
+                data: 'id=' + id,
+                type: 'get',
+                dataType: 'json',
+                success: function(d) {
+                    if (d.status) {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    };
+    //--全选函数
+    publicMethod.listcheck = function(e, chk) {
+        var elems = document.getElementsByTagName("INPUT");
+        for (var i = 0; i < elems.length; i++) {
+            if (elems[i].name == chk || elems[i].name == chk + "[]") {
+                elems[i].checked = e.checked;
+            }
+        }
+    };
+    //--检测是否选择了
+    publicMethod.check = function(chk) {
+        var str = $("input[name='" + chk + "[]']:checked").serialize();
+        if (str == '') {
+            return false;
+        } else {
+            return str;
+        }
+    };
+</script>

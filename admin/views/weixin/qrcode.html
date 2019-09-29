@@ -1,0 +1,115 @@
+<layout name="layout/layout1" />
+<include file="weixin/tou" />
+
+<div style="line-height: 1.5em; padding: 0px 20px; color:#777;" >
+    <p>这里有3种类型的二维码：</p>
+    <p>1、临时二维码，是有过期时间的，<b>最长可以设置为在二维码生成后的7天（即604800秒）后过期</b>，但能够生成较多数量。临时二维码主要用于帐号绑定等不要求二维码永久保存的业务场景</p>
+    <p>2、永久二维码，是无过期时间的，但数量较少（目前为最多10万个）。永久二维码主要用于适用于帐号绑定、用户来源统计等场景。</p>
+    <p>3、自定义二维码，这个是 异新优商城后台 的二维码插件，可随意添加制作 ，<b style="color:#049D0B;" >无数量和时间限制</b>（不会进入公众号，而是识别自定义的字符对应操作）</p>
+    <br />
+    <p>用户扫描带场景值二维码时，可能推送以下两种事件：</p>
+    <p>1、如果用户还未关注公众号，则用户可以关注公众号，关注后微信会将带场景值关注事件推送给开发者。</p>
+    <p>2、如果用户已经关注公众号，在用户扫描后会自动进入会话，微信也会将带场景值扫描事件推送给开发者。</p>
+</div>
+<div class="hr" ></div>
+
+
+
+<div class="h10" ></div>
+<div class="h10" ></div>
+<div class="weixinTypeC_area1" >
+    <div class="b1" >
+        <p>
+            <label><button onclick="privateMethod.addqrcode3()" class="bt1">创建自定义二维码</button></label>&nbsp;&nbsp;&nbsp;&nbsp;
+            |&nbsp;&nbsp;&nbsp;&nbsp;<label><button onclick="privateMethod.addqrcode('ls')" class="bt1" >创建临时二维码 (带参公众号)</button></label>
+            &nbsp;&nbsp;&nbsp;&nbsp;<label><button onclick="privateMethod.addqrcode('yj')" class="bt1" style="color:#f00;" >创建永久二维码 (带参公众号)</button></label>
+        </p>
+    </div>
+    <div class="b2" >
+        <table class="w100 content_list">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>类型 / 有效时间</th>
+                <th>短链接</th>
+                <th>参数</th>
+                <th>说明</th>
+                <th width="100" >操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <list name="list" item="v" >
+                <tr>
+                    <td>{$v.id}</td>
+                    <td><?php if($v['type']==1){ echo '永久';} elseif($v['type']==2){ echo '临时'; } ?>&nbsp;/&nbsp; 
+                        <?php if(strtotime($v['times'])<time()){ ?><b class="cr">已过期</b><?php }else{ echo $v['times'];  } ?>
+                    </td>
+                    <td>{$v.shorturl}</td>
+                    <td>{$v.param}</td>
+                    <td>{$v.comment}</td>
+                    <td>
+                        <label><a href="javascript:void(0)" onclick="privateMethod.showqrcode('{$v.shorturl}')" >查看</a></label>&nbsp;&nbsp;
+                        <?php if($v['type']==2){ ?><label><a href="#" onclick="privateMethod.deleteqrcode({$v.id})" >删除</a></label><?php } ?>
+                    </td>
+                </tr>
+            </list>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    privateMethod = {};
+    //--  创建临时二维码 (带参公众号)显示窗口
+    privateMethod.addqrcode = function(type){
+        var html = "<div class='padding10' ><p>参数：<input type='text' name='qrcodevar' value='' class='input2' /></p> <p>说明：<input type='text' name='comment' value='' class='input2' /></p>  <p style='text-indent:3em;' ><button onclick='privateMethod.tjdata(\""+type+"\")' >提交</button></p><p style='color:#777;font-size:12px;' >提交数据后，点击<操作>栏的<查看>查看二维码</p></div>";
+        kmsg(html,'创建临时二维码',1,320,180);
+    };
+    //--  创建自定义二维码显示窗口
+    privateMethod.addqrcode3 = function(){
+        var html = "<div class='padding10' ><p><textarea id='weixinqrcodetextarea1' onclick='privateMethod.weixinqrcodetextarea1(this)' style='width:470px; height:60px;'>输入字符或链接……</textarea></p><p><button onclick='privateMethod.tjdata3()' >生成二维码</button></p><p><img id='qrcodeimg' src='' /></p></div>";
+        kmsg(html,'创建自定义二维码',1,500,480);
+    };
+    //--  清空 textarea 的内容
+    privateMethod.weixinqrcodetextarea1 = function(id){
+        $(id).text('');
+    };
+    //--    创建自定义二维码
+    privateMethod.tjdata3 = function(){
+        var t = $('#weixinqrcodetextarea1').val();
+        var defaulturl = "<?php echo 'http://'.MAIN_DOMAIN; ?>/static/default.gif";
+        $("#qrcodeimg").attr('src',defaulturl);
+        $.post('<root />?c=weixin&a=exemption&t=base64',{data:t},function(d){
+            var url = "<?php echo 'http://'.MAIN_DOMAIN; ?>/u/qrcode/text/"+d;
+            $.get(url);
+            $("#qrcodeimg").attr('src',url);
+        },'text');
+    };
+    //--    公众号临时二维码 提交数据
+    privateMethod.tjdata = function(type){
+        var data = {var:null,comment:null,type:type};
+        data.var = $("input[name=qrcodevar]").val();
+        data.comment = $("input[name=comment]").val();
+        $.post("<root />?c=weixin&a=qrcodepost",data,function(d){
+             window.location.reload();
+        },'json');
+    };
+    //--    查看二维码
+    privateMethod.showqrcode = function(string){
+        var html = '<img id="showqrcode" src="http://'+"<?php echo MAIN_DOMAIN; ?>/static/default.gif"+'" />';
+        kmsg(html,'查看二维码',1,320,240);
+        $.post('<root />?c=weixin&a=exemption&t=base64',{data:string},function(d){
+            var url = "<?php echo 'http://'.MAIN_DOMAIN; ?>/u/qrcode/text/"+d;
+//--            $.get(url);
+            $("#showqrcode").attr('src',url);
+        },'text');
+    };
+    //--    删除二维码记录
+    privateMethod.deleteqrcode = function(id){
+        confirm_('确定要删除吗？',function(){
+            $.post("<root />?c=weixin&a=deleteqrcode",{id:id},function(d){
+                window.location.reload();
+            },'json');
+        });
+    };
+</script>
+

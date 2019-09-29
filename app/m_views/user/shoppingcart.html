@@ -1,0 +1,187 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+    
+    <div class="goodslist clearfix" >
+        <ul>
+            <list name="goodslist" item="v" >
+            <li>
+                <div class="left" >
+                    
+                    <?php if( $v['numbers']<KUCUNBUZU ){ ?>
+                        <div class="left1" style="margin-left: 2rem; height: 1.2rem;" ></div>
+                     <?php }elseif( $v['xiangou']>0 && $v['xiangouuser']>0 && $v['xiangouuser']>=$v['xiangou'] ){ ?>
+                        <div class="left1" style="margin-left: 2rem; height: 1.2rem;" ></div>
+                     <?php }else{ ?>
+                            <div class="left1" ><i init="0" class="iconfont" >&#xe6ad;</i></div>
+                     <?php } ?>
+                     
+                    <a href="javascript:void(0);" ><img src="<?php echo IMAGE_URL; ?>{$v.thumb}" /></a>
+                </div>
+                <div class="right" >
+                    <a class="a1" href="<?php echo createLink('index/item',array('id'=>$v['goodsid']) ); ?>"><div class="title" >{$v.goodsname}</div></a>
+                    <a href="<?php echo createLink('index/item',array('id'=>$v['goodsid']) ); ?>">
+                        <div class="title" >{$v.attributeStr}</div>
+                    </a>
+                    <a href="<?php echo createLink('index/item',array('id'=>$v['goodsid']) ); ?>">
+                        <div class="title2" >{$v.business_name}</div>
+                    </a>
+                    
+                    <?php if( $v['numbers']<KUCUNBUZU ){ ?>
+                    <div class="price" >&yen;{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;库存不足！</div>
+                    <?php }elseif( $v['xiangou']>0 && $v['xiangouuser']>0 && $v['xiangouuser']>=$v['xiangou'] ){ ?>
+                    <div class="price" >&yen;{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;[限购] 今天已买</div>
+                    <?php }else{ ?>
+                
+                        <div class="price" >&yen;&nbsp;{$v.shopPrice}</div>
+                        <div class="button1" data-goodsid="{$v.goodsid}" data-id="{$v.id}" data-price="{$v.shopPrice}" >
+                            <i class="i2" >+</i>
+                            <input type="text"  name="num_{$v.goodsid}" readonly="readonly" value="{$v.goodsnum}" />
+                            <i class="i1" >-</i>
+                            <i class="i3" >删</i>
+                        </div>
+                    
+                    <?php } ?>
+                    
+                    
+                </div>
+                <div class="right1" ></div>
+            </li>
+            </list>
+        </ul>
+    </div>
+    
+</div>
+<div class="hg10 w100" ></div>
+<div class="hg10 w100" ></div>
+<div class="shoppingcart_jiesuan w100 maxwidth" >
+    <div class="left" >
+        <i init="0" class="iconfont" >&#xe6ad;</i>
+        <div class="text" >全选</div>
+    </div>
+    <div class="right2" >
+        <a href="javascript:void(0);" >结算</a>
+    </div>
+    <div class="right1" >
+        <div class="text" >合计</div>
+        <div class="total" >&yen;&nbsp;<font>0.00</font></div>
+    </div>
+</div>
+<script>
+    publicMethod = {};
+    $(function(){
+        publicMethod.init();
+        publicMethod.buycartfun();
+    });
+    publicMethod.init = function(){
+        var w1 = parseInt( $(".goodslist").width() );
+        var w2 = parseInt( $(".goodslist .left").width() );
+        $(".goodslist .right").css({'width':w1-w2-15});
+    };
+    //--初始化按钮事件
+    publicMethod.buycartfun = function(){
+        $(".goodslist li").each(function(i){
+            var obj = $(this).find(".right .button1");
+            var this_ = this;
+            //--添加 操作
+            $(obj).find("i.i2").on('click', function(){
+                var val = parseInt($(obj).find("input").val()) ;
+                if(val<999) {
+                    $(obj).find("input").val( val+1 ); 
+                    goodsfun.ccgn($(obj).data('goodsid'),val+1);
+                    publicMethod.computertotal();
+                }
+            });
+            //--减  操作
+            $(obj).find("i.i1").on('click', function(){
+                var val = parseInt($(obj).find("input").val()) ;
+                if(val>1) {
+                    $(obj).find("input").val( val-1 ); 
+                    goodsfun.ccgn($(obj).data('goodsid'),val-1);
+                    publicMethod.computertotal();
+                }
+            });
+            //--删除  操作
+            $(obj).find("i.i3").on('click', function(){
+                goodsfun.ccgn($(obj).data('goodsid'),-1);
+            });
+            //--选择商品
+            $(this).find(".left").on('click', function(){
+                var input = $(obj).find('input');
+                if( !input.attr('init') || input.attr('init')==0  ){
+                    $(this).find(".left1 i").css({'background-color':'#f00','color':'#fff','border':'.1rem solid #fff'});
+                    input.attr('init',1);
+                    $(obj).find(".i3").css({"display":"block"});
+                    $(this_).find(".right a.a1").css({"width":"80%"});
+                    publicMethod.computertotal();
+                }else{
+                    $(this).find(".left1 i").css({'background-color':'#fff','color':'#fff','border':'.1rem solid #dfdfdf'});
+                    input.attr('init',0);
+                    $(obj).find(".i3").css({"display":"none"});
+                    $(this_).find(".right a.a1").css({"width":"100%"});
+                    publicMethod.computertotal();
+                }
+            });
+        });
+        
+        //--  全选
+        $(".shoppingcart_jiesuan .left").on('click',function(){
+            if( $(this).find("i").attr('init')==0 ){
+                $(this).find("i").css({'background-color':'#f00' });
+                $(this).find("i").attr('init',1);
+                $(".goodslist li .right .button1 input").attr('init',1);
+                $(".goodslist .left1 i").css({'background-color':'#f00','color':'#fff','border':'.1rem solid #fff'});
+                
+                $(".goodslist li .right .button1 .i3").css({"display":"block"});
+                $(".goodslist li .right a.a1").css({"width":"80%"});
+                publicMethod.computertotal();
+            }else{
+                $(this).find("i").css({'background-color':'#999' });
+                $(this).find("i").attr('init',0);
+                $(".goodslist li .right .button1 input").attr('init',0);
+                $(".goodslist .left1 i").css({'background-color':'#fff','color':'#fff','border':'.1rem solid #dfdfdf'});
+                
+                $(".goodslist li .right .button1 .i3").css({"display":"none"});
+                $(".goodslist li .right a.a1").css({"width":"100%"});
+                total = 0;
+                $(".shoppingcart_jiesuan .right1 .total font").text( total.toFixed(2) );
+            }
+        });
+        
+        $(".shoppingcart_jiesuan .right2 a").on('click',function(){
+            publicMethod.buynow();
+        });
+    };
+    
+    //--选择的商品
+    publicMethod.selectgoods = '';
+    
+    //--  价格计算 
+    publicMethod.computertotal = function(){
+        publicMethod.selectgoods = '';
+        var button1dom = $(".goodslist li .right .button1").get();
+        var  total = 0.00;
+        for(x in button1dom){
+            var obj = button1dom[x];
+            //--  通过 设置 属性init  来判断 是不是被 选中，只有被 选中的才参与 价格计算 
+            if( $(obj).find('input').attr('init')==1 ){
+                var t = parseFloat($(obj).data('price')) * parseFloat($(obj).find('input').val());
+                total = total + t;
+                publicMethod.selectgoods += $(obj).data("id")+',';
+            }
+        }
+        $(".shoppingcart_jiesuan .right1 .total font").text( total.toFixed(2) );
+    };
+    
+    publicMethod.buynow = function(){
+        $.getJSON(rootPath+'?v=/goods/ConfirmAnOrderChangeGoods',{'id':publicMethod.selectgoods,'type':2},function(d){
+            console.log(d);
+            if(d.status==1){
+                window.location.href = '<?php echo createLink("goods/ConfirmAnOrder/",array("clear"=>1)); ?>'; //--rootPath+'?c=goods&a=ConfirmAnOrder';
+            }else if(d.status==2){
+                window.location.href = '<?php echo createLink("u/login",array("back"=>base64_encode("?v=/goods/shoppingcartList")) ); ?>';
+            }
+        });
+    };
+    
+</script>

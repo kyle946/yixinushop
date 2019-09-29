@@ -1,0 +1,133 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?user=list"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?user=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <a href="<?php echo __ROOT__; ?>"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+<div class="w100">
+    <form method="post" action="" name="iform" onsubmit="return icheck();" >
+    <table class="w100 content_list">
+        <tr>
+            <th width="180" style="text-align: left;">添加 / 修改 - 用户</th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">用户名：</span></td>
+            <td><input type="text" class="input1" name="username"  onblur="ch.onecheck(this)" value="{$info.username}" /></td>
+            <td><span id="usernametips" class="c1">用来登录验证的用户名</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">手机号码：</span></td>
+            <td><input type="text" class="input1"  onblur="ch.onecheck(this)" name="mobile" value="{$info.mobile}" /></td>
+            <td><span id="mobiletips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">密码：</span></td>
+            <td><input type="password" class="input1" name="password"  onblur="ch.onecheck(this)" value="" /></td>
+            <td><span id="passwordtips" class="c1">登录密码</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">确认密码：</span></td>
+            <td><input type="password" class="input1"   onblur="ch.onecheck(this)" name="pwd" value="" /></td>
+            <td><span id="pwdtips" class="c1">确认密码</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">邮箱：</span></td>
+            <td><input type="text" class="input1"  onblur="ch.onecheck(this)" name="email" value="{$info.email}" /></td>
+            <td><span id="emailtips" class="c1">Email</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">性别：</span></td>
+            <td>
+                <label><input name="sex" type="radio" value="1" <if con="$info['sex']==1" >checked="checked"</if> >男</label>
+                <label><input name="sex" type="radio" value="2" <if con="$info['sex']==2" >checked="checked"</if> >女</label>
+            </td>
+            <td><span class="c1"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="cr fb" >*&nbsp;</span><span class="fb">昵称：</span></td>
+            <td><input type="text" class="input1"  onblur="ch.onecheck(this)" name="nickname" value="{$info.nickname}" /></td>
+            <td><span id="nicknametips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">找回密码问题：</span></td>
+            <td><input type="text" class="input1"  onblur="ch.onecheck(this)" name="question" value="{$info.question}" /></td>
+            <td><span id="questiontips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">问题答案：</span></td>
+            <td><input type="text" class="input1"  onblur="ch.onecheck(this)" name="answer" value="{$info.answer}" /></td>
+            <td><span id="answertips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">余额：</span></td>
+            <td><input type="text" class="input1"  onblur="ch.onecheck(this)" name="money" value="{$info.money}" /></td>
+            <td><span id="moneytips" class="c1">用户余额，默认为0，单位为RMB 元</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">积分：</span></td>
+            <td><input type="text" class="input1"  onblur="ch.onecheck(this)" name="payPoints" value="{$info.payPoints}" /></td>
+            <td><span id="payPointstips" class="c1">用户积分，默认为0</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">用户等级：</span></td>
+            <td>
+                <select name="userRank" >
+                    <list name='ranklist' item='v' >
+                    <option value="{$v.id}" <?php if(@$info['userRank']==@$v['id']){ ?>selected='selected'<?php } ?> >
+                            {$v.name},折扣:{$v.discount}%
+                    </option>
+                    </list>
+                </select>
+            </td>
+            <td><span class="c1"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">状态：</span></td>
+            <td>
+                <select name="status">
+                    <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                    <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                </select>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="保存" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    </form>
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'username',type:'regexp',msg:'用户名应该为1－22个字符！',rule:/^.{1,22}$/,required:1}; 
+            option[1] = {name:'password',type:'password',msg:'输入一个6－16个字符的密码！'<?php if( isset($_GET['type']) && $_GET['type']=="edit" ): ?>,required:2<?php endif; ?>};
+            option[2] = {name:'pwd',type:'password2',msg:'两次密码输入不一致！'};
+            option[3] = {name:'email',type:'email',msg:'邮件格式不正确 ！',required:2};
+            option[4] = {name:'mobile',type:'mobile',msg:'手机号码格式不正确 ！'};
+            option[5] = {name:'question',type:'regexp',msg:'找回密码问题应该在1-80个字符！',rule:/^.{1,80}$/,required:2};
+            option[6] = {name:'answer',type:'regexp',msg:'找回密码问题答案应该在1-80个字符！',rule:/^.{1,80}$/,required:2};
+            option[7] = {name:'money',type:'regexp',msg:'请输入一个有效的金额数字！',rule:/^[0-9]{1,9}\.?\d{0,2}$/,required:2};
+            option[8] = {name:'payPoints',type:'int11',msg:'请输入一个有效的积分数字！',required:2};
+            option[9] = {name:'phone',type:'regexp',msg:'请输入一个有效的电话号码！',rule:/^[0-9]{0,4}\-?\d{1,8}$/,required:2};
+            option[10] = {name:'qq',type:'int11',msg:'请输入一个有效的QQ号码！',required:2};
+            option[11] = {name:'alipay',type:'regexp',msg:'30个字符以内的有效账号！',rule:/^.{1,30}$/,required:2};
+            option[12] = {name:'weixin',type:'regexp',msg:'30个字符以内的有效账号！',rule:/^.{1,30}$/,required:2};
+            option[13] = {name:'nickname',type:'regexp',msg:'昵称应该为1－8个字符',rule:/^.{1,8}$/,required:1};
+            ch = new formCheck(option);
+        })
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+</div>

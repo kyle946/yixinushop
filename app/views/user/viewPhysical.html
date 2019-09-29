@@ -1,0 +1,29 @@
+
+<div class="usercenter_viewPhysical_area1" >
+    <table border="0" cellspacing="5">
+        <tbody>
+            <tr>
+                <td></td>
+                <td>订单号</td>
+                <td>{$info.nu}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>更新时间</td>
+                <td>{$info.updatetime}</td>
+                <td></td>
+            </tr>
+            <tr><td colspan="6" ></td></tr>
+        <?php foreach($info['arr'] as $key=>$value): ?>
+            <tr>
+                <td></td>
+                <td>{$value.time}</td>
+                <td>{$value.context}</td>
+                <td></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+
+</div>

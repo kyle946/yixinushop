@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>订单 - {$info.orderSn} - {$address.provice_name},{$address.city_name}</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css" >
+            body{
+                margin: 0px; padding: 10px; font-size: 12px; 
+                font-family: "微软雅黑","黑体",sans-serif,"Times New Roman", Times, serif; 
+            }
+            div{ margin: 0px auto; height: auto; position: relative; }
+            .clearfix:after{content:".";display:block;height:0; clear:both; visibility:hidden;}
+            .fl{float: left;}
+            .fr{float: right;}
+
+            .table1{width:100%;}
+            .table1 tr td,.table1 tr th{border-bottom: 1px solid #f1f1f1; padding: 8px;}
+
+            .table1 tr td.td1{padding: 0px}
+            .table1 tr td.td1 .div1{padding: 10px 0px 0px 0px;font-size: 18px; font-weight: bold; color:#555;}
+
+            .table1 tr td.td2 div{display: inline-block; margin-right: 12px; margin-bottom: 5px; margin-top: 5px; color:#00f; min-width: 185px;}
+            .table1 tr td.td2 div font{color:#555;}
+            .table1 tr.tr1 td{text-align: center;}
+
+            .area1 h3{padding: 8px; margin: 0px; color:#666;}
+            .area1 .div4{width:100%; border-bottom: 1px dashed #e1e1e1; margin-bottom: 20px;}
+            .area2{padding: 10px;}
+            .area3{margin-right: 10px;}
+            .area3 div{display: inline-block;}
+            .area3 div.div1{text-align: right;}
+            
+            .print_btn{ width: 100%; text-align: center; margin: 0px auto; }
+            .print_btn .btn{ border:0; padding: 8px 20px; width: 100px; color: #fff; font-size: 14px; outline: 0; background-color: #bd0000; display: inline-block; text-align: center; cursor: pointer; }
+        </style>
+        <style type="text/css" media="print">
+            .print_btn .btn{display:none;}
+        </style>
+    </head>
+    <body>
+        <div class="area1" >
+            <h3>订单 - {$info.orderSn}</h3>
+            <div class="div4" ></div>
+            <table class="table1" border="0" cellspacing="0">
+                <tr>
+                    <td class="td1" colspan="6" >
+                        <div class="div1 fl" ><img src="<root />static/logo_1.png" /></div>
+                        <div class="fr" ><img src="?c=order&a=printDelivery&barcode=1&text={$info.orderSn}" /></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td2" colspan="6" >
+                        <div><font>订单号：</font>{$info.orderSn}</div>
+                        <div><font>下单时间：</font>{$info.createTime}</div>
+                        <div>
+                            <font>支付状态：</font>
+                            <switch name="$info['payStatus']" >
+                            <case value="1">未支付</case>
+                            <case value="2">已支付</case>
+                            <case value="3">退款</case>
+                            </switch>
+                        </div>
+                        <div><font>支付时间：</font>{$info.payTime}</div><br />
+                        <div><font>收货人：</font>{$info.name}</div>
+                        <div><font>手机号码：</font>{$info.mobile}</div><br />
+                        <div><font>收货地址：</font>{$address.provice_name},{$address.city_name},{$address.county_name},{$info.address}</div><br />
+                        <div><font>配送方式：</font>{$info.deltypename}</div>
+                        <div>
+                            <font>配送状态：</font>
+                            <switch name="$info['delStatus']" >
+                            <case value="1">未发货</case>
+                            <case value="2">已发货</case>
+                            <case value="3">已签收</case>
+                            <case value="4">拒收</case>
+                            </switch>
+                        </div>
+                        <div><font>发货时间：</font>{$info.sendTime}</div>
+                        <div><font>物流快递单号：</font>{$info.expressNo}</div>
+                        <br />
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table1" border="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>商品货号</th>
+                        <th>名称</th>
+                        <th>规格属性</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <list name="goodlist" item="v" >
+                <tr class="tr1" >
+                    <td>{$v.goodssn}</td>
+                    <td>{$v.goodsname}</td>
+                    <td>{$v.goodsattributeStr}</td>
+                    <td>{$v.goodsprice}</td>
+                    <td>{$v.goodsnum}</td>
+                    <td><?php echo $v['goodsprice']*$v['goodsnum']; ?></td>
+                </tr>
+                </list>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="clearfix">
+            <div class="area2" >用户补充说明：{$info.usernote}</div>
+            <div class="area3 fr" >
+                <div class="div1" >
+                    <p>打印时间：</p>
+                    <p>商品总额：</p>
+                    <p>调价：</p>
+                    <p>运费：</p>
+                    <p>应付款：</p>
+                </div>
+                <div>
+                    <p><?php echo date("Y-m-d"); ?></p>
+                    <p>{$info.goodsAmount}</p>
+                    <p>{$info.priceMod}</p>
+                    <p>{$info.freight}&nbsp;&nbsp;(总重量 {$info.weight}&nbsp;kg)</p>
+                    <p>{$info.amount}</p>
+                </div>
+            </div>
+        </div>
+        <div  class="print_btn">
+            <input class="btn" name="" type="button" value="打印" onclick="window.print()"/>
+        </div>
+    </body>
+</html>

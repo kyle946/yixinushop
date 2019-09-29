@@ -1,0 +1,81 @@
+<layout name="layout/layout1" />
+<style type="text/css">
+ul.area1{ padding: 0px;}
+ul.area1 li{ list-style-type: none; width: 180px; float: left; padding: 6px 0px;}
+</style>
+<div class="w100">
+    <table class="w100 content_list">
+        <tr>
+            <th style="text-align: left;"></th>
+            <th style="text-align: left;">权限模块修改</th>
+        </tr>
+        <tr>
+            <td style="text-align: right; vertical-align: top;">&nbsp;</td>
+            <td style="text-align: left;">
+                <button class='bt1' onclick="obj.add_module()" >添加权限模块</button>&nbsp;&nbsp;
+                <button class='bt1' onclick="obj.context_menu(0)" >查看所有菜单</button>&nbsp;&nbsp;
+                <button class='bt1' onclick="obj.module_operation(0)" >查看所有模块</button>&nbsp;&nbsp;
+            </td>
+        </tr>
+        <tr id="nohover" >
+            <td style="text-align: right; vertical-align: top;">&nbsp;</td>
+            <td style="text-align: left;">
+                <list name="main" item="v">
+                <div class='clearfix'>
+                    <p class='fb'>
+                            {$v['name']}<br />
+                            <a href='#' onclick=" obj.context_menu('{$v.id}')" >菜单</a>&nbsp;&nbsp;
+                            <a href='#' onclick="obj.module_operation('{$v.id}')"  >操作</a>&nbsp;&nbsp;
+                            <a href='#' onclick="obj.edit_module('{$v.id}')" >修改</a>&nbsp;&nbsp;
+                            <a href='#' onclick="obj.delete_module('{$v.id}')" >删除</a>
+                    </p>
+                    <ul class='area1 clearfix'>
+                        <?php $var = 'menu'.$v['id']; foreach($$var as $value): ?>
+                        <li>
+                            <?php echo $value['name']; ?><br />
+                            <a href='#' onclick=" obj.context_menu('{$value.id}')" >菜单</a>&nbsp;&nbsp;
+                            <a href='#' onclick="obj.module_operation('{$value.id}')" >操作</a>&nbsp;&nbsp;
+                            <a href='#' onclick="obj.edit_module('{$value.id}')" >修改</a>&nbsp;&nbsp;
+                            <a href='#' onclick="obj.delete_module('{$value.id}')" >删除</a>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <hr />
+                </list>
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    obj = {};
+    //--
+    obj.context_menu = function(mtag_id){
+        var id = parseInt(mtag_id);
+        deletemsg = kmsg("?c=dev&a=context_menu&mtagid="+id,"菜单",2,650,350);
+    };
+    
+    obj.module_operation = function(mtag_id){
+        var id = parseInt(mtag_id);
+        deletemsg = kmsg("?c=dev&a=module_operation&mtagid="+id,"操作",2,650,350);
+    };
+    
+    obj.add_module = function(){
+        deletemsg = kmsg("?c=dev&a=edit_module","添加权限模块",2,550,150);
+    };
+    
+    obj.edit_module = function(id){
+        deletemsg = kmsg("?c=dev&a=edit_module&id="+id,"添加权限模块",2,550,150);
+    };
+    
+    obj.delete_module = function(mtag_id){
+        var id = parseInt(mtag_id);
+        deletemsg = kmsg("<p>&nbsp;&nbsp;删除后菜单和操作也会一起删除，你确定要删除这个权限模块吗？</p>","删除权限模块",1,450,150,null,1,function(){
+                    $.post("<root />?c=dev&a=delete_module",{id:id},function(d){
+                        if(d==1){
+                            window.location.reload();
+                        }
+                    });
+        });
+    };
+</script>

@@ -1,0 +1,55 @@
+<div class="bg2 w100 h30" ></div>
+    <div class="layout1_area7 w100 clearfix" >
+        <div class="w1 clearfix" >
+            <ul class="clearfix" >
+                <li><i class='iconfont' >&#xe61a;</i>正品保障</li>
+                <li><i class='iconfont' >&#xe623;</i>7天无理由退货</li>
+                <li><i class='iconfont' >&#xe609;</i>15天免费换货</li>
+                <li><i class='iconfont' >&#xe62b;</i>满99元包邮</li>
+                <li class='none' ><i class='iconfont' >&#xe618;</i>特色服务</li>
+            </ul>
+        </div>
+    </div>
+    <div class="layout1_area5 w100 clearfix" >
+        <div class="w1 clearfix" >
+            <div class="area1" >
+                <h2>帮助中心</h2>
+                <?php $arr = getartlist('help11',3,1); ?>
+                <?php foreach($arr as $v){ ?>
+                <div><a href="<root />{u m/$v[mark]/id_$v[id]}" >{fun ysubstr($v['title'],25)}</a></div>
+                <?php } ?>
+            </div>
+            <div class="area2" >
+                <h2>支付购买</h2>
+                <?php $arr = getartlist('zhifugoumai',3,1); ?>
+                <?php foreach($arr as $v){ ?>
+                <div><a href="<root />{u m/$v[mark]/id_$v[id]}" >{fun ysubstr($v['title'],25)}</a></div>
+                <?php } ?>
+            </div>
+            <div class="area3" >
+                <h2>售后服务</h2>
+                <?php $arr = getartlist('shouhoufuwu',3,1); ?>
+                <?php foreach($arr as $v){ ?>
+                <div><a href="<root />{u m/$v[mark]/id_$v[id]}" >{fun ysubstr($v['title'],25)}</a></div>
+                <?php } ?>
+            </div>
+            <div class="area4" >
+                <h2>服务支持</h2>
+                <div><a href='javascript:void(0);' >服务支持</a></div>
+                <div><a href='javascript:void(0);' >客服QQ：123456789</a></div>
+                <div><a href='javascript:void(0);' >售后客服：0731-88888888</a></div>
+            </div>
+            <div class='qrcode'>
+                <img src='<?php echo createLink("u/qrcode",array("text"=>base64_encode(MOBILE_URL))); ?>' />
+            </div>
+        </div>
+    </div>
+    <div class="layout1_area6 w100 clearfix" >
+        <div class="w1 clearfix" >
+            <div class="area1" >
+                <p>友情链接：<a href="javascript:void(0)" >友情链接</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" >友情链接</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" >友情链接</a>&nbsp;&nbsp;|&nbsp;&nbsp;</p>
+                <div class="h10 w100" ></div>
+                <p class="p1" >Copyright © 2012-2015&nbsp;&nbsp;异新优 版权所有&nbsp;&nbsp;<a target="_blank" href="http://www.miibeian.gov.cn/" >湘ICP备14004402号</a>&nbsp;&nbsp;Power by yixinu.com</p>
+            </div>
+        </div>
+    </div>

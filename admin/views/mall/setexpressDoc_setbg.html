@@ -1,0 +1,19 @@
+<style type="text/css" >
+    #setexpressDoc_setbg_imagefile{width: 250px;}
+    #setexpressDoc_setbg_imagefile a{display: block; width:80%; margin: 0px auto; text-align: center; text-decoration: underline; cursor: pointer;color:#008DFC;}
+</style>
+<div>
+    <form id="setexpressDoc_setbg_form11" >
+    <div id="setexpressDoc_setbg_imagefile">
+        <if con="$backgroundImage" >
+            <div>
+                <img src="<?php echo IMAGE_URL; ?>{$backgroundImage}">
+                <input type="hidden" name="ex_background" value="{$backgroundImage}">
+                <a onclick="deleteImgSingle(this)">删除图片</a>
+            </div>
+        </if>
+    </div>
+    <input type="hidden" name="_submit_" value="1" />
+    </form>
+    <input class="bt1" onclick="insertImage({'mode': 'single', 'divid': 'setexpressDoc_setbg_imagefile',inputname:'ex_background', 'level': '1'})" type="button" value="选择图片">
+</div>

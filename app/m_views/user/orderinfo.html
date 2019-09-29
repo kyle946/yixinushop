@@ -1,0 +1,161 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+    <div class="orderinfo_area1" >
+        <div class="h2 color444" >基本信息</div>
+        <div class="clearfix l" >
+            <div><font class="f1" >订单号：</font>{$info.orderSn}</div>
+        </div>
+        <div class="clearfix l" >
+            <?php if($info['sortsn']){ ?><div><font class="f1" >短订单号：</font>{$info.sortsn}</div><?php } ?>
+            <div><font class="f1" >类型：</font>{$info.type}</div>
+        </div>
+        <div class="clearfix l" >
+            <div><font class="f1" >配送：</font>{$info.delStatus}</div>
+            <div><font class="f1" >支付：</font>{$info.payStatusInfo}</div>
+        </div>
+        <div class="clearfix l" >
+            <div><font class="f1" >支付方式：</font><img style='border:1px solid #e1e1e1; max-width: 7rem;' src="<root />static/{$info.payTypeLogo}" /></div>
+            <if con="$info['payStatus']==1 " >
+                <div>
+                    <font class="f1">修改/支付：</font>
+                    <a style="padding: .5rem; margin: .5rem 0rem; display: inline-block; text-align: center; background-color: #C20000;color:#fff;" href="<?php echo createLink('pay/collectMoney',array('id'=>$info['id'])); ?>" >立即支付</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a style="padding: .5rem; margin: .5rem 0rem; display: inline-block; text-align: center; background-color: #FF9696;color:#fff;" href='javascript:publicMethod.modpay();'>修改</a>
+                </div>
+            </if>
+        </div>
+        
+        <!--快递100查询物流信息 begin -->
+        <?php if($info['expressNo']){ ?>
+        <div class="clearfix l" >
+            <!--<div><font class="f1" >物流快递：<a style="padding: .4rem; display: inline-block; text-align: center; background-color: #96BBFF;color:#fff;" href="{$excomlink}">查看快递信息</a></div>-->
+            <div><font class="f1" >物流快递：<a style="padding: .4rem; display: inline-block; text-align: center; background-color: #96BBFF;color:#fff;" href="<?php echo createLink('user/getwuliuxinxi',array('ex'=>$ex_com,'id'=>$info['expressNo'])); ?>">查看快递信息</a></div>
+            <div><font class="f1" ></div>
+        </div>
+        <?php } ?>
+        <!--快递100查询物流信息 end -->
+        
+        <div class="clearfix l" >
+            <div><font class="f1" >下单时间：</font>{$info.createTime}</div>
+            <div><font class="f1" >支付时间：</font>{$info.payTime}</div>
+        </div>
+        <div class="clearfix l" >
+            <div><font class="f1" >备注说明：</font>{$info.usernote}</div>
+        </div>
+
+        <div class="h2 color444" >收货信息</div>
+        <div class="clearfix l" >
+            <div><font class="f1" >收货人：</font>{$info.name}</div>
+            <div><font class="f1" >联系方式：</font>{$info.mobile}</div>
+        </div>
+        <div class="clearfix l" >
+            <div><font class="f1" >收货地址：</font>{$address.provice_name},{$address.city_name},{$address.county_name},{$address.town_name}&nbsp;&nbsp;{$info.address}</div>
+        </div>
+
+        <div class="h2 color444" >商品</div>
+        <div class="clearfix" >
+            <div class="goodslist" >
+                <ul>
+                    <?php $total=0; ?>
+                    <list name="goodslist" item="v" >
+                    <li>
+                        <div class="left" ><a href="<?php echo createLink('index/item',array('id'=>$v['goodsid']) ); ?>" ><img src="<?php echo IMAGE_URL; ?>{$v.goodsthumb}" /></a></div>
+                        <div class="right" >
+                            <a href="<?php echo createLink('index/item',array('id'=>$v['goodsid']) ); ?>"><div class="title" >{$v.goodsname}</div></a>
+                            <a href="<?php echo createLink('index/item',array('id'=>$v['goodsid']) ); ?>"><div class="title2" >{$v.goodsattributeStr}</div></a>
+                            <div class="price" >&yen;&nbsp;<?php printf('%.2f',$v['goodsprice']); ?><font> × {$v.goodsnum} = </font><?php $goodstotal= $v['goodsnum']*$v['goodsprice'];?><?php printf('%.2f',$goodstotal); ?></div>
+                        </div>
+                    </li>
+                    <?php $total += $goodstotal; ?>
+                    </list>
+                </ul>
+            </div>
+        </div>
+
+        <div class="hg10 w100" ></div>
+        <div class="hg10 w100" ></div>
+        <div class="p clearfix" >
+            <div class="fl"><font class="f2 color444" >商品总额：</font></div>
+            <div class="fr"><font class="f3" >{$total}</font></div>
+        </div>
+        <div class="p clearfix" >
+            <div class="fl"><font class="f2 color444" >总重量：</font></div>
+            <div class="fr"><font class="color9" >{$info.weight}&nbsp;kg</font></div>
+        </div>
+        <div class="p clearfix" >
+            <div class="fl"><font class="f2 color444" >运费：</font></div>
+            <div class="fr"><font class="f3" > +&nbsp;{$info.freight} </font></div>
+        </div>
+        <div class="p clearfix" >
+            <div class="fl"><font class="f2 color444" >商家调价：</font></div>
+            <div class="fr"><font class="f4" > &nbsp;{$info.priceMod} </font></div>
+        </div>
+        <div class="p clearfix" >
+            <div class="fl"><font class="f2 color444" >折扣优惠：</font></div>
+            <div class="fr"><font class="f4" > -&nbsp;{$info.preferential} </font></div>
+        </div>
+        <div class="p clearfix" >
+            <div class="fl"><font class="f2 color444" >使用优惠券：</font></div>
+            <div class="fr"><font class="f4" >-&nbsp;{$info.coupon} </font></div>
+        </div>
+        <div class="hg10 br1b" ></div>
+        <div class="hg10" ></div>
+        <div class="p clearfix c" >
+            <div class="fl"><font class="color444" >实付款：</font></div>
+            <div class="fr"><font class="f3" >&yen;{$info.amount} </font></div>
+        </div>
+    </div>
+</div>
+<div class="hg10 w100" ></div>
+<div></div>
+
+
+    <div class="ConfirmAnOrder_hidden_area2" >
+        <div class="ConfirmAnOrder_hidden_area22" >
+        <!--确定不是在微信环境下才能使用支付宝-->
+        <!--<if con="$payment['alipayj']!==false and judgeMicroMessenger()==false" >-->
+            <div class="area clearfix" onclick="publicMethod.selectPay('{$payment['face_pay']['sn']}')"><img src="<root />static/{$payment['face_pay']['logo']}" /><i></i>
+                <span>{$payment['face_pay']['title']}</span>
+            </div>
+            <div class="area clearfix" onclick="publicMethod.selectPay('{$payment['alipay']['sn']}')" ><img src="<root />static/{$payment['alipay']['logo']}" /><i></i>
+                <span>{$payment['face_pay']['title']}</span>
+            </div>
+            <!--</if>-->
+            <!--<if con="$payment['weixinPay']!==false and judgeMicroMessenger()" >-->
+            <div class="area clearfix" onclick="publicMethod.selectPay('{$payment['weixin01']['sn']}')" ><img src="<root />static/{$payment['weixin01']['logo']}" /><i></i>
+                <span>{$payment['weixin01']['title']}</span>
+            </div>
+            <!--</if>-->
+            <div class="area clearfix" onclick="publicMethod.selectPay('{$payment['transfer']['sn']}')"><img src="<root />static/{$payment['transfer']['logo']}" /><i></i>
+                <span>{$payment['transfer']['title']}</span>
+            </div>
+        </div>
+    </div>
+
+<script>
+    publicMethod = {};
+    $(function() {
+
+    });
+    publicMethod.modpay = function(){
+        var c=$(".ConfirmAnOrder_hidden_area2").html();
+        //--layer.open({content:c});
+        layer.open({ 
+            type: 1,
+            content:c,
+            anim: 'up',
+            style: 'position:fixed; bottom:0; left:0; width: 100%; height: auto; padding:10px; border:none;'
+        });
+    };
+    //--选择支付方式 
+    publicMethod.selectPay = function(id){
+        $.getJSON(rootPath+'?c=user&a=modiPaymentDone',{'sn':id,'orderid':{$info.id} },function(d){ 
+            window.location.reload();
+        });
+    };
+    
+    publicMethod.getwuliuxinxi = function(){
+        layer.open({content:c});
+    };
+
+</script>

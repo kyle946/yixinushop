@@ -1,0 +1,119 @@
+<layout name="layout/layout1" />
+<style>
+    .content_list strong b{color:#2FC531;}
+    #jincheng_table1 tr th , #jincheng_table1 tr td{ text-align: center; }
+</style>
+<div class="bg1 color2 padding10 f14" style="line-height: 1.5em;">
+    提示：<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;1、<font class="cr" >该功能对服务器开销非常大</font>，生产环境不建议使用，建议您用系统计划任务代替。<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;2、服务器重启之后，自动进程会失效（即使状态为开启），必须关闭然后再次打开才会生效。<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;3、进程关闭后，必须要等到休眠时间过后才能再次开启。<br /><br />
+    系统计划任务设置方法（<?php echo PHP_OS; ?>）：<br />
+    <?php if(PHP_OS=='Linux'){ ?>
+    &nbsp;&nbsp;&nbsp;&nbsp;1、vim /etc/crontab<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;2、增加两行：<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/1 * * * *  root php -f <?php echo dirname($_SERVER["DOCUMENT_ROOT"]).'/cron/updateCache.php'; ?><br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/1 * * * *  root php -f <?php echo dirname($_SERVER["DOCUMENT_ROOT"]).'/cron/deleteOrder.php'; ?>
+    <?php }else{ ?>
+    &nbsp;&nbsp;&nbsp;&nbsp;1、创建一个计划任务（win系统设置比较简单，这里不详细介绍）<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;2、两个命令：<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;php.exe -f "<?php echo dirname($_SERVER["DOCUMENT_ROOT"]).'/cron/updateCache.php'; ?>" <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;php.exe -f "<?php echo dirname($_SERVER["DOCUMENT_ROOT"]).'/cron/deleteOrder.php'; ?>"
+    <?php } ?>
+</div>
+<div class="h10" ></div>
+<div class="w100">
+    <table class="content_list w100" id="jincheng_table1">
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>关联的操作</th>
+            <th>上次开启或关闭时间</th>
+            <th>休眠 秒数</th>
+            <th>说明</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        <list name="list" item="v">
+        <tr>
+            <td>{$v.id}</td>
+            <td>{$v.name}</td>
+            <td>{$v.actionName}</td>
+            <td>{$v.dtime}</td>
+            <td>{$v.sleeps}</td>
+            <td>{$v.comment}</td>
+            <td>
+                <?php if($v['status']==1): ?>
+                <font class='cg'>开启</font>
+                <?php else: ?>
+                <font class='cr'>关闭</font>
+                <?php endif; ?>
+            </td>
+            <td id="jinchengid_{$v.id}" >
+                <?php if($v['status']==1){ ?>
+                <button onclick="privateMethod.set({$v.id},'{$v.actionName}')" >关闭</button>
+                <?php }else{ ?>
+                        <?php if($v['uptime']>0){ ?>
+                        <!--<strong id="day_show"><b>0</b>天</strong>-->
+                        <!--<strong id="hour_show"><b>0</b>时</strong>-->
+                        <strong id="minute_show"><b>0</b> 分</strong>
+                        <strong id="second_show"><b>0</b> 秒</strong>
+                        后可以&nbsp;
+                        <button disabled="disabled" onclick="privateMethod.set({$v.id},'{$v.actionName}')" >开启</button>
+                        <?php }else{ ?>
+                        <button onclick="privateMethod.set({$v.id},'{$v.actionName}')" >开启</button>
+                        <?php } ?>
+                <?php } ?>
+            </td>
+        </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+<script>
+    privateMethod = {};
+    privateMethod.set = function(id,a){
+        $.getJSON('<root />?c=jincheng&a=set&id='+id,function(d){
+            console.log(d);
+            if( parseInt(d.status)==1){
+                $.post('<root />?c=jincheng&a='+d.actionName);
+            }
+            window.location.reload();
+        });
+    };
+    privateMethod.timer = function (intDiff, obj) {
+        window.setInterval(function () {
+            var day = 0,
+                    hour = 0,
+                    minute = 0,
+                    second = 0;
+            if (intDiff > 0) {
+                day = Math.floor(intDiff / (60 * 60 * 24));
+                hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+                minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+                second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+            }
+            if( intDiff<=0 ){
+                obj.find('button').removeAttr('disabled');
+            }
+            if (minute <= 9)
+                minute = '0' + minute;
+            if (second <= 9)
+                second = '0' + second;
+//--            obj.find('#day_show').html('<b>'+day + "</b> 天");
+//--            obj.find('#hour_show').html('<b id="h">' + hour + '</b> 时');
+            obj.find('#minute_show').html('<b>' + minute + '</b> 分');
+            obj.find('#second_show').html('<b>' + second + '</b> 秒');
+            intDiff--;
+        }, 1000);
+    };
+
+    $(function () {
+        <?php foreach($list as $v){ ?>
+            <?php if($v['uptime']>0){ ?>
+        privateMethod.timer({$v.uptime},$('#jinchengid_{$v.id}'));
+            <?php } ?>
+        <?php } ?>
+    });
+</script>
+

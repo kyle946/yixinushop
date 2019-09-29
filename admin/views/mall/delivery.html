@@ -1,0 +1,307 @@
+<layout name="layout/layout1" />
+<style type="text/css" >
+#address1{padding: 15px;}
+</style>
+<!--<script src="<?php echo __ROOT__; ?>/static/jquery.form.js" type="text/javascript"></script>-->
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?system=delivery"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?system=delivery&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <a href="<?php echo __ROOT__; ?>"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+
+<?php if( !isset($_GET['type']) ): ?>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>区域</th>
+            <th>首重(kg)</th>
+            <th>首重价格(元)</th>
+            <th>续重(kg)</th>
+            <th>续重价格(元)</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td><?php if($v['area']==0): echo $v['id']; endif; ?></td>
+                <td>{$v.name}</td>
+                <td><?php if($v['area']==0): ?><span class='cg'>全国范围(默认运费)</span><?php else: echo $v['areaName']; endif; ?></td>
+                <td>{$v.firstWeight}</td>
+                <td>{$v.firstPrice}</td>
+                <td>{$v.secondWeight}</td>
+                <td>{$v.secondPrice}</td>
+                <td>
+                    <?php if($v['status']==1): ?>
+                    <font class='cg'>可用</font>
+                    <?php else: ?>
+                    <font class='cr'>禁用</font>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if($v['area']==0): ?>
+                    <a href="<root />?system=delivery&type=setexpressDoc&id={$v.id}">快递单模板</a>&nbsp;&nbsp;
+                    <a href="<root />?system=delivery&type=add&id={$v['id']}">修改</a>&nbsp;&nbsp;
+                    <a href="javascript:confirm_('你确定要删除 [{$v['name']}] 吗？','<?php echo __ROOT__.'?c=mall&a=deleteDeliveryM2&id='.$v['id']; ?>')" >删除</a></td>
+                    <?php endif; ?>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+
+<?php elseif( isset($_GET['type']) && $_GET['type']=='add' ): ?>
+<div class="w100">
+    <form method="post" action="" id="iform" name="iform" onsubmit="return icheck();" >
+    <table class="w100 content_list">
+        <tr>
+            <th width="150" style="text-align: left;">编辑 - 配送方式</th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span>名称：</span></td>
+            <td style="text-align: left;"><input type="text" class="input1" name="name"  onblur="ch.onecheck(this)" value="{$info.name}" /></td>
+            <td style="text-align: left;"><span id="nametips" class="c1">配送方式名称</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span>默认运费：</span></td>
+            <td colspan="2"  style="text-align: left;">
+                <p><input type="hidden" name="addressName[]" value="{$first.areaName}" /><input type="hidden" name="addressSn[]" value="{$first.area}" />首重 <input type="text" name="firstweight[]" class="input3" value='{$first.firstWeight}'  onblur="ch.onecheck(this)" /> kg,运费 <input type="text" name="firstprice[]" class="input3" value='{$first.firstPrice}'  onblur="ch.onecheck(this)" /> 元 ,每增加 <input type="text" name="secondweight[]" class="input3" value='{$first.secondWeight}'  onblur="ch.onecheck(this)" /> kg,增加运费 <input type="text" name="sendprice[]" class="input3" value='{$first.secondPrice}'  onblur="ch.onecheck(this)" /> 元</p>
+                <p>
+                    <span id="firstWeight[]tips" class="c1"></span>
+                    &nbsp;&nbsp;<span id="firstprice[]tips" class="c1"></span>&nbsp;&nbsp;<span id="secondweight[]tips" class="c1"></span>&nbsp;&nbsp;<span id="sendprice[]tips" class="c1"></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span>指定地区运费：</span></td>
+            <td colspan="2" style="text-align: left;" >
+                <p><input type="button" class="bt1" onclick="addarea1()" value="添加地区" /></p>
+                <div id="address2" >
+                    <list name='list' item='v' >
+                    <p id="{$v.area}" ><input type="hidden" name="addressName[]" value="{$v.areaName}" /><input type="hidden" name="addressSn[]" value="{$v.area}" /><input type="hidden" name="firstweight[]" value="{$v.firstWeight}" /><input type="hidden" name="firstprice[]" value="{$v.firstPrice}" /><input type="hidden" name="secondweight[]" value="{$v.secondWeight}" /><input type="hidden" name="sendprice[]" value="{$v.secondPrice}" />{$v.areaName}&nbsp;&nbsp;<span class="cg">|</span>&nbsp;&nbsp;首重 {$v.firstWeight} kg,运费 <span class="cr fb">{$v.firstPrice}</span> 元 ,每增加 {$v.secondWeight} kg,增加运费 <span class="cr fb">{$v.secondPrice}</span> 元&nbsp;&nbsp;<span class="cg">|</span>&nbsp;&nbsp;<a href="javascript:void(0)" onclick="deleteDeliveryM1({$v.id},this)" >删除</a></p>
+                    </list>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span>描述：</span></td>
+            <td style="text-align: left;"><textarea name="description" class="textarea1" >{$info.description}</textarea></td>
+            <td style="text-align: left;"><span id="descriptiontips" class="c1">配送方式简单的描述 </span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span>状态：</span></td>
+            <td style="text-align: left;">
+                <select name="status">
+                    <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                    <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                </select>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span>关联快递公司<br />(方便查询物流)：</span></td>
+            <td style="text-align: left;">
+                <select name="ex_com">
+                     <option  <if con="$info['ex_com']=='shentong'" >selected='selected'</if> value="0" >请选择</option>
+                     <option <if con="$info['ex_com']=='auspost'" >selected='selected'</if> value="auspost">澳大利亚邮政</option>
+                     <option <if con="$info['ex_com']=='aramex'" >selected='selected'</if> value="aramex">Aramex</option>
+                     <option <if con="$info['ex_com']=='huitongkuaidi'" >selected='selected'</if> value="huitongkuaidi">百世汇通</option>
+                     <option <if con="$info['ex_com']=='youzhengguonei'" >selected='selected'</if> value="youzhengguonei">包裹信件</option>
+                     <option <if con="$info['ex_com']=='bpost'" >selected='selected'</if> value="bpost">比利时邮政</option>
+                     <option <if con="$info['ex_com']=='citylink'" >selected='selected'</if> value="citylink">City-Link</option>
+                     <option <if con="$info['ex_com']=='coe'" >selected='selected'</if> value="coe">COE</option>
+                     <option <if con="$info['ex_com']=='dhl'" >selected='selected'</if> value="dhl">DHL中国件</option>
+                     <option <if con="$info['ex_com']=='dhlen'" >selected='selected'</if> value="dhlen">DHL全球件</option>
+                     <option <if con="$info['ex_com']=='dhlde'" >selected='selected'</if> value="dhlde">DHL德国件</option>
+                     <option <if con="$info['ex_com']=='disifang'" >selected='selected'</if> value="disifang">递四方</option>
+                     <option <if con="$info['ex_com']=='ems'" >selected='selected'</if> value="ems">EMS</option>
+                     <option <if con="$info['ex_com']=='emsguoji'" >selected='selected'</if> value="emsguoji">EMS国际件</option>
+                     <option <if con="$info['ex_com']=='fedex'" >selected='selected'</if> value="fedex">FedEx国际件</option>
+                     <option <if con="$info['ex_com']=='vancl'" >selected='selected'</if> value="vancl">凡客配送</option>
+                     <option <if con="$info['ex_com']=='fanyukuaidi'" >selected='selected'</if> value="fanyukuaidi">凡宇快递</option>
+                     <option <if con="$info['ex_com']=='fedexcn'" >selected='selected'</if> value="fedexcn">Fedex</option>
+                     <option <if con="$info['ex_com']=='fedexus'" >selected='selected'</if> value="fedexus">FedEx美国件</option>
+                     <option <if con="$info['ex_com']=='guotongkuaidi'" >selected='selected'</if> value="guotongkuaidi">国通快递</option>
+                     <option <if con="$info['ex_com']=='ganzhongnengda'" >selected='selected'</if> value="ganzhongnengda">能达速递</option>
+                     <option <if con="$info['ex_com']=='gongsuda'" >selected='selected'</if> value="gongsuda">共速达</option>
+                     <option <if con="$info['ex_com']=='koreapost'" >selected='selected'</if> value="koreapost">韩国邮政</option>
+                     <option <if con="$info['ex_com']=='huaqikuaiyun'" >selected='selected'</if> value="huaqikuaiyun">华企快运</option>
+                     <option <if con="$info['ex_com']=='jd'" >selected='selected'</if> value="jd">京东快递</option>
+                     <option <if con="$info['ex_com']=='jiajiwuliu'" >selected='selected'</if> value="jiajiwuliu">佳吉快运</option>
+                     <option <if con="$info['ex_com']=='canpost'" >selected='selected'</if> value="canpost">加拿大邮政</option>
+                     <option <if con="$info['ex_com']=='jiayunmeiwuliu'" >selected='selected'</if> value="jiayunmeiwuliu">加运美</option>
+                     <option <if con="$info['ex_com']=='jialidatong'" >selected='selected'</if> value="jialidatong">嘉里大通</option>
+                     <option <if con="$info['ex_com']=='jinguangsudikuaijian'" >selected='selected'</if> value="jinguangsudikuaijian">京广速递</option>
+                     <option <if con="$info['ex_com']=='kuayue'" >selected='selected'</if> value="kuayue">跨越速递</option>
+                     <option <if con="$info['ex_com']=='kuaijiesudi'" >selected='selected'</if> value="kuaijiesudi">快捷速递</option>
+                     <option <if con="$info['ex_com']=='kuaiyouda'" >selected='selected'</if> value="kuaiyouda">四川快优达</option>
+                     <option <if con="$info['ex_com']=='minbangsudi'" >selected='selected'</if> value="minbangsudi">民邦速递</option>
+                     <option <if con="$info['ex_com']=='minghangkuaidi'" >selected='selected'</if> value="minghangkuaidi">民航快递</option>
+                     <option <if con="$info['ex_com']=='ocs'" >selected='selected'</if> value="ocs">OCS</option>
+                     <option <if con="$info['ex_com']=='ontrac'" >selected='selected'</if> value="ontrac">OnTrac</option>
+                     <option <if con="$info['ex_com']=='quanfengkuaidi'" >selected='selected'</if> value="quanfengkuaidi">全峰快递</option>
+                     <option <if con="$info['ex_com']=='quanritongkuaidi'" >selected='selected'</if> value="quanritongkuaidi">全日通</option>
+                     <option <if con="$info['ex_com']=='quanyikuaidi'" >selected='selected'</if> value="quanyikuaidi">全一快递</option>
+                     <option <if con="$info['ex_com']=='quanchenkuaidi'" >selected='selected'</if> value="quanchenkuaidi">全晨快递</option>
+                     <option <if con="$info['ex_com']=='quanjitong'" >selected='selected'</if> value="quanjitong">全际通</option>
+                     <option <if con="$info['ex_com']=='japanposten'" >selected='selected'</if> value="japanposten">日本邮政</option>
+                     <option <if con="$info['ex_com']=='rufengda'" >selected='selected'</if> value="rufengda">如风达</option>
+                     <option <if con="$info['ex_com']=='swisspost'" >selected='selected'</if> value="swisspost">瑞士邮政</option>
+                    <option <if con="$info['ex_com']=='shentong'" >selected='selected'</if> value="shentong">申通快递</option>
+                     <option <if con="$info['ex_com']=='shunfeng'" >selected='selected'</if> value="shunfeng">顺丰速运</option>
+                     <option <if con="$info['ex_com']=='suer'" >selected='selected'</if> value="suer">速尔快递</option>
+                     <option <if con="$info['ex_com']=='shenganwuliu'" >selected='selected'</if> value="shenganwuliu">圣安物流</option>
+                     <option <if con="$info['ex_com']=='shengfengwuliu'" >selected='selected'</if> value="shengfengwuliu">盛丰物流</option>
+                     <option <if con="$info['ex_com']=='shenghuiwuliu'" >selected='selected'</if> value="shenghuiwuliu">盛辉物流</option>
+                     <option <if con="$info['ex_com']=='tiantian'" >selected='selected'</if> value="tiantian">天天快递</option>
+                     <option <if con="$info['ex_com']=='tnt'" >selected='selected'</if> value="tnt">TNT</option>
+                     <option <if con="$info['ex_com']=='ups'" >selected='selected'</if> value="ups">UPS</option>
+                     <option <if con="$info['ex_com']=='usps'" >selected='selected'</if> value="usps">USPS</option>
+                     <option <if con="$info['ex_com']=='wanjiawuliu'" >selected='selected'</if> value="wanjiawuliu">万家物流</option>
+                     <option <if con="$info['ex_com']=='wanxiangwuliu'" >selected='selected'</if> value="wanxiangwuliu">万象物流</option>
+                     <option <if con="$info['ex_com']=='hkpost'" >selected='selected'</if> value="hkpost">香港邮政</option>
+                     <option <if con="$info['ex_com']=='xinbangwuliu'" >selected='selected'</if> value="xinbangwuliu">新邦物流</option>
+                     <option <if con="$info['ex_com']=='xinfengwuliu'" >selected='selected'</if> value="xinfengwuliu">信丰物流</option>
+                     <option <if con="$info['ex_com']=='yuantong'" >selected='selected'</if> value="yuantong">圆通速递</option>
+                     <option <if con="$info['ex_com']=='yunda'" >selected='selected'</if> value="yunda">韵达快递</option>
+                     <option <if con="$info['ex_com']=='youzhengguoji'" >selected='selected'</if> value="youzhengguoji">邮政国际包裹</option>
+                     <option <if con="$info['ex_com']=='youshuwuliu'" >selected='selected'</if> value="youshuwuliu">优速物流</option>
+                     <option <if con="$info['ex_com']=='yuanchengwuliu'" >selected='selected'</if> value="yuanchengwuliu">远成物流</option>
+                     <option <if con="$info['ex_com']=='ytkd'" >selected='selected'</if> value="ytkd">运通中港快递</option>
+                     <option <if con="$info['ex_com']=='ztky'" >selected='selected'</if> value="ztky">中铁物流</option>
+                     <option <if con="$info['ex_com']=='zhongtiewuliu'" >selected='selected'</if> value="zhongtiewuliu">中铁快运</option>
+                     <option <if con="$info['ex_com']=='zhongyouwuliu'" >selected='selected'</if> value="zhongyouwuliu">中邮物流</option>
+                     <option <if con="$info['ex_com']=='zhongtong'" >selected='selected'</if> value="zhongtong">中通速递</option>
+                     <option <if con="$info['ex_com']=='zhaijisong'" >selected='selected'</if> value="zhaijisong">宅急送</option>
+                     <option <if con="$info['ex_com']=='zengyisudi'" >selected='selected'</if> value="zengyisudi">增益速递</option>
+                </select>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span></span></td>
+            <td>
+                <input type="submit"  name="_submit_" class="bt1" value="保存" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    </form>
+<!--    <div id="hidearea1" >
+        <div id="address1" >
+                <form method="post" action="" id="iform2" name="iform2" onsubmit="return icheck();" >
+                <p>选择地区:<select id='proviceId' name="provice" ></select> <select id='cityId' name="city" ></select>
+                        <select id='countyId' name="county" ></select> <select id='townId' name="town" ></select></p>
+                <p>首重 <input type="text" name="firstweight" class="input3" /> kg,运费 <input type="text" name="firstprice" class="input3" /> 元 ,每增加 <input type="text" name="secondweight" class="input3" /> kg,增加运费 <input type="text" name="sendprice" class="input3" /> 元</p>
+                <p><input type="button" class="bt1" onclick="addarea2()" value="添加 >>" /></p>
+                </form>
+        </div>
+    </div>-->
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'name',type:'regexp',msg:'名称应该为1－30个字符！',rule:/^.{1,30}$/,required:1};
+            option[1] = {name:'firstweight[]',type:'regexp',msg:'请输入有效的首重！',rule:/^[0-9]{1,11}\.?[0-9]{0,2}$/,required:1};
+            option[2] = {name:'firstprice[]',type:'regexp',msg:'请输入有效的运费！',rule:/^[0-9]{1,11}\.?[0-9]{0,2}$/,required:1};
+            option[3] = {name:'secondweight[]',type:'regexp',msg:'请输入有效的续重！',rule:/^[0-9]{1,11}\.?[0-9]{0,2}$/,required:1};
+            option[4] = {name:'sendprice[]',type:'regexp',msg:'请输入有效的续重运费！',rule:/^[0-9]{1,11}\.?[0-9]{0,2}$/,required:1};
+            option[5] = {name:'description',type:'regexp',msg:'描述应该在120个字符 以内！',rule:/^.{1,120}$/,required:0}; 
+            ch = new formCheck(option);
+        });
+        function icheck(){
+                var bool_ = false;
+                var res = ch.start();
+                if(res==1){
+                    bool_ = true;
+                }
+                return bool_;
+        }
+        htmlcontent1 = "<div id=\"address1\" ><form method=\"post\" action=\"\" id=\"iform2\" name=\"iform2\" onsubmit=\"return icheck();\" ><p>选择地区:<select     id='proviceId' name=\"provice\" ></select> <select id='cityId' name=\"city\" ></select><select id='countyId' name=\"county\" ></select>     <select id='townId' name=\"town\" ></select></p><p>首重 <input type=\"text\" name=\"firstweight\" class=\"input3\" /> kg,运费 <input type=\"text\" name=\"firstprice\" class=\"input3\" /> 元 ,每增加 <input type=\"text\" name=\"secondweight\" class=\"input3\" /> kg,增加运费 <input type=\"text\" name=\"sendprice\" class=\"input3\" /> 元</p><p><input type=\"button\" class=\"bt1\" onclick=\"addarea2()\" value=\"添加 >>\" /></p></form></div>";
+        function addarea1(){
+            deletemsg=kmsg(htmlcontent1,'指定区域运费',1,700,160);
+            $("#address1").setaddr({proviceSn:430,citySn:430100000000});
+//--            $("#address1").setaddr({proviceSn:430,citySn:430100000000,countySn:430124000000,townSn:430124100000});
+        }
+        function addarea2(){
+            var jqForm = $("#iform2");
+            var obj = jqForm[0];
+//--            console.log(obj.provice.options[obj.provice.selectedIndex].text);
+            if(obj.provice.value==0){
+                confirm_('请至少选择一个省级区域。');return false;
+            }
+            var rule = new RegExp(/^[0-9]{1,11}\.?[0-9]{0,2}$/);
+            var t = obj.firstweight.value;
+            if(!rule.test(t) || t == ''){confirm_('请输入一个正确的重量。');return false;}
+            var t = obj.firstprice.value;
+            if(!rule.test(t) || t == ''){confirm_('请输入一个正确的运费。');return false;}
+            var t = obj.secondweight.value;
+            if(!rule.test(t) || t == ''){confirm_('请输入一个正确的重量。');return false;}
+            var t = obj.sendprice.value;
+            if(!rule.test(t) || t == ''){confirm_('请输入一个正确的运费。');return false;}
+            
+            var provice='',city='',county='',town='';
+            var addressSn = '';
+            if(obj.provice.value!=0){
+                provice=obj.provice.options[obj.provice.selectedIndex].text+',';
+                addressSn =addressSn+obj.provice.value+',';
+            }
+            if(obj.city.value!=0){
+                city=obj.city.options[obj.city.selectedIndex].text+',';
+                addressSn =addressSn+obj.city.value+',';
+            }
+            if(obj.county.value!=0){
+                county=obj.county.options[obj.county.selectedIndex].text+',';
+                addressSn =addressSn+obj.county.value+',';
+            }
+            if(obj.town.value!=0){
+                town=obj.town.options[obj.town.selectedIndex].text;
+                addressSn =addressSn+obj.town.value+',';
+            }
+            var name = provice+city+county+town;
+            //--下面两行是保证不出现重复的地区运费
+            var a=document.getElementById(addressSn);
+            if(a){
+                a.parentElement.removeChild(a);
+            }
+            
+            var html="<p id=\""+addressSn+"\" ><input type=\"hidden\" name=\"addressName[]\" value=\""+name+"\" /><input type=\"hidden\" name=\"addressSn[]\" value=\""+addressSn+"\" /><input type=\"hidden\" name=\"firstweight[]\" value=\""+obj.firstweight.value+"\" /><input type=\"hidden\" name=\"firstprice[]\" value=\""+obj.firstprice.value+"\" /><input type=\"hidden\" name=\"secondweight[]\" value=\""+obj.secondweight.value+"\" /><input type=\"hidden\" name=\"sendprice[]\" value=\""+obj.sendprice.value+"\" />"+name+"&nbsp;&nbsp;<span class=\"cg\">|</span>&nbsp;&nbsp;首重 "+obj.firstweight.value+" kg,运费 <span class=\"cr fb\">"+obj.firstprice.value+"</span> 元 ,每增加 "+obj.secondweight.value+" kg,增加运费 <span class=\"cr fb\">"+obj.sendprice.value+"</span> 元&nbsp;&nbsp;<span class=\"cg\">|</span>&nbsp;&nbsp;<a onclick=\"this.parentNode.parentNode.removeChild(this.parentNode)\" href=\"javascript:void(0)\" >删除</a><p>";
+            $("#address2").append(html);
+            deletemsg.hide();
+        }
+        
+        
+        function deleteDeliveryM1(id,e){
+            e.parentNode.parentNode.removeChild(e.parentNode); 
+            $.getJSON("?c=mall&a=deleteDeliveryM1&id="+id, function(data){
+                if(data.status==1){  }
+            });
+        }
+/*     
+//        function submit1(){
+//            $("#iform").ajaxSubmit({
+//                type:"post",
+//                url:"",
+//                beforeSubmit:function(data,o){
+//                    console.log(data);  //$().serialize()  or $.param(data)
+//                    console.log(o);
+//                    var bool_ = false;
+//                    var res = ch.start();
+//                    if(res==1){
+//                        bool_ = true;
+//                    }
+//                    return bool_;
+//                },
+//                success:function(data){
+//                    console.log(data);
+//                },
+//                 resetForm:false,
+//                 clearForm:false
+//            });
+//        }
+*/
+    </script>
+</div>
+<?php endif; ?>

@@ -1,0 +1,115 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?article={$_GET.article}"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?article={$_GET.article}&type=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+    <div class="search" >
+        <span>标题：</span>
+        <input type="text" class="input2" name="title" value="{$_GET.title}" onkeyup="keydown(function(){ privateMethod.search(); })" />
+        <span>栏目：</span>
+        <select name="cid">
+            <option value="0" >请选择</option>
+            <list name="channelList" item="v" >
+            <option value="{$v.id}" <if con="@$_GET['cid']==$v['id']">selected="selected"</if> >{$v.name}</option>
+            </list>
+        </select>
+        &nbsp;&nbsp;
+        <input type="button" class="bt1" onclick="privateMethod.search()" value="搜索" />
+    </div>
+</div>
+<div class="w100">
+    <!--################################################################-->
+    <?php if( $_GET['article']=='channel-renshi' ){ ?>
+    <table class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>标题</th>
+            <th>工作地点</th>
+            <th>薪资</th>
+            <th>学历</th>
+            <th>发布时间</th>
+            <th>权限</th>
+            <th>操作</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td>{$v.id}</td>
+                <td>{$v.title}</td>
+                <td>{$v.didian}</td>
+                <td>{$v.xinzi}</td>
+                <td>{$v.xueli}</td>
+                <td>{$v.addtime}</td>
+                <td>
+                    <font style="color:<?php echo printColor(); ?>">
+                    <switch name="$v['arcrank']" >
+                    <case value='o' >开放浏览</case>
+                    <case value='c' >待审核</case>
+                    <case value='oc' >禁止评论</case>
+                    </switch>
+                    </font>
+                </td>
+                <td>
+                    <a href="<?php echo __ROOT__; ?>?article={$_GET.article}&type=jianlitoudi&id={$v['id']}">
+                        简历<?php if($v['read']>0){ ?><font style='color:#f00;'>({$v.read})</font><?php } ?>
+                    </a>&nbsp;&nbsp;
+                    <a href="<?php echo __ROOT__; ?>?article={$_GET.article}&type=edit&id={$v['id']}">修改</a>&nbsp;&nbsp;
+                    <a href="javascript:confirm_('你确定要删除这个招聘信息吗？','<root />?article={$_GET.article}&type=delete&id={$v['id']}')" >删除</a></td>
+            </tr>
+        </list>
+    </table>
+    <?php }else{ ?>
+    <!--################################################################-->
+    <table class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>标题</th>
+            <th>栏目</th>
+            <th>创建时间</th>
+            <th>权限</th>
+            <th>操作</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td>{$v.id}</td>
+                <td>{$v.title}</td>
+                <td> <font style="color:<?php echo printColor(); ?>">{$v.cname}</font></td>
+                <td>{$v.addtime}</td>
+                <td>
+                    <font style="color:<?php echo printColor(); ?>">
+                    <switch name="$v['arcrank']" >
+                    <case value='o' >开放浏览</case>
+                    <case value='c' >待审核</case>
+                    <case value='oc' >禁止评论</case>
+                    </switch>
+                    </font>
+                </td>
+                <td>
+                    <a href="<?php echo __ROOT__; ?>?article={$_GET.article}&type=edit&id={$v['id']}">修改</a>&nbsp;&nbsp;
+                    <a href="javascript:confirm_('你确定要删除这篇文章吗？','<root />?article={$_GET.article}&type=delete&id={$v['id']}')" >删除</a></td>
+            </tr>
+        </list>
+    </table>
+    <?php } ?>
+    <!--################################################################-->
+    
+    
+    
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+<script type="text/javascript" >
+    privateMethod = {};
+    privateMethod.search = function(){
+        var data = '';
+        
+        var title = $("input[name='title']").attr('value');
+        if(title!=''){
+            data += '&title='+title;
+        }
+        
+        var cid = $("select[name='cid']").attr('value');
+        if(cid!=0){
+            data += '&cid='+cid;
+        }
+        var url = '<root />?<?php echo 'article='.$_GET['article']; ?>' + data;
+        window.location.replace(url);
+    }
+</script>

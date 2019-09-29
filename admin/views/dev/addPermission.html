@@ -1,0 +1,42 @@
+<layout name="layout/layout1" />
+<include file='dev/head' />
+<style type="text/css">
+ul.area1{ padding: 0px;}
+ul.area1 li{ list-style-type: none; width: 180px; float: left; padding: 6px 0px;}
+</style>
+<div class="w100">
+    <form method="post" action="">
+    <table class="w100 content_list">
+        <tr>
+            <th width="220" style="text-align: left;">编辑 - 权限</th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td style="text-align: right;">名称：</td>
+            <td><input class="input1" type="text" name="name" value="{$info.name}" /></td>
+            <td><span class="c1">名称</span></td>
+        </tr>
+        
+        <tr>
+            <td style="text-align: right;">权限模块：</td>
+            <td>
+                <select name="parentId">
+                    <option value="0">顶级权限模块</option>
+                    <list name="mtaglist" item="v">
+                        <option <?php if(isset($info['parentId']) && $info['parentId']==$v['id']): ?>selected='selected'<?php endif; ?> value="{$v.id}">{$v.name}</option>
+                    </list>
+                </select>
+            </td>
+            <td><span></span></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="提交" />
+            </td>
+            <td><span></span></td>
+        </tr>
+    </table>
+        </form>
+</div>

@@ -1,0 +1,82 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+    <div class='commentList clearfix' >
+        <?php if( loginJudbe() ){ ?>
+        <div class='write clearfix' >
+            <form method="post" id='form1' action="" onsubmit="return publicMethod.icheck()" >
+                <textarea name="commentContent" placeholder="我来说两句…" ></textarea>
+                <?php if(!empty($huifuneirong)){ ?>
+                    <div class="huifuneirong" >正在回复：{$huifuneirong}</div>
+                    <div class="huifuneirongquxiao" ><a href="<?php echo createLink('article/comment',array('m'=>rget('m'),'id'=>rget('id') )); ?>" >取消回复</a></div>
+                <?php } ?>
+                <input type='submit' name='_submit_' value="发表" class='fr' />
+            </form>
+        </div>
+        <div class='hg10 br1b' ></div>
+        <?php } ?>
+        <?php foreach($list as $v){ ?>
+        <div class='li clearfix br1b' >
+            <div class='w100 clearfix'>
+                <div class="huifu" ><a href="<?php echo createLink('article/comment',array('m'=>rget('m'),'id'=>rget('id'),'commentpid'=>$v['id'])); ?>" >回复评论</a></div>
+                <div class='img fl' ><img src='http://<?php echo MAIN_DOMAIN."avatar/$v[avatar]"; ?>' /></div>
+                <div class='user fl' >{$v.nickname}</div>
+                <div class='date fl' >{$v.ctime}</div>
+            </div>
+            <?php if($v['floor']){ ?>
+                <?php foreach($v['floor'] as $j){ ?>
+                <div class="sonContent" >
+                    <div class="a1" >{$j.nickname}</div>&nbsp;&nbsp;<div class="a2" >{$j.content}</div>
+                </div>
+                <?php } ?>
+            <?php } ?>
+            <div class='content' >{$v.content}</div>
+        </div>
+        <?php } ?>
+    </div>
+</div>
+<div class="hg10 w100" ></div>
+<div class='pageinfo' >{$pageinfo}</div>
+
+
+<script>
+    publicMethod = {};
+    $(function() {
+        //--
+    });
+
+    //--
+    publicMethod.icheck = function() {
+        var c = document.getElementsByName('commentContent').item(0).value;
+        var rule = new RegExp(/^.{1,200}$/);
+        if (rule.test(c) == false) {
+            layer.open({
+                content: '评论内容不合法！',
+                time: 5
+            });
+            return false;
+        } else {
+            return true;
+        }
+    };
+
+    //--下一页
+    publicMethod.nextpage = function(p, c) {
+        var url = "<?php echo createLink('article/comment',array('id'=>rget('id'),'m'=>rget('m')) ); ?>_p_"+p;
+        $.get(url, function(d) {
+            $.each(d.data, function(n, item) {
+                var floor = '';
+                if (item.floor.length > 0) {
+                    $.each(item.floor, function(i2, item2) {
+                        i2 = ++i2;
+                        floor += '<div class="sonContent"><div class="a1">'+item2.nickname+'</div>&nbsp;&nbsp;<div class="a2">'+item2.content+'</div></div>';
+                    });
+                }
+                var html = '<div class="li clearfix br1b"><div class="w100 clearfix"><div class="huifu" ><a href="<?php echo createLink("article/comment",array("m"=>rget("m"),"id"=>rget("id") )); ?>_commentpid_'+item.id+'" >回复评论</a></div><div class="img fl"><img src="http://<?php echo MAIN_DOMAIN; ?>avatar/'+item.avatar+'"></div><div class="user fl">'+item.nickname+'</div><div class="date fl">'+item.ctime+'</div></div>'+floor+' <div class="content">'+item.content+'</div> </div>';
+                $(".commentList").append(html);
+            });
+            $(".pageinfo").html(d.page);
+        }, 'json');
+    };
+
+</script>

@@ -1,0 +1,63 @@
+<layout name="layout/layout1" />
+<style type="text/css">
+ul.area1{ padding: 0px;}
+ul.area1 li{ list-style-type: none; width: 180px; float: left; padding: 6px 0px;}
+</style>
+<div class="w100">
+    <form method="post" action="">
+    <table class="w100 content_list">
+        <tr>
+            <th width="18%" style="text-align: left;">添加管理员</th>
+            <th></th>
+        </tr>
+        <?php if( @$admin){ }else{ ?>
+        <tr>
+            <td style="text-align: right;">用户名：</td>
+            <td style="text-align: left;"><input type="text" name="name" class="input11" value="{$info.name}" /></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">角色：</td>
+            <td style="text-align: left;">
+                <select name="role">
+                    <list name="role_list" item="v">
+                    <option <?php if(isset($info['roleId']) && $info['roleId']==$v['id']): ?>selected='selected'<?php endif; ?> value="{$v['id']}">{$v['name']}</option>
+                    </list>
+                </select>
+            </td>
+        </tr>
+        <?php } ?>
+        <tr>
+            <td style="text-align: right;">关联商户号：</td>
+            <td style="text-align: left;"><input type="text" class="input11 bg2" name="business_no" readonly='readonly' value="{$info.business_no}" /></td>
+        </tr>
+        
+        <?php if($_GET['type']=='edit'): ?>
+        <tr>
+            <td style="text-align: right;">旧密码：</td>
+            <td style="text-align: left;"><input type="password" class="input11" name="passwdOld" value="" /></td>
+        </tr>
+        <?php endif; ?>
+        <tr>
+            <td style="text-align: right;">密码：</td>
+            <td style="text-align: left;"><input type="password" class="input11" name="passwd" value="" /><if con="$_GET['type']=='edit'" >&nbsp;&nbsp;<font class='c1'>如果不修改密码，将此处置空即可。</font></if></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">重复密码：</td>
+            <td style="text-align: left;"><input type="password" class="input11" name="passwd2" value="" /></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">状态：</td>
+            <td style="text-align: left;">
+                <label><input type="radio" <?php if(@$info['status']==1){ ?>checked='checked'<?php } ?> name="status" value="1" />可用</label>&nbsp;&nbsp;
+                <label><input type="radio" <?php if(@$info['status']==2){ ?>checked='checked'<?php } ?> name="status" value="2" />禁用</label>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" name="_submit_" value="提交" />
+            </td>
+        </tr>
+    </table>
+        </form>
+</div>

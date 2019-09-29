@@ -1,0 +1,167 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?activity=goodslist"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>活动列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?activity=goodslist&act=add"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加活动</font></a>  
+</div>
+<div class="commonMenu w100"><a href="javascript:void(0)">促销活动 [<span class="cf60" >{$activityName}</span>] 商品编辑</a> <input type="button" onclick="publicMethod.add({$aid})" value="添加商品" class="bt1" /> </div>
+<div class="w100 h10" ></div>
+<div class="w100">
+    <table class="content_list w100">
+        <tr>
+            <th>商品编号</th>
+            <th>商品名称</th>
+            <th>促销价</th>
+            <th>限购 (每人每天)</th>
+            <th>原价</th>
+            <th style="text-align: center;" >操作</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td>{$v.sn}</td>
+                <td>{$v.name} {$v.attributeStr}</td>
+                <td class="cr fb" >{$v.aprice}</td>
+                <td class="c1" >
+                    <?php if($v['xiangou']==0){ ?>
+                    不做限制
+                    <?php }else{ ?>
+                    {$v.xiangou}
+                    <?php } ?>
+                </td>
+                <td class="c1" >{$v.shopPrice}</td>
+                <td style="text-align: center;" >
+                    <a href="javascript:publicMethod.edit({$v.goodsid})">修改</a>&nbsp;&nbsp;
+                    <a href="javascript:publicMethod.delete({$v.goodsid},{$aid})" >删除</a></td>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+<script>
+    publicMethod = {};
+    /* 打开选择发送方式窗口 */
+    publicMethod.add = function(id){
+        var html = '<div class="padding10" >'+
+                '<p>选择添加商品方式：<select name="selectGrantMode" ><option value="1" >指定商品</option><option value="2" >按商品分类</option><option value="3" >所有商品</option></select></p>'+
+                '</div>';
+        var msg = kmsg(html,'选择发放方式',1,400,120,null,1,function(){
+            publicMethod.select(id);
+            msg.hide();
+        });
+    };
+    publicMethod.edit = function(id){
+        var html = '<div class="padding10" >'+
+                '<p>促销价：<input class="input3" type="text" name="price" /></p>'+
+                '<p>限购：<input class="input3" type="text" name="xiangou" /></p>'+
+                '</div>';
+        var msg = kmsg(html,'修改促销价',1,350,120,null,1,function(){
+            var price = $("input[name='price']").attr('value');
+            var xiangou = $("input[name='xiangou']").attr('value');
+            $.ajax({
+                url:"<root />?c=activity&a=salesGoodsEditgoodseditprice",
+                data:'price='+price+'&xiangou='+xiangou+'&goodsid='+id,
+                type:'get',
+                dataType:'json',
+                success:function(d){
+                    if(d.status){
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    };
+    
+    publicMethod.delete = function(id,aid){
+        var html = '<p>删除该商品后，商品将恢复原价销售<br />确定要删除吗？</p>';
+        var msg = kmsg(html,'删除促销商品',1,350,120,null,1,function(){
+            $.ajax({
+                url:"<root />?c=activity&a=salesGoodsEditgoodsdelete",
+                data:'goodsid='+id+'&aid='+aid,
+                type:'get',
+                dataType:'json',
+                success:function(d){
+                    if(d.status){
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    };
+    //--选择方式
+    publicMethod.select = function(id){
+        var mode = $("select[name='selectGrantMode']").attr('value');
+        switch(mode){
+            case '1':
+                publicMethod.SpecifiesGoods(id);
+                break;
+            case '2':
+                publicMethod.goodscate(id);
+                break;
+            case '3':
+                publicMethod.allgoods(id);
+                break;
+            default:
+                confirm_('请选择一种方式！');
+                break;
+        }
+    };
+    publicMethod.SpecifiesGoods = function(id){
+        $.get("<root />?c=activity&a=SpecifiesGoods",function(d){
+            
+            var msg = kmsg(d,'指定商品',1,700,400,null,1,function(){
+                var data = publicMethod.check('goodslistcheck');
+                if(data==false){
+                    kmsg('请至少选择一个商品！',null,1,400,120,3,1);
+                    return false;
+                }else{
+                    $.ajax({
+                        url:"<root />?c=activity&a=SpecifiesGoodsCallback&id="+id,
+                        data:data,
+                        dataType:'json',
+                        type:'get',
+                        success:function(d){
+                            window.location.reload();
+                        }
+                    });
+                }
+
+            });
+            
+        });
+    };
+     publicMethod.SpecifiesGoodsPage = function(p,s){
+                var pagesize = $("#pageSize").attr('value');
+                $.ajax({
+                    url:"<root />?c=activity&a=SpecifiesGoods&ajax=1",
+                    data:'p='+p+'&pagesize='+pagesize,
+                    dataType:'json',
+                    type:'get',
+                    success:function(d){
+                        var obj = $("#grantlisttable tbody");
+                        obj.html("");
+                        $(".SpecifiesGoodspage").html(d.page);
+                        $.each(d.data,function(i,item){
+                            obj.append('<tr> <td><input name="goodslistcheck[]" type="checkbox" value="'+item.id+'" /></td> <td>'+item.sn+'</td> <td>'+item.name+' '+item.attributeStr+'</td> <td>'+item.shopPrice+'</td> </tr> ');
+                        });
+                    }
+                });
+                
+     };
+    //--全选函数
+    publicMethod.listcheck = function(e,chk){
+         var elems = document.getElementsByTagName("INPUT");
+          for (var i=0; i < elems.length; i++){
+                if (elems[i].name == chk || elems[i].name == chk + "[]") {
+                      elems[i].checked = e.checked;
+                }
+          }
+    };
+    //--检测是否选择了
+    publicMethod.check = function(chk){
+        var str=$("input[name='"+chk+"[]']:checked").serialize();
+        if(str==''){
+            return false;
+        }else{
+            return str;
+        }
+    };
+</script>

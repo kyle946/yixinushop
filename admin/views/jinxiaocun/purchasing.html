@@ -1,0 +1,32 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?jinxiaocun=c"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>首页</font></a>
+    <a href="<?php echo __ROOT__; ?>?jinxiaocun=c&type=order"><img src="<?php echo __ROOT__; ?>static/icon/a3.png" /><font>采购订单</font></a>
+    <a href="<?php echo __ROOT__; ?>?jinxiaocun=c&type=order_add"><img src="<?php echo __ROOT__; ?>static/icon/a3.png" /><font>添加采购订单</font></a>
+    <!--<a href="<?php echo __ROOT__; ?>?jinxiaocun=c&type=IncreaseStoreInformation"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>退货</font></a>-->
+    <a href="<?php echo __ROOT__; ?>?jinxiaocun=c"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>单据</font></a>
+    <a href="<?php echo __ROOT__; ?>?jinxiaocun=c"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>统计</font></a>
+    
+    <div class="search" >
+        <!--<span>门店名称/联系手机：</span>-->
+        <input type="text" class="input2" name="username" placeholder="输入关键字" value="{$_GET.username}" onkeyup="keydown(function(){ privateMethod.search(); })" />
+        &nbsp;&nbsp;
+        <input type="button" class="bt1" onclick="privateMethod.search()" value="搜索" />
+    </div>
+</div>
+
+<script>
+        $(function(){
+            $("input[name='username']").focus();
+        });
+    privateMethod = {};
+    privateMethod.search = function(){
+        var data = '';
+        var username = $("input[name='username']").attr('value');
+        if(username!=''){
+            data += '&username='+username;
+        }
+        var url = '<root />?user=list' + data;
+        window.location.replace(url);
+    }
+</script>

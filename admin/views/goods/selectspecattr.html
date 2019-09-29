@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+<link href="<?php echo __ROOT__; ?>static/style.css" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+    #table1 tr td a{
+        display: inline-block; padding:  3px; border: 1px solid #e1e1e1;text-indent: 0px; color: #888;cursor: pointer; margin: 3px 3px 3px 0px;
+    }
+    .selectspecattr_area1{margin:5px 0px; padding: 3px 10px;}
+</style>
+</head>
+<body>
+    <div class="content2 w100">
+        <p class="selectspecattr_area1"><font class="cr fb">警告：</font>如果是重新选择规格将<font class="cr fb">删除</font>之前的规格数据！请慎重选择。</p>
+        <form name="form1" id='form1' action="" method="POST">
+        <table id="table1" class="content_list w100" border="0">
+            <thead>
+                <tr>
+                    <th style="width:110px;" >名称(说明)</th>
+                    <th>属性值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <list name="list" item="v">
+                <tr id='selecttrid{$v.id}'>
+                    <td>{$v.name}(<span class="c1" >{$v.comments}</span>)</td>
+                    <td>
+                        <a onclick="select1(this,{$v.id})"><?php echo str_replace(array("\\r\\n", "\\n", "\\r"),"</a>&nbsp;&nbsp;<a  onclick='select1(this,$v[id])'>",trim($v['specValue']) ); ?></a>
+                        <input type="hidden" name="selectattr[{$v.id}]" value="<?php echo str_replace(array("\\r\\n", "\\n", "\\r"),'=0,',$v['specValue']); ?>" />
+                    </td>
+                </tr>
+                </list>
+                <tr>
+                    <td style="text-align:center" align='center' colspan="2">
+                        <input type="hidden" name="_submit_" value="1" />
+                        <input type="button" onclick="submit1()" value="确定" class="bt1" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </form>
+    </div>
+    <script>
+        function submit1(){
+            $.ajax({
+                type:'POST',
+                url:'?c=goods&a=selectspecattr',
+                data:$('#form1').serialize(),
+                cache:false,
+                dataType:'json',
+                success:function(d){
+                    var list = window.parent.document.getElementById('table2').getElementsByTagName('tbody').item(0);
+                    $(list).html("");
+                    $.each(d,function(i,item){
+                        $(list).prepend('<tr>'+
+                                '<td class="noborder" >编号：'+item.sn+' <input type=\"hidden\"name=\"sn['+item.key+']\"value=\"'+item.sn+'\"/>  </td>'+
+                                '<td class="noborder" >规格：'+item.attributeStr+'</td>'+
+                                '<td class="noborder" >售价：<input type=\"text\" placeholder="售价" name=\"shopPrice['+item.key+']\" value=\"\" class=\"input21\"/></td>'+
+                                '<td class="noborder" >市场价：<input type=\"text\" placeholder="市场价" name=\"marketPrice['+item.key+']\" class=\"input21\"/></td>'+
+                                '<td class="noborder" >库存：<input type=\"text\" placeholder="库存" name=\"numbers['+item.key+']\" class=\"input21 bg2\"  value="0" readonly="readonly" /></td>'+
+                                '</tr><tr>'+
+                                '<td class="left" >条码：<input type=\"text\" placeholder="条码" name=\"tiaoma['+item.key+']\" class=\"input21\" value="" /></td>'+
+                                '<td class="left" >重量：<input type=\"text\" placeholder="重量" name=\"weight['+item.key+']\" class=\"input21\" value="1.000" /> kg</td>'+
+                                '<td class="left" ><div class=\"clearfix\"><div class=\"thumb2\" id=\"img'+item.sn+'\"></div>'+
+                                    '<input type=\"button\" onclick=\"insertImage({\'mode\':\'single\',\'divid\':\'img'+item.sn+'\',\'inputname\':\'imgfile['+item.key+']\',\'level\':\'5\'})\" value=\"缩略图\" class=\"bt1 fright\"/></div></td>'+
+                                '<td class="left" ></td><td class="left" ></td></tr>');
+                    });
+                    //--把选择的商品类型赋值给父窗口的  type_id 常量 ，为了check_step2()准备
+                    //--window.parent.cat_id = {$_GET['catId']};  
+                    window.parent.document.getElementById('tab2').setAttribute('read',0);
+                    window.parent.goodstypeselect();
+                    window.parent.deletemsg.hide();
+                }
+            });
+        }
+        
+        function select1(e,id){
+            var t = e.getAttribute("check") || 0;
+             if(t==0){
+                e.setAttribute("check",1);   //--根据 这个属性判断 图片 是否被 选中添加 到父窗口
+                e.style.border = "1px solid #f00";;
+            }else{
+                e.setAttribute("check",0);
+                e.style.border = "1px solid #e1e1e1";
+            }
+            
+            var str = '';
+            $("#selecttrid"+id+" td a").each(function(){
+                var t2='';
+                if($(this).attr('check')==1){
+                    t2= $(this).text()+'=1,';
+                }else{
+                    t2= $(this).text()+'=0,';
+                }
+                str += t2;
+            });
+            document.getElementsByName("selectattr["+id+"]").item(0).value = str;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<layout name="layout/layout1" />
+<include file="weixin/tou" />
+
+<?php if(@$info1 or @$info2){ ?>
+<div class="bg1 color2 padding10 f14" >
+    <?php if(@$info1){ ?><p>{$info1}&nbsp;&nbsp;&nbsp;<a href="/?system=setup&type=mail" >点击前往</a></p><?php } ?>
+    <?php if(@$info2){ ?><p>{$info2}&nbsp;&nbsp;&nbsp;<a href="/?system=setup&type=mail" >点击前往</a></p><?php } ?>
+</div>
+<?php }else{ ?>
+
+<div style="line-height: 1.5em; padding: 0px 20px; color:#777; " >
+    <p><b>公众平台服务号、订阅号、企业号的相关说明</b></p>
+    <p>服务号、订阅号、企业号的介绍（区别） ：</p>
+    <p>1、订阅号：主要偏于为用户传达资讯（类似报纸杂志），认证前后都是每天只可以群发一条消息，<b>不能申请微信支付</b>；</p>
+    <p>2、服务号：主要偏于服务交互（类似银行，114，提供服务查询），认证前后都是每个月可群发4条消息，<b>可申请微信支付</b>；</p>
+    <p>3、企业号：主要用于公司内部通讯使用，需要先有成员的通讯信息验证才可以关注成功企业号；</p>
+    <br />
+    <p>温馨提示：</p>
+    <p>1、如果想简单的发送消息，达到宣传效果，建议可选择订阅号；</p>
+    <p>2、如果想进行商品销售，进行商品售卖，建议可申请服务号；</p>
+    <p>3、如果想用来管理内部企业员工、团队，对内使用，可申请企业号。</p>
+    <p>4、订阅号无法升级为服务号。若需要服务号，需注册服务号使用。</p>
+</div>
+<div class="hr" ></div>
+<div class="h10" ></div>
+<?php } ?>
+
+<div class="h10" >
+    <div class="weixinTypeA_area1" >
+        <a target="_blank" href="https://mp.weixin.qq.com" >微信公众号官网</a>
+        <a target="_blank" href="https://weixin.qq.com" >微信官网</a>
+        <a target="_blank"  href="http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html" >微信JSSDK文档</a>
+        <a target="_blank" href="https://pay.weixin.qq.com" >微信支付官网</a>
+        <a target="_blank" href="https://pay.weixin.qq.com/wiki/doc/api/index.html" >微信支付开发文档</a>
+    </div>
+    <!--<div class="weixinTypeA_area2" ><img src="<root  />static/weixinimage1.jpg" /></div>-->
+</div>

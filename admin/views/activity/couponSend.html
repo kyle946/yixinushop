@@ -1,0 +1,103 @@
+<div class="content_title w100 clearfix">
+    <a href="<root />?activity=coupon"><img src="<root />static/icon/a1.png" /><font>列表</font></a>
+    <a href="javascript:void(0)" onclick="publicMethod.disabled(1)"><img src="<root />static/icon/a1.png" /><font>启用</font></a>
+    <a href="javascript:void(0)" onclick="publicMethod.disabled(2)"><img src="<root />static/icon/a1.png" /><font>禁用</font></a>
+    <a href="javascript:void(0)" onclick="confirm_('你确定要删除吗？',function(){ publicMethod.delete(); } )"><img src="<root />static/icon/a1.png" /><font>删除</font></a>
+</div>
+<style>
+#goodslisttable tr th{text-align: center;}
+#goodslisttable tr td{border-bottom: 0px dashed #e1e1e1;text-align: center; padding: 8px 5px;}
+</style>
+<div class="w100">
+    <table id="goodslisttable" class="content_list w100">
+        <tr>
+            <th style="wdith:15px" ><input type="checkbox" onclick="publicMethod.listcheck(this,'couponlistcheck')"/></th>
+            <th>用户</th>
+            <th>手机</th>
+            <th>面额</th>
+            <th>需满金额</th>
+            <th>发放时间</th>
+            <th style="text-align: center;width:300px;" >有效期</th>
+            <th>状态</th>
+            <!--<th>操作</th>-->
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td><input name="couponlistcheck[]" type="checkbox" value="{$v.id}" /></td>
+                <td>{$v.username}</td>
+                <td>{$v.mobile}</td>
+                <td>{$v.money}</td>
+                <td>{$v.amount}</td>
+                <td>{$v.rtime}</td>
+                <td style="text-align: center;" >
+                    <span <?php if($v['status']==3): ?> class="cr" <?php endif; ?> >{$v.startTime} ~ {$v.endTime}</span>
+                </td>
+                <td>
+                        <switch name="$v['status']" >
+                        <case value="1"><font class='cg'>可用&nbsp;</font></case>  
+                        <case value="2"><font class='cr'>禁用&nbsp;</font></case>   
+                        <case value="3"><font class='cr'>已过期&nbsp;</font></case>   
+                        <case value="4"><font class='cr'>已使用&nbsp;</font></case>       
+                        </switch>
+                </td>
+<!--                <td>
+                    <a href="javascript:void(0)" >删除</a>
+                </td>-->
+            </tr>
+        </list>
+    </table>
+    <div id='page' >{$pageinfo}</div>
+</div>
+<script>
+    publicMethod = {};
+    //--全选函数
+    publicMethod.listcheck = function(e,chk){
+         var elems = document.getElementsByTagName("INPUT");
+          for (var i=0; i < elems.length; i++){
+                if (elems[i].name == chk || elems[i].name == chk + "[]") {
+                      elems[i].checked = e.checked;
+                }
+          }
+    };
+    //--检测是否选择了
+    publicMethod.check = function(chk){
+        var str=$("input[name='"+chk+"[]']:checked").serialize();
+        if(str==''){
+            return false;
+        }else{
+            return str;
+        }
+    };
+     //--禁用
+    publicMethod.disabled = function(s){
+        var data = publicMethod.check('couponlistcheck');
+        if(data==false){
+            kmsg('请选择优惠券！',null,1,400,120,3,1);
+            return false
+        }else{
+            $.ajax({
+                url:"<root />?c=activity&a=ScouponSetstatus&status="+s,
+                data:data,
+                type:'get',
+                dataType:'json',
+                success:function(d){window.location.reload();}
+            });
+        }
+    };
+     //--禁用
+    publicMethod.delete = function(){
+        var data = publicMethod.check('couponlistcheck');
+        if(data==false){
+            kmsg('请选择优惠券！',null,1,400,120,3,1);
+            return false
+        }else{
+            $.ajax({
+                url:"<root />?c=activity&a=ScouponDelete",
+                data:data,
+                type:'get',
+                dataType:'json',
+                success:function(d){window.location.reload();}
+            });
+        }
+    };
+</script>

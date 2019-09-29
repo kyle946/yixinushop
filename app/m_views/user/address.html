@@ -1,0 +1,74 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+
+    <div class="addresslist" >
+        <list name="addresslist" item="v" >
+        <div class="li clearfix " >
+            <div class="a1" >
+                <b>{$v.recipients}</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>{$v.mobile}</b>
+                <?php if($v['isdefault']){ ?><font class='colorf00' >&nbsp;[默认]</font><?php } ?>
+            </div>
+            <div class="a2 clearfix " >
+                <div class="b1" >{$v.provice_name},{$v.city_name},{$v.county_name},{$v.town_name} {$v.street} </div>
+                <?php if( $from=='ConfirmAnOrder' ){ ?>
+                <div class="b2" ><a href="javascript:publicMethod.select({$v.id});" >选择</a></div>
+                <?php } ?>
+            </div>
+        </div>
+        <div class="a3 clearfix" >
+            <a href="javascript:publicMethod.delete({$v.id});" >删除</a>
+                <?php if( $from=='ConfirmAnOrder' ){ ?>
+                <a href="<?php echo createLink('user/editAddress',array('id'=>$v['id'],'from'=>'ConfirmAnOrder') ); ?>" >修改</a>
+                <?php }else{ ?>
+                <a href="<?php echo createLink('user/editAddress',array('id'=>$v['id']) ); ?>" >修改</a>
+                <?php } ?>
+        </div>
+        <div class="hg10 w100 bg1" ></div>
+        </list>
+    </div>
+
+</div>
+<div class="hg10 w100" ></div>
+<div class="w100 addressadd" >
+                <?php if( $from=='ConfirmAnOrder' ){ ?>
+                <a href="<?php echo createLink('user/editAddress',array('from'=>'ConfirmAnOrder') ); ?>" >添加地址</a>
+                <?php }else{ ?>
+                    <a href="<?php echo createLink('user/editAddress'); ?>" >添加地址</a>
+                <?php } ?>
+</div>
+<div></div>
+<script>
+    publicMethod = {};
+    $(function () {
+        publicMethod.init();
+    });
+    publicMethod.init = function () {
+        $('.addresslist .li .b2 a').css({'display':'block'});
+        var w1 = $('.addresslist .li .a2').width();
+        var w2 = $('.addresslist .li .b2').width();
+        $('.addresslist .li .b1').width(parseInt(w1-w2-10));
+    };
+    //--选择收货地址
+    publicMethod.select = function(id){
+        $.getJSON("<?php echo createLink('goods/selectAddress'); ?>",{ id:id },function(d){
+            if(d.status==1){
+                window.location.href = "<?php echo createLink('goods/ConfirmAnOrder'); ?>";
+            }
+        });
+    };
+    publicMethod.delete = function(id){
+        layer.open({
+            content:'你确定要删除这个地址吗？',
+            btn:['确定','取消'],
+            yes: function(){
+                $.getJSON("<?php echo createLink('user/deleteAddress'); ?>",{ id:id },function(d){
+                    if(d.status==1){
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+    };
+
+</script>

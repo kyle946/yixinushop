@@ -1,0 +1,43 @@
+<layout name="layout/layout1" />
+<include file="weixin/tou" />
+
+    <table class="w100 content_list">
+        <list name="list" item="info">
+        <tr id="nohover" >
+            <td width="150" style="text-align: right; padding: 14px 5px; color:#2E82DD;"><span>{$info.name}：</span></td>
+            <td width="380" style="text-align: left; padding: 14px 5px;">
+                <if con="$info['type']=='text'" ><input type="text" class="input11" name="{$info.mark}" value="{$info.val}" /></if>
+                <if con="$info['type']=='textarea'" ><textarea name="{$info.mark}" class="textarea11">{$info.val}</textarea></if>
+                <if con="$info['type']=='select'" >
+                    <select name='{$info.mark}' >
+                        <?php foreach($info['seval'] as $s2): list($sval,$sname)=explode("=",$s2);?>
+                        <option <?php if($info['val']==$sval): echo "selected='selected'"; endif; ?> value="{$sval}" >{$sname}</option>
+                        <?php endforeach; ?>
+                    </select>
+                </if>
+            </td>
+            <td width="50" > <button class='bt1' onclick="privateMethod.save('{$info.mark}','{$info.type}');" >提交</button> </td>
+            <td style="text-align: left; padding: 14px 5px;"><span class="c1">标签 : {$info.mark}</span></td>
+        </tr>
+        </list>
+        
+    </table>
+
+<script>
+    privateMethod = {};
+    privateMethod.save = function(mark,type){
+        var val = '';
+        if(type=='select'){
+            val = $("select[name='"+mark+"'] option:selected").val();
+        }
+        if(type=='text'){
+            val = $("input[name='"+mark+"']").val();
+        }
+        
+        $.post('<root />?weixin=index&type={$_GET.type}',{ 'mark':mark,'val':val },function(d){
+            if(d.status==1){
+                confirm_('<p>已修改！</p>');
+            }
+        },'json');
+    };
+</script>

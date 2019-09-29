@@ -1,0 +1,1 @@
+INSERT INTO `y_admin_user` VALUES (5,'kyle','c37f686df12d8a706297690724399921',NULL,1,NULL,NULL,'founder'),(6,'user','ee11cbb19052e40b07aac0ca060c23ee',3,1,NULL,NULL,NULL),(7,'orderadmin','6f50ed8124f2346ff5c7aa517a79693c',7,1,NULL,NULL,NULL);

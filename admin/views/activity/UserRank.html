@@ -1,0 +1,17 @@
+<div>
+    <form id="userRankForm1" >
+    <p>
+        用户等级&nbsp;&nbsp;
+        <select name="con" >
+            <option value="=" >等于</option>
+            <option value=">=" >大于等于</option>
+        </select>
+        &nbsp;&nbsp;
+        <select name="val" >
+            <list name="userrank" item="v" >
+            <option value="{$v.id}" >{$v.name} [ {$v.alias} ]</option>
+            </list>
+        </select>
+    </p>
+    </form>
+</div>

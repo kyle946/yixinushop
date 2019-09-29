@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+<title><?php if( empty($webtitle_) ){  echo isset($webconfig['webtitle'])?$webconfig['webtitle']:'异新优商城内容系统'; }else{ echo $webtitle_; } ?></title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="Keywords" content="{$webconfig.keywords}" />
+<meta name="Description" content="{$webconfig.description}" />
+<script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+<script src="<root />static/jquery.form.js" type="text/javascript"></script>
+<script>imageUrl = '<?php echo IMAGE_URL; ?>'; rootPath = '<?php echo __ROOT__; ?>';</script>
+<script src="<?php echo __ROOT__; ?>static/main.js" type="text/javascript"></script>
+<link href="<?php echo __ROOT__; ?>static/style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <include file='layout/common' />
+    <div class='layout1_area3 w100' >
+        <div class="area1 w1 clearfix">
+            <ul class='clearfix'>
+                <li id="menu">
+                    <a class="a1"  href='<root />'>异新优商城系统</a>
+                    <if con="isindex()"><div class="area2 clearfix" ><else /><div class="area2 clearfix" style="display: none;" ></if>
+                        <ul class="clearfix">
+                            <li class='clearfix' >
+                                <!--<div class="icon"><img src="<root />static/icon/clock32.png" /></div>-->
+                                <div class='text'>
+                                    <a class='a2' href='javascript:void(0);' >异新优商城内容系统</a>
+                                    <a class='a3' href='javascript:void(0);' >PC版+微商城+官网</a>
+                                </div>
+                            </li>
+                        <?php $arr = getgoodscate(); ?>
+                        <?php foreach($arr as $v){ ?>
+                                <li class='clearfix' >
+                                    <div class='text'>
+                                        <a class='a2' href='<root />{u g/$v[id]}' >{$v.name}</a>
+                                        <?php if( isset($v['son']) and is_array($v['son']) ): foreach($v['son'] as $k2=>$v2): ?>
+                                        <a class='a3' href='<root />{u g/$v2[id]}' >{$v2.name}</a>
+                                        <?php endforeach; endif; ?>
+                                    </div>
+                                </li>
+                        <?php } ?>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href='<root />'>首页</a></li>
+                <!--<li><a class='acur' href='<root />{u user}'>用户中心</a></li>-->
+                <li><a <if con="ACTION_NAME=='index'"> class='acur'</if> href='<root />{u user}'>用户中心</a></li>
+                <li><a <if con="ACTION_NAME=='address' or ACTION_NAME=='addNewAddress'"> class='acur'</if> href='<root />?c=user&a=address'>地址管理</a></li>
+                <li><a <if con="ACTION_NAME=='order' or ACTION_NAME=='orderinfo'"> class='acur'</if> href='<root />?c=user&a=order'>我的订单</a></li>
+                <li><a <if con="ACTION_NAME=='shoppingcart'"> class='acur'</if> href='<root />?c=user&a=shoppingcart'>我的购物车</a></li>
+                <li><a <if con="ACTION_NAME=='info'"> class='acur'</if> href='<root />?c=user&a=info'>个人资料</a></li>
+                <li><a <if con="ACTION_NAME=='cpwd'"> class='acur'</if> href='<root />?c=user&a=cpwd'>修改密码</a></li>
+                <li><a href='<root />u/logout'>退出</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="w100 clearfix" >
+        <div class="w1 clearfix" >
+            <div class="h10 w100" ></div>
+            <div class="w1 userindex clearfix" >
+                <div class="w22 clearfix fl area2" >
+                    <div class="area3 w100" >
+                        <!--<div class="title">用户中心</div>-->
+                        <list name="menul" item="v2" >
+                            <dl>
+                                <?php foreach($v2 as $k=>$v): ?>
+                                <if con="!is_array($v)" >
+                                    <dt><a href="javascript:void(0);" >{$v}</a></dt>
+                                    <else />
+                                    <?php foreach($v as $k1=>$v1): ?>
+                                    <dd><a href="<root />?c=user&a={$v1}" ><?php echo $menuConfig[$v1]; ?></a></dd>
+                                    <?php endforeach; ?>
+                                </if>
+                                <?php endforeach; ?>
+                            </dl>
+                        </list>
+<!--                        <dl>
+                            <dt><a href="javascript:void(0);" >个人设置</a></dt>
+                            <dd><a href="<root />" >地址管理</a></dd>
+                            <dd><a href="<root />" >个人资料</a></dd>
+                            <dd><a href="<root />" >修改密码</a></dd>
+                        </dl>-->
+                    </div>
+                </div>
+                <div class="w92 fr clearfix" >
+                    <div class="w100 userarea1" ><i></i><?php echo $menuConfig[ACTION_NAME]; ?></div>
+                    {__CONTENT__}
+                </div>
+            </div>
+            <div class="h10 w100" ></div>
+        </div>
+    </div>
+    <include file='layout/footer' />
+<script>
+    $(function(){
+        <if con="isindex()==FALSE">
+        $('#menu').mouseenter(function(){ $('.layout1_area3 .area2').css({'display':'block','height':'520px'})});
+        $('#menu').mouseleave(function(){ $('.layout1_area3 .area2').css({'display':'none'})});
+        <else />
+        $('#menu').mouseenter(function(){ $('.layout1_area3 .area2').animate({'height':'520px'},200) });
+        $('#menu').mouseleave(function(){ $('.layout1_area3 .area2').animate({'height':'298px'},200) });
+        </if>
+    });
+</script>
+</body>
+</html>

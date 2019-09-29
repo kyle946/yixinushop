@@ -1,0 +1,71 @@
+<layout name="layout/layout_mobile2" />
+<div class="menutop2 clearfix" >
+    <?php $i=1; ?>
+    <?php foreach($list2 as $v){  ?>
+        <div class='a1'><a>{$v.name}:</a></div>
+        <?php foreach($v['list'] as $k=>$h ){ ?>
+        <div <?php if( substr(rget('t'),$i-1,1)==$k){ ?>class="act"<?php } ?> >
+            <a href="<?php echo createLink('article/artList', array('i'=>rget('i'),'t'=> replaceStr($link,$i,$k) ) ); ?>">{$h}</a>
+        </div>
+        <?php } ?>
+    <br />
+    <?php 
+            $i++;
+        } 
+    ?>
+    <div class="button1" ><a class="iconfont" href='javascript:publicMethod.setmenutop2();' >&#xe6a6;</a></div>
+</div>
+
+
+<div class="w100 hg10" ></div>
+<div class="indexArtcileArea1" >
+    <!--<h2>{$info.title}<font>更多……</font></h2>-->
+    <?php foreach($list as $v){ ?>
+    <section class="clearfix" > 
+        <div class="l" style="background-color: <pr />;" >
+            <a href="<?php echo createLink('article/item',array('m'=>$v['mark'],'id'=>$v['id'])); ?>" >
+                <?php if( !empty($v['picname']) ){ ?>
+                <img src="<?php echo IMAGE_URL; ?>/{$v.picname}" />
+                <?php }else{ ?>
+                <div>{fun ysubstr($v[title],7)}</div>
+                <?php } ?>
+            </a>
+        </div>
+        <div class="r" >
+            <a href="<?php echo createLink('article/item',array('m'=>$v['mark'],'id'=>$v['id'])); ?>" ><div class="text" >{fun ysubstr($v[title],28)}</div></a>
+            <div class="info" ><?php echo substr($v['addtime'],0,10); ?>&nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont">&#xe69b;</i>&nbsp;{$v.hits}</div>
+        </div>
+    </section>
+    <?php } ?>
+</div>
+<!--一个文章列表  end-->
+<div class="hg10 w100" ></div>
+<div class='pageinfo' >{$pageinfo}</div>
+
+<script>
+    publicMethod = {};
+    publicMethod.setmenutop2 = function() {
+        var i = $(".menutop2").data("init");
+        if (!i) {
+            $(".menutop2").css({"height": "auto", "padding-bottom": "2rem"});
+            $(".menutop2").data("init", 1);
+            $(".menutop2 .button1").css({"bottom": "0rem", "top": "initial"});
+            $(".menutop2 .button1 a").html("&#xe6a5;");
+        } else {
+            $(".menutop2").css({"height": "2.5rem", "padding-bottom": "0rem"});
+            $(".menutop2").data("init", 0);
+            $(".menutop2 .button1").css({"bottom": "initial", "top": ".2rem"});
+            $(".menutop2 .button1 a").html("&#xe6a6;");
+        }
+    };
+    publicMethod.nextpage = function(p, c) {
+        var url = "<?php echo createLink('article/artList',array('i'=>rget('i'),'t'=>rget('t')) ); ?>" + '_p_' + p;
+        $.get(url,function(d){
+            $.each(d.data, function(n, item) {
+                var html='<section class="clearfix">  <div class="l" style="background-color: '+item.bgcolor+';"> <a href="'+item.link2+'">'+item.imgArea+'</a> </div> <div class="r"> <a href="'+item.link2+'"><div class="text">'+item.title+'</div></a> <div class="info">'+item.addtime+'&nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont"></i>&nbsp;'+item.hits+'</div> </div> </section>';
+                $(".indexArtcileArea1").append(html);
+            });
+            $(".pageinfo").html(d.page);
+        },'json');
+    };
+</script>

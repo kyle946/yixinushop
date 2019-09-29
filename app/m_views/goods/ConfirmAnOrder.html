@@ -1,0 +1,211 @@
+<layout name="layout/layout_mobile2" />
+
+<div class="ConfirmAnOrder_div1" >
+    <div class="hr" ></div>
+    <div class="a1 br1" ><i class="i1 iconfont" >&#xe626;</i>收货地址<i data-sn='c1' init="0" class="i2" >选择&nbsp;&nbsp;</i></div>
+    <div class="a2 c1" >
+        <?php if( count(@$adrlist)==0){ ?><div class="info" >未选择……</div><?php } ?>
+        <list name="adrlist" item="v" >
+        <div class="area"  data-id='{$v.id}' >
+            <div class="name" ><i class="i2 iconfont">&#xe6b8;</i> {$v.recipients}&nbsp;&nbsp;&nbsp;&nbsp;<i class="i2 iconfont" >&#xe604;</i> {$v.mobile}</div>
+            <div class="address" >{$v.provice_name} {$v.city_name} {$v.county_name} {$v.town_name} {$v.street} </div>
+        </div>
+        </list>
+    </div>
+    
+    
+<form action="" method="post" >
+    <?php $quehuo = false; ?>
+    <?php foreach($order_list as $business_no=>$order){ ?>
+    <div class="hg10 w100" ></div>
+    <div style='text-indent: 10px;padding: 5px 0px; background: #f1f1f1;color:#C20000;border-bottom:1px solid #C20000;'><?php echo $order['business']['business_name']; ?>&nbsp;&nbsp;<span style="color:#ea9f2e;">从最近仓库 [ {$order.warehouse_address} ] 发货</span></div>
+    <div class="a4 c4 clearfix" >
+        <div class="goodslist" >
+            <ul>
+                <?php foreach($order['goodslist'] as $v){ ?>
+                <li>
+                    <div class="left" ><a href="<?php echo createLink('index/item',array('id'=>$v['yixinu']) ); ?>" ><img src="<?php echo IMAGE_URL; ?>{$v.thumb}" /></a></div>
+                    <div class="right" >
+                        <a href="<?php echo createLink('index/item',array('id'=>$v['yixinu']) ); ?>">
+                            <div class="title" >
+                                <?php if(@$v['quehuo']){ $quehuo=true; ?><span style="background-color:#c20;color:#fff;">仓库缺货</span>&nbsp;<?php } ?>
+                                {$v.name}
+                            </div>
+                        </a>
+                        <a href="<?php echo createLink('index/item',array('id'=>$v['yixinu']) ); ?>"><div class="title2" >{$v.attributeStr}</div></a>
+                        <div class="price" >&yen;&nbsp;<?php printf('%.2f',$v['shopPrice']); ?><font> × {$v.num} = </font><?php printf('%.2f',$v['shopPriceTotal']); ?></div>
+                    </div>
+                </li>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
+    <div class="hg10 w100" ></div>
+    <div class="a1" >
+        <i class="i1 iconfont" >&#xe65b;</i>运费
+        <span class='fr c5'>&yen;<?php printf("%.2f",$order['freight']); ?></span>
+    </div>
+    <div class="a1" >
+        <i class="i1 iconfont" >&#xe65b;</i>商品总额:
+        <span class='fr c5'>&yen;<?php printf("%.2f",$order['goodstotal']); ?></span>
+    </div>
+    <div class="a1" >
+        <i class="i1 iconfont" >&#xe65b;</i>应付款
+        <span class="fr c5 fb">&yen;<?php printf("%.2f",$order['total']); ?></span>
+    </div>
+    <div class="a1" >
+        <i class="i1 iconfont" >&#xe65b;</i>补充说明:
+        <input type="text" name="comment[{$business_no}]" placeholder="在这里填写补充说明……" style="display: inline-block; padding: 5px; font-size: .9rem;" />
+    </div>
+    <?php } ?>
+    
+    
+    <div class="hg10 w100" ></div>
+    <div class="hr" ></div>
+    <div class="hg10 w100" ></div>
+    <div class="a1" ><i class="i1 iconfont" >&#xe6ce;</i>配送方式:&nbsp;&nbsp;<span class="c1">({$freight_name})</span>
+        <i data-sn='c3' init="0" class="i2" >选择&nbsp;&nbsp;</i>
+    </div>
+    <div class="a1" >
+        <i class="i1 iconfont" >&#xe65b;</i>付款方式:&nbsp;&nbsp;<span class="c1">({$payment_name})</span>
+        <i data-sn='c2' init="0" class="i2" >选择&nbsp;&nbsp;</i>
+    </div>
+    <div class="hg10 w100" ></div>
+    <div class="hg10 w100" ></div>
+    
+    <div class="a5 clearfix" >
+        <div class="area2 clearfix" > <div class="text fl" >商品总额</div><div class="price fr" >&yen; <?php printf("%.2f",$goodstotal); ?> </div> </div>
+        <div class="area2 clearfix" > <div class="text fl" >运费</div><div class="price fr" >+ &yen; <?php printf("%.2f",$freight); ?>  </div> </div>
+        <!--<div class="area2 clearfix" > <div class="text fl" >会员折扣</div><div class="price fr" >- &yen; <?php printf("%.2f",$Preferential); ?> </div> </div>-->
+<!--        <div class="area2 clearfix" >
+            <div class="text fl" ><a href=" <?php echo createLink('user/ticket',array('from'=>'ConfirmAnOrder','total'=>$goodstotal+$freight-$Preferential)); ?> " >使用优惠券</a></div>
+            <div class="price fr" >- &yen;<?php printf("%.2f",$coupon); ?>  </div>
+        </div>-->
+        <div class="area3 clearfix" > <div class="text fl" >应付款</div><div class="price fr" >&yen;<?php printf("%.2f",$total); ?> </div> </div>
+    </div>
+    <div class="hg10 w100" ></div>
+    <div class="a6 clearfix" >
+        <?php if($quehuo){ ?>
+        <input class="fr i1" type="button" onclick="publicMethod.quehuo()" name="_submit_" value="提交订单" />
+        <?php }else{ ?>
+        <input class="fr i1" type="submit" name="_submit_" value="提交订单" />
+        <?php } ?>
+    </div>
+</form>
+    
+    
+    <!--隐藏区域 start-->
+    <div class="ConfirmAnOrder_hidden_area1" >
+        <div class="ConfirmAnOrder_hidden_area11" >
+        <list name="freighlist" item="v" >
+        <div class="area2" onclick="publicMethod.selectfreight({$v.id},'{$v.name}')" ><div class="title" style="display: block;float: none;" >{$v.name}</div><i></i></div>
+        </list>
+        </div>
+    </div>
+    <div class="ConfirmAnOrder_hidden_area2" >
+        <div class="ConfirmAnOrder_hidden_area22" >
+                <if con="$payment['face_pay']!==false" >
+                     <div class="area clearfix" onclick="publicMethod.selectPay('{$payment['face_pay']['sn']}','{$payment['face_pay']['title']}')" >
+                         <img src="<root />static/{$payment['face_pay']['logo']}" />&nbsp;&nbsp;
+                         <span>{$payment['face_pay']['title']}</span>
+                     </div>
+                </if>
+                <if con="$payment['alipay']!==false" >
+                     <div class="area clearfix" onclick="publicMethod.selectPay('{$payment['alipay']['sn']}','{$payment['alipay']['title']}')" >
+                         <img src="<root />static/{$payment['alipay']['logo']}" />
+                         <span>{$payment['alipay']['title']}</span>
+                     </div>
+                </if>
+                <if con="$payment['weixin01']!==false" >
+                     <div class="area clearfix" onclick="publicMethod.selectPay('{$payment['weixinPay']['sn']}','{$payment['weixin01']['title']}')" >
+                         <img src="<root />static/{$payment['weixin01']['logo']}" />
+                         <span>{$payment['weixin01']['title']}</span>
+                     </div>
+                </if>
+                <if con="$payment['transfer']!==false" >
+                     <div class="area clearfix" onclick="publicMethod.selectPay('{$payment['transfer']['sn']}','{$payment['transfer']['title']}')" >
+                         <img src="<root />static/{$payment['transfer']['logo']}" />
+                         <span>{$payment['transfer']['title']}</span>
+                     </div>
+                </if>
+        </div>
+    </div>
+    <!--隐藏区域 end-->
+</div>
+<script>
+    publicMethod = {};
+    $(function() {
+        publicMethod.init();
+    });
+    publicMethod.quehuo = function(){
+        layer.open({content:'部分商品仓库缺货，暂时无法发货！ <br />建议您更换收货地址或者商品数量试试。'});
+    };
+    //--选择支付方式 
+    publicMethod.selectPay = function(id,name){
+        $.getJSON(rootPath+'?c=goods&a=selectPayment',{'sn':id,'name':name},function(d){ 
+            window.location.href = '<?php echo createLink("goods/ConfirmAnOrder/" ); ?>';
+        });
+    };
+    //--选择配送方式
+    publicMethod.selectfreight = function(id,name){
+        $.getJSON("<?php echo createLink('goods/selectFreight'); ?>",{id:id,'name':name},function(d){
+            if(d.status){
+                //--$(".ConfirmAnOrder_div1 .a3.c3 .area2 .title").html(name);
+                //--layer.closeAll();
+                window.location.href = '<?php echo createLink("goods/ConfirmAnOrder/" ); ?>';
+            }
+        });
+    };
+    //--初始化一些事件之类的
+    publicMethod.init = function() {
+        
+        var w1 = parseInt( $(".goodslist").width() );
+        var w2 = parseInt( $(".goodslist .left").width() );
+        $(".goodslist .right").css({'width':w1-w2-15});
+        
+        $(".ConfirmAnOrder_div1 .a1 i.i2").each(function(i) {
+            var obj = this;
+            $(obj).on('click', function() {
+                var sn = $(this).data('sn');
+                switch (sn) {
+                    case 'c1':
+                        window.location.href = '<?php echo createLink('user/address',array('from'=>'ConfirmAnOrder')); ?>';
+                        break;
+                        ;
+                    case 'c2':
+                        var c=$(".ConfirmAnOrder_hidden_area2").html();
+                        layer.open({ 
+                            type: 1,
+                            content:c,
+                            anim: 'up',
+                            style: 'position:fixed; bottom:0; left:0; width: 100%; height: auto; padding:10px; border:none;'
+                        });
+                        break;
+                        ;
+                    case 'c3':
+                        var c=$(".ConfirmAnOrder_hidden_area1").html();
+                        layer.open({ 
+                            type: 1,
+                            content:c,
+                            anim: 'up',
+                            style: 'position:fixed; bottom:0; left:0; width: 100%; height: auto; padding: 10px 0px ; border:none;'
+                        });
+                        break;
+                        ;
+                    case 'c4':
+                        if ($(this).attr('init') == 0) {
+                            $('.' + sn).css({'height': 'auto'});
+                            $(this).attr('init', 1);
+                            $(this).html('&#xe6a5;');
+                        } else {
+                            $('.' + sn).css({'height': '0rem'});
+                            $(this).attr('init', 0);
+                            $(this).html('&#xe6a6;');
+                        }
+                        break;
+                        ;
+                }
+            });
+        });
+    }
+</script>

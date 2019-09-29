@@ -1,0 +1,97 @@
+<layout name="layout/layout1" />
+<style type="text/css">
+ul.area1{ padding: 0px;}
+ul.area1 li{ list-style-type: none; width: 180px; float: left; padding: 6px 0px;}
+</style>
+
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?goods=customData"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?goods=customData&type=edit"><img src="<?php echo __ROOT__; ?>static/icon/papercheck32.png" /><font>添加</font></a>
+    <a href="javascript:void(0)"><img src="<?php echo __ROOT__; ?>static/icon/a9.png" /><font>搜索</font></a>
+</div>
+
+<div class="w100">
+    <form method="post" action="" onsubmit="return icheck();" >
+    <table class="w100 content_list">
+        <tr>
+            <th width="150" style="text-align: left;">自定义数据组 - <span class="cf60" >编辑</span></th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <!--########################################################-->
+        <tr>
+            <td style="text-align: right;"><span class="cr">*</span>&nbsp;标题：</td>
+            <td><input class="input1" type="text" name="title"  onblur="ch.onecheck(this);" value="{$info.title}" /></td>
+            <td><span id="titletips" class="c1">1 到 30个字符以内的名称</span></td>
+        </tr>
+        <!--########################################################-->
+        <tr>
+            <td style="text-align: right;"><span class="cr">*</span>&nbsp;标签：</td>
+            <td>
+                <?php if( isset($_GET['id']) ){ ?>
+                {$info.mark}
+                <?php }else{ ?>
+                <input class="input1" type="text" name="mark"  onBlur="ch.onecheck(this,'<?php echo __ROOT__; ?>?c=goods&a=exemption&t=ajaxfield&value='+this.value,'该标识已被使用！请更换标识ID');" value="{$info.mark}" />
+                <?php } ?>
+            </td>
+            <td><span id="marktips" class="c1">30个字符以内</span></td>
+        </tr>
+        <!--########################################################-->
+        <tr>
+            <td style="text-align: right;"><span class="cr">*</span>&nbsp;状态：</td>
+            <td>
+                <select name="status">
+                    <option value="1" <?php if(isset($info['status']) && $info['status']==1): ?>selected='selected'<?php endif; ?> >可用</option>
+                    <option value="2" <?php if(isset($info['status']) && $info['status']==2): ?>selected='selected'<?php endif; ?> >禁用</option>
+                </select>
+            </td>
+            <td><span></span></td>
+        </tr>
+        <!--########################################################-->
+        <tr>
+            <td style="text-align: right;"><span class="cr">*</span>&nbsp;数据类型(表名称)：</td>
+            <td>
+                <select name="tablename">
+                    <option value="goods"<?php if(@$info['tablename']=='goods'){ ?>selected='selected'<?php } ?>>商品类型</option>
+                    <list name="model" item="v" >
+                    <option value="{$v.mark}" <?php if(@$info['tablename']==$v['mark']){ ?>selected='selected'<?php } ?> >{$v.name}</option>
+                    </list>
+                </select>
+            </td>
+            <td><span></span></td>
+        </tr>
+        <!--########################################################-->
+        <tr>
+            <td style="text-align: right; vertical-align: top;">备注：</td>
+            <td><textarea name="notes"  onblur="ch.onecheck(this);" class="textarea1">{$info.notes}</textarea></td>
+            <td><span id="notestips" class="c1" >150字以内</span></td>
+        </tr>
+        <!--########################################################-->
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="提交" />
+            </td>
+            <td><span></span></td>
+        </tr>
+    </table>
+    </form>
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'title',type:'str30',msg:'标题应该为1-30个字符！'};
+            option[1] = {name:'mark',type:'str30',msg:'30个字符以内！'};
+            option[2] = {name:'notes',type:'regexp',msg:'200个字以内的备注！',required:2,rule:/^.{0,150}$/};
+            ch = new formCheck(option);
+        });
+        //--检测 表单
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+</div>

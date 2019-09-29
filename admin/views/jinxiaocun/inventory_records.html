@@ -1,0 +1,72 @@
+<layout name="layout/layout1" />
+<style>
+#goodslisttable tr th{text-align: center;}
+#goodslisttable tr td{border-bottom: 0px dashed #ECE7E7; text-align: center; padding: 14px 5px;}
+</style>
+<div class="content_title w100 clearfix">
+    <include file='jinxiaocun/menu1' />
+    
+    <div class="search" >
+        <input type="text" class="input2" placeholder="商品名称" name="searchVal" value="{$_GET.searchVal}" onkeyup="keydown(function(){ privateMethod.search(); })" />
+        &nbsp;&nbsp;
+        <input type="button" class="bt1" onclick="privateMethod.search()" value="搜索" />
+    </div>
+</div>
+<div class="w100">
+    <table id='goodslisttable' class="content_list w100">
+        <tr>
+            <th>ID</th>
+            <th>商品名称</th>
+            <th>操作</th>
+            <th>数量</th>
+            <th>时间</th>
+            <th>备注</th>
+            <th>出入库原因</th>
+        </tr>
+        
+        <list name="list" item="v">
+            <tr>
+                <td>{$v.id}</td>
+                <td> {$v.goods_name}</td>
+                <td>
+                    <?php if($v['type']==1){ ?>
+                    <font class='cg'>入库</font>
+                    <?php }elseif($v['type']==2){ ?>
+                    <font class='cr'>出库</font>
+                    <?php } ?>
+                </td>
+                <td>{$v.nums}</td>
+                <td>{$v.date}</td>
+                <td>{$v.comments}</td>
+                <td>
+                    <?php if($v['reason']==1){ ?>
+                    采购入库
+                    <?php }elseif($v['reason']==2){ ?>
+                    商城下单出库
+                    <?php }elseif($v['reason']==3){ ?>
+                    商品损耗出库
+                    <?php }elseif($v['reason']==2){ ?>
+                    门店下单出库
+                    <?php } ?>
+                </td>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+
+<script>
+    $(function(){
+        $("input[name='searchVal']").focus();
+    });
+    privateMethod = {};
+    privateMethod.search = function(){
+        var data = '';
+        var searchVal = $("input[name='searchVal']").attr('value');
+        if(searchVal!=''){
+            data += '&searchVal='+searchVal;
+        }
+        var url = '<root />?jinxiaocun=k&type=inventory_records' + data;
+        window.location.replace(url);
+    }
+</script>

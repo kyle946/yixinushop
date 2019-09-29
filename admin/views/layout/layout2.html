@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title>YixinuSHOP商城系统后台管理</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+        <link href="<?php echo __ROOT__; ?>static/style.css" rel="stylesheet" type="text/css"/>
+        <script src="<?php echo __ROOT__; ?>static/main.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <div class="area_top w100" id="area_top">
+            <!--<div class="logo"><a href="<?php echo __ROOT__; ?>" title="返回首页" >后台管理系统</a></div>-->
+            <div class="menu">
+                <div class="logo fleft"><a href="/"  ><img src="<?php echo __ROOT__; ?>static/logo_2.png" /></a></div>
+                <list name="menu" item="v">
+                    <?php if($querystring == $v['url']  or $parentid == $v['id']): ?>
+                    <div class='link fleft'><a style="color:#fff; background-color: #00C1DE" href='<?php echo __ROOT__.'?'.$v['url']; ?>'><?php echo $v['name']; ?></a>
+                        <!--<div class='bgimg'><img src='<?php echo __ROOT__; ?>static/menuBg.png' /></div>-->
+                    </div>
+                    <?php else: ?>
+                    <div class='link fleft'><a href='<?php echo __ROOT__.'?'.$v['url']; ?>'><?php echo $v['name']; ?></a></div>
+                    <?php endif; ?>
+                </list>
+                    <div class="link fright" ><a href="<?php echo __ROOT__; ?>?act=logout">退出登录({$userinfo_name})</a></div>
+                    <?php if(@$isfounder){ ?>
+                    <div class="link fright" ><a href="javascript:void(0)" onclick='delete_cache()'>清除缓存</a></div>
+                    <?php } ?>
+                    <div class="link fright" ><a target="_blank"  href="<?php echo 'http://'.MAIN_DOMAIN; ?>">查看前台</a></div>
+                    <!--<div class="link fright" ><a target="_blank"  href="<?php echo 'http://'.MAIN_DOMAIN; ?>/doc/">开发文档</a></div>-->
+                    <!--<div class="link fright" ><a href="http://www.yixinu.com" target="_blank" >关于异新优</a></div>-->
+            </div>
+<!--            <div class="topmenu">
+                <a target="_blank"  href="<?php echo 'http://'.MAIN_DOMAIN; ?>/doc/">开发文档</a>
+                <a target="_blank"  href="<?php echo 'http://'.MAIN_DOMAIN; ?>">查看前台</a>
+                <a href="<?php echo __ROOT__; ?>">清除缓存</a>
+                <a href="<?php echo __ROOT__; ?>?act=logout">退出登录</a>
+                <a href="http://www.yixinu.com" target="_blank" >关于异新优</a>
+            </div>-->
+        </div>
+        <div class="area_middle w100 clearfix" id="area_middle">
+            <div class="area_left" id="area_left" style="width:0px;" ></div>
+            <div class="area_right w100 clearfix" id="area_right" >
+                <div class="content clearfix">
+                    {__CONTENT__}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

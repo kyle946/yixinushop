@@ -1,0 +1,21 @@
+<div class="content" style="overflow: scroll; height: 390px;" >
+    <table id="grantlisttable" class="content_list w100">
+        <thead>
+        <tr>
+            <th style="wdith:15px" ><input type="checkbox" onclick="publicMethod.listcheck(this,'goodslistcheck')"/></th>
+            <th>编号</th>
+            <th>标题</th>
+        </tr>
+        </thead>
+        <tbody>
+        <list name="list" item="v" >
+        <tr>
+            <td><input name="goodslistcheck[]" type="checkbox" value="{$v.id}" /></td>
+            <td>{$v.id}</td>
+            <td>{$v.title}</td>
+        </tr>
+        </list>
+        </tbody>
+    </table>
+    <div id="page" class="SpecifiesGoodspage" class="clearfix">{$pageinfo}</div>
+</div>

@@ -1,0 +1,223 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="javascript:void(0);"><img src="<root />static/icon/a6.png" /><font>{$info.name}&nbsp;-&nbsp;快递单模板</font></a>
+</div>
+<div class="setexpressDoc_area1" >
+    <input type="button" class="bt1" onclick="setTemplateArea.save({$info.id})" value="保存" />
+    <input type="button" class="bt1" onclick="setTemplateArea.addtag()" value="设置标签" />
+    <input type="button" class="bt1" onclick="setTemplateArea.deltag()" value="删除选中的标签(红色)" />
+    <input type="button" class="bt1" onclick="setTemplateArea.setbg({$info.id})" value="背景(快递单)" />
+    <input type="button" class="bt1" onclick="setTemplateArea.setweight({$info.id})" value="快递单宽高" />
+    <input type="button" class="bt1" onclick="setTemplateArea.send({$info.id})" value="寄件信息" />
+</div>
+<div class="setexpressDoc_area2" >
+    <div class="h10 w100" ></div>
+    <div id="templateArea" class="templateArea" style="border: 1px solid #e1e1e1;" >{$info.expressDoc}</div>
+</div>
+<div class="h10 w100" ></div>
+<script>
+    $(function(){
+        //----------------------------------------------------------------------------------------------------------------------
+        //--初始化区域方法 
+        initTemplateArea = {}; 
+        initTemplateArea.width = {$info.ex_width};
+        initTemplateArea.height = {$info.ex_height};
+        initTemplateArea.bg = '<?php echo IMAGE_URL; ?>{$info.ex_background}';
+        initTemplateArea.start = function(){
+            
+            var obj = this;
+            $('#templateArea').css({
+                'width':obj.width,
+                'height':obj.height,
+                'background-size':obj.width+'px '+obj.height+'px',
+                'background-image': 'url('+obj.bg+')'
+            });
+            
+        };
+        
+        initTemplateArea.start();
+        movedivbind();
+        //----------------------------------------------------------------------------------------------------------------------
+        //-- 相关设置的方法 
+        setTemplateArea = {};
+        setTemplateArea.addtag = function(){
+            $.get('?c=mall&a=setexpressDoc_addtag',function(d){
+                var msg2 = kmsg(d,'设置标签',1,650,310,null,1,function(){
+                    $.ajax({
+                        url:'?c=mall&a=setexpressDoc_addtag',
+                        data:$('#setexpressDoc_addtag_form1').serialize() + '&width='+initTemplateArea.width+'&height='+initTemplateArea.height,
+                        type:'post',
+                        cache:false,
+                        dataType:'json',
+                        success:function(d){
+                            setTemplateArea.createtag(d);
+                            msg2.hide();
+                            movedivbind();
+                        }
+                    });
+                });
+            });
+        };
+        setTemplateArea.createtag = function(data){
+            $.each(data,function(i,n){
+                $('#templateArea').append("<div check='0' class='"+this.name+"' style='left:"+this.left+"px; top:"+this.top+"px;' >"+this.value+"</div>");
+            });
+        };
+        setTemplateArea.save = function(id){
+            var html = $('#templateArea').html();
+            $.getJSON('?c=mall&a=setexpressDoc_save',{'html':html,'id':id},function(d){
+                if(d.status==1){
+                    confirm_('保存成功！');
+                }
+            });
+        };
+        setTemplateArea.send = function(id){
+            $.get("?c=mall&a=setexpressDoc_send",{id:id},function(d){
+                
+                var msg2 = kmsg(d,'设置寄件信息',1,750,180,null,1,function(){
+                    $.ajax({
+                        url:'?c=mall&a=setexpressDoc_send',
+                        data:$('#setexpressDoc_send_form1').serialize() + "&id="+id,
+                        dataType:'json',
+                        type:'post',
+                        cache:false,
+                        success:function(d){
+                            //--console.log(d);
+                            if(d.status==1){ msg2.hide(); }
+                        }
+                    });
+                });
+                
+                $.getJSON("?c=mall&a=setexpressDoc_send",{json:1,id:id},function(d){
+                    //--console.log(d);
+                    if(d==null){
+                        $("#address1").setaddr({proviceSn:430});
+                    }else{
+                        $("#address1").setaddr({proviceSn:d.proviceSn,citySn:d.citySn,countySn:d.countySn,townSn:d.townSn});
+                    }
+                });
+                
+            });
+        };
+        setTemplateArea.deltag = function(){
+            $("#templateArea div").each(function(i){
+                if( $(this).attr('check')==1 ){
+                    $(this).remove();
+                }
+            });
+        };
+        
+        setTemplateArea.setbg = function(id){
+            $.get('?c=mall&a=setexpressDoc_setbg',{id:id},function(d){
+                var msg2 = kmsg(d,'设置背景图片(快递单)',1,400,260,null,1,function(){
+                    $.ajax({
+                        url:'?c=mall&a=setexpressDoc_setbg&id='+id,
+                        type:'post',
+                        cache:false,
+                        data:$('#setexpressDoc_setbg_form11').serialize(),
+                        dataType:'json',
+                        success:function(d){
+                            if(d.status==1){
+                                window.location.reload();
+                            }else if(d.status==0){
+                                confirm_('背景(快递单)已清空！','javascript:window.location.reload()');
+                            }
+                        }
+                    });
+                });
+            });
+        };
+        
+        setTemplateArea.setweight = function(id){
+            
+            $.get('?c=mall&a=setexpressDoc_setweight',{id:id},function(d){
+                var msg2 = kmsg(d,'设置快递单宽高',1,520,110,null,1,function(){
+                    //-- 检测值 start
+                    var rule = new RegExp(/^[0-9]{2,4}$/);
+                    var ex_width = $("#setexpressDoc_setweight_form12 input[name='ex_width']").attr('value');
+                     if(!rule.test(ex_width) || ex_width == ''){
+                         confirm_('宽度：请填写一个有效的数字！');
+                         return false;
+                     }
+                    var ex_height = $("#setexpressDoc_setweight_form12 input[name='ex_height']").attr('value');
+                     if(!rule.test(ex_height) || ex_height == ''){
+                         confirm_('高度：请填写一个有效的数字！');
+                         return false;
+                     }
+                     //-- 检测值 end
+     
+                    $.ajax({
+                        url:'?c=mall&a=setexpressDoc_setweight&id='+id,
+                        type:'post',
+                        cache:false,
+                        data:$('#setexpressDoc_setweight_form12').serialize(),
+                        dataType:'json',
+                        success:function(d){
+                            if(d.status==1){
+                                confirm_('设置成功！','javascript:window.location.reload()');
+                            }
+                        }
+                    });
+                });
+            });
+            
+        };
+        
+        //----------------------------------------------------------------------------------------------------------------------
+        //-- DIV的移动  方法
+        
+            function movediv() {
+                this.var = {
+                    isDrag:0,
+                    divAndMouseX:null,
+                    divAndMouseY:null,
+                };
+                this.down = function(obj) {
+                    this.var.isDrag = 1;
+                };
+                this.up = function(obj) {
+                    this.var.isDrag = 0;
+                    
+                    if( $(obj).attr("check")==0){
+                        $(obj).attr("check",1);  //--根据 这个属性判断 图片 是否被 选中添加 到父窗口
+                        $(obj).css({border:"1px solid #f00"});
+                    }else{
+                        $(obj).attr("check",0);
+                        $(obj).css({border:"1px solid #e1e1e1"});
+                    }
+                };
+                this.over = function(obj) {
+                    this.var.isDrag = 0;
+                };
+                this.move = function(obj) {
+                    if(this.var.isDrag==1){
+                        var left_ = event.clientX - (this.var.divAndMouseX+10);
+                        var top_ = event.clientY - (this.var.divAndMouseY+10);
+                        $(obj).css({'left':left_,'top':top_});
+                    }
+                };
+            }
+            
+            function movedivbind(){
+                $('#templateArea div').each(function() {
+                    var movedivbind = new movediv();
+                    movedivbind.var.divAndMouseX = $('#templateArea').offset().left;
+                    movedivbind.var.divAndMouseY = $('#templateArea').offset().top;
+                    $(this).bind({
+                        mousedown: function() {
+                            movedivbind.down(this);
+                        },
+                        mousemove: function() {
+                            movedivbind.move(this);
+                        },
+                        mouseup: function() {
+                            movedivbind.up(this);
+                        },
+                        mouseover:function(){
+                            movedivbind.over(this);
+                        }
+                    });
+                });
+            }
+    });
+</script>

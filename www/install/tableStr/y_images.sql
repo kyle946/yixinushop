@@ -1,0 +1,6 @@
+CREATE TABLE `y_images` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `num` int(8) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8;

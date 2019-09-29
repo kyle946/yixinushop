@@ -1,0 +1,110 @@
+<layout name="layout/layout1" />
+<div class="h10 w100" ></div>
+<div class="w1 clearfix">
+    <div class="artlist_area3 clearfix" >
+        <div class="area11 w100 br1">
+            <h3>栏目分类</h3>
+            <?php if( isset($sonColumn11) && count($sonColumn11)!=0 ): foreach($sonColumn11 as $k2=>$v2): ?>
+            <dl> 
+                <dt><a <?php if( searchColumnSpeStyle($v2['id']) ): ?>class='cur'<?php endif; ?> href="<root />{fun replaceColumnType($v2['id']) }/{$v2.mark}">{$v2.name}</a></dt> 
+                <!--查找是不是有子栏目-->
+                <?php if( isset($v2['son']) && count($v2['son'])!=0 ): foreach($v2['son'] as $v3): ?>
+                <dd><a <?php if( searchColumnSpeStyle($v3['id']) ): ?>class='cur'<?php endif; ?> href="<root />{fun replaceColumnType($v3['id']) }/{$v3.mark}">{$v3.name}</a></dd>  
+                <?php endforeach; endif; ?>
+            </dl>  
+            <?php endforeach; endif; ?>
+        </div>
+
+        <div class="h10" ></div>
+        <div class="br1 clearfix " >
+            <h3 >更多精彩内容</h3>
+            <ul>
+                <?php $arr=getartlist('news',7,2); ?>
+                <?php foreach($arr as $v){ ?>
+                <li>
+                    <div class="area1 fl" >
+                        <a href="<root />{u m/$v[mark]/id_$v[id]}" >
+                            <if con="empty($v['picname'])">
+                                <div style='background-color: <pr />' class='nothumb' ><div class="title" >{fun ysubstr($v[title],8)}</div></div>
+                                <else />
+                                <img border="0" src="<root />image/{$v.picname}" />
+                            </if>
+                        </a>
+                    </div>
+                    <div class="area2 fr" ><p><a href="<root />{u m/$v[mark]/id_$v[id]}" >{fun ysubstr($v[title],18)}</a></p></div>
+                    <div class="area3 fr" ><p>人气：<font>{$v.hits}</font></p></div>
+                </li>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
+
+    <div class="artlist_area2 clearfix" >
+        <div class="area71" >
+            <div class="area7" >
+
+                <?php $i=1; ?>
+                <?php foreach($list2 as $v){  ?>
+                <p>
+                    {$v.name}：
+                    <?php foreach($v['list'] as $k=>$h ){ ?>
+                    <a <?php if( substr(rget('t'),$i-1,1)==$k){ ?>class="cur"<?php } ?> href="<?php echo createLink('article/artList', array('i'=>rget('i'),'t'=> replaceStr($link,$i,$k) ) ); ?>" >{$h}</a>
+                    <?php } ?>
+                </p>
+                <?php 
+                    $i++;
+                    } 
+                ?>
+                
+            </div>
+        </div>
+        <div class="h10 w100" ></div>
+        <ul>
+            <if con="empty($list)" ><li class="nocontent" >暂无内容，敬请期待。</li></if>
+            <list name="list" item="v" >
+            <li class="clearfix" >
+                <div class="area1 fl" >
+                    <a href="<root />{u m/$v[mark]/id_$v[id]}">
+                        <if con="empty($v['picname'])">
+                            <div style='background-color: <pr />' class='nothumb' ><div class="title" ><?php echo ysubstr($v['title'],22); ?></div></div>
+                            <else />
+                            <img border="0" src="<root />image/{$v.picname}" />
+                        </if>
+                    </a>
+                </div>
+                <div class="area2 fl w6" ><a  href="<root />{u m/$v[mark]/id_$v[id]}">{$v.title}</a><a class="a1"  href="javascript:void(0);"  onclick="getcontent(this, {$v.id})" >[小窗阅读]</a></div>
+                <div class="area3 fl w6" >
+                    <p>栏目：{$v.colname}&nbsp;</p>
+                    <p><font>{$v.addtime}</font>&nbsp;&nbsp;/&nbsp;&nbsp;人气：<font>{$v.hits}</font>&nbsp;&nbsp;/&nbsp;&nbsp;评论：<font>{$v.comments}</font></p>
+                </div>
+                <div class="area4 fl w6" ><p>{$v.description}</p></div>
+                <div class="area5 fr w6" >来源 : <a style="color:<pr />" href="javascript:viod(0);" >{$v.source}</a></div>
+                <div class="content fl" ></div>
+            </li>
+            </list>
+        </ul>
+        <div id="page" class="clearfix w100">{$pageinfo}</div>
+    </div>
+</div>
+<div class="h10 w100" ></div>
+<script type="text/javascript" >
+    function getcontent(e, id) {
+        var read = $(e).parent().parent().attr('read');
+        if (read == 1) {
+            $(e).parent().parent().attr('read', 2);
+            $(e).html('[小窗阅读]');
+            $(e).parent().parent().find('.content').css({'height': '0px', 'padding': '0px', 'margin': '0px', 'overflow': 'hidden'});
+        } else if (read == 2) {
+            $(e).parent().parent().attr('read', 1);
+            $(e).html('[关闭小窗]');
+            $(e).parent().parent().find('.content').css({'height': '350px', 'padding': '20px', 'margin': '20px', 'overflow': 'scroll'});
+        } else {
+            $(e).parent().parent().attr('read', 1);
+            $(e).html('[关闭小窗]');
+            $(e).parent().parent().find('.content').css({'height': '350px', 'padding': '20px', 'margin': '20px', 'overflow': 'scroll'});
+            $.get('<root />?c=article&a=getcontent', {'mark': '{$mark}', 'id': id}, function(d) {
+                $(e).parent().parent().find('.content').html(d);
+            });
+        }
+    }
+</script>

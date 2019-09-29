@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+<title>添加图片 - <?php if($mode=='single'){echo '单选模式';}else{echo '多选模式';} ?></title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="<?php echo __ROOT__; ?>static/jquery-1.8.1.min.js" type="text/javascript"></script>
+<script src="<?php echo __ROOT__; ?>static/jquery.form.js" type="text/javascript"></script>
+<script src="<?php echo __ROOT__; ?>static/screenshot-paste.js" type="text/javascript"></script>
+<script>mode='<?php echo $mode; ?>'; type='<?php echo $type; ?>';</script>
+<style type="text/css">
+body{    margin: 0px; padding: 0px; font-size: 12px;     font-family: "微软雅黑","黑体",sans-serif,"Times New Roman", Times, serif; }
+.clearfix:after{content:".";display:block;height:0; clear:both; visibility:hidden;}
+.w100{width:99%;}
+.titleArea{    height: auto; background-color: #F0F0F0; border: 1px solid #D5D5D5; margin-bottom: 10px;}    
+.titleArea a{    display: block; padding: 3px 10px; float: left;  text-decoration: none; color: #555; border-right: 1px solid #D5D5D5;}
+.titleArea a font{    position: relative; padding: 0px 0px 0px 10px; top: -3px;}
+.titleArea a img{ width: 18px; height: 18px; border: 0px;}
+.titleArea a:hover, .titleArea a.hover{ color: #f61;}
+.footer{ position: absolute; bottom: 0px; width: 100%;}
+
+.imglist{overflow: scroll; height: 270px;}
+.imglist ul li{list-style-type: none; float: left; width: 103px; height: 93px; border:1px solid #e1e1e1; margin: 3px;}
+.imglist ul li a{display: block}
+.imglist ul{margin: 0px; padding: 0px;}
+.imglist  .icon{ margin: 10px auto; width: 70px;}
+.imglist .text{ margin: 0px auto; width: 90%; text-align: center;}
+
+.imglist2{display: block; width: 92%; margin: 0px auto;}
+#filename{color:red;}
+
+select{border: 1px solid #B8B8B8; padding: 3px; cursor: pointer; background-color: #fff; }
+</style>
+</head>
+    <body>
+        <div class="titleArea w100 clearfix">
+            
+            <a <?php if($_GET['type']=='paste'):  ?>class="hover"<?php endif; ?>
+                href="<?php echo __ROOT__; ?>?c=image&a=show&type=paste&mode={$mode}&id={$id}&inputName={$inputName}&level={$level}" >
+                <img src="<?php echo __ROOT__; ?>static/icon/a1.png">
+                <font>截图粘贴上传</font>
+            </a>
+            
+            <a <?php if($_GET['type']=='local'):  ?>class="hover"<?php endif; ?>
+                href="<?php echo __ROOT__; ?>?c=image&a=show&type=local&mode={$mode}&id={$id}&inputName={$inputName}&level={$level}" >
+                <img src="<?php echo __ROOT__; ?>static/icon/a1.png">
+                <font>本地上传</font>
+            </a>
+            
+            <a <?php if($_GET['type']=='list'):  ?>class="hover"<?php endif; ?> 
+                href="<?php echo __ROOT__; ?>?c=image&a=show&type=list&mode={$mode}&id={$id}&inputName={$inputName}&level={$level}" >
+                <img src="<?php echo __ROOT__; ?>static/icon/a6.png">
+                <font>图片库</font>
+            </a>
+            
+        </div>
+        
+        <div class="contentArea w100">
+            
+            <?php if($_GET['type']=='paste'):  ?>
+            <div style="padding:10px;" >
+                    <input type="text" id="imagepaste" placeholder="ctrl+v 粘帖到这里"/>&nbsp;&nbsp;<button id="paste_upload_button" onclick="upload(this)" >上传</button>
+                    <div>   <div id="imgPreview" style="margin-top:10px; "></div> </div>
+                <p id="imglist" class="imglist2" style="display: none;"></p>
+            </div>
+            <script type="text/javascript">
+                    $('#imagepaste').screenshotPaste({
+                            imgContainer:'#imgPreview'
+                    });
+                    
+                    function upload(e){
+                        var img = $("#imgPreview img").attr("src");
+                        if(!img){
+                            alert("没有找到图片，请粘贴一张图片再上传。");
+                            return ;
+                        }
+                        $(e).text("正在上传…");
+                        $.post("<root />?c=image&a=paste_upload",{image: img},function(d){
+                            if(d.error==0){
+                                var img = document.createElement("img");
+                                img.setAttribute("src","<?php echo IMAGE_URL_EXT; ?>"+d.path); <!-- //在上传图片 页面 显示，需要加上url地址  -->
+                                img.style.width = "110px";
+                                img.style.height = "100px";
+                                
+                                var a1 = document.createElement("a");
+                                a1.setAttribute("check",1);
+                                a1.setAttribute("src",d.path);  //-- 传递给insert_函数的参数，不需要加url地址
+                                a1.appendChild(img);
+                                document.getElementById("imglist").appendChild(a1);
+                                $("#paste_upload_button").text("上传成功").attr("disabled","disabled");
+                            }
+                        },'json');
+                    }
+            </script>
+            
+            <?php elseif($_GET['type']=='local'):  ?>
+            <div style="margin: 10px auto;height:260px; overflow: scroll;">
+            <form enctype="multipart/form-data" id="upform" name="upform" action="" method="post">
+                <p style="text-indent:2em;"><input type="file" id="upfile" onchange="uploadImage()" name="upfile" /></p>
+                <p style="text-indent:2em;"><span id="filename" ></span></p>
+                <p id="imglist" class="imglist2"></p>
+            </form>
+            </div>
+            <script type="text/javascript">
+             function uploadImage(){
+                 var messtxt;
+                 $("#upform").ajaxSubmit({
+                     type:'post',
+                     url:'?c=image&a=upload',
+                     dataType:'json',
+                     beforeSubmit:function(){
+                         document.getElementById("filename").innerHTML = "正在上传……";
+                     },
+                     success:function(data){
+                            $("input[name='_verifyKey_']").attr('value',data.verifyKey);
+                            var bool_ = false;
+                            if (data.info == "-1") {
+                                messtxt = "文件超过规定大小！";
+                            } else if (data.info == "-2") {
+                                messtxt = "文件类型不符!";
+                            } else if (data.info == "-3") {
+                                messtxt = "移动文件出错!";
+                            } else {
+                                bool_ = true;
+                                <!--//显示的图片 -->
+                                var img = document.createElement("img");
+                                img.setAttribute("src","<?php echo IMAGE_URL_EXT; ?>"+data.path); <!-- //在上传图片 页面 显示，需要加上url地址  -->
+                                img.style.width = "110px";
+                                img.style.height = "100px";
+                                <!-- //添加的图片文件地址属性 -->
+                                var a1 = document.createElement("a");
+                                a1.setAttribute("check",1);
+                                a1.setAttribute("src",data.path); <!--  //传递给insert_函数的参数，不需要加url地址 -->
+                                a1.appendChild(img);
+                                <!-- //添加到列表 -->
+                                document.getElementById("imglist").appendChild(a1);
+                                $("#imgsrc").attr("src",data.path);
+                                
+                                document.getElementById("returnFilename").value = data.path;  <!-- //returnFilename -->
+                                <!-- //如果上传模式为单选 -->
+                                if(mode=='single' || mode=='singleSrc'){
+                                    document.getElementById('upfile').setAttribute('disabled','disabled');
+                                    document.getElementById("filename").innerHTML = '上传成功！'; <!-- //returnFilename -->
+                                }else{
+                                    document.getElementById("filename").innerHTML = '上传成功！点击上面 [选择文件] 按钮可以继续上传'; <!-- //returnFilename -->
+                                }
+                            }
+                            <!-- //如果上传失败 -->
+                            if(!bool_){
+                                window.parent.kmsg('<p style="color:red;text-indent:2em;">'+messtxt+'</p>','<font style="color:red;text-indent:2em;">上传失败！</font>',1,350,150);
+                                document.getElementById("filename").innerHTML = "上传失败！";
+                            }
+                     },
+                     resetForm:false,
+                     clearForm:false
+                 });
+             }
+            </script>
+            
+            
+            <?php elseif($_GET['type']=='list'): ?>
+            <div class="imglist clearfix w100" id="imglist" >
+                <ul class="clearfix">
+                    <?php foreach($dirdata as $value): ?>
+                    <?php if(isset($_GET['name'])): ?>
+                    <li><a check="0" onclick="selectImg(this)" src="<?php echo $business_no.'/'.$_GET['name'].'/'.$value; ?>" href="javascript:void(0);"><img border='0' src='<?php echo IMAGE_URL_EXT.$_GET['name'].'/'.$value; ?>' width="100" height="90" /></a></li>
+                    <?php else: ?>
+                    <li>
+                        <div class="icon">
+                            <a href="<?php echo __ROOT__; ?>?c=image&a=show&type=list&mode={$mode}&id={$id}&inputName={$inputName}&name={$value}&level={$level}">
+                                <img border="0" src="<?php echo __ROOT__; ?>static/dir.jpg" />
+                            </a></div>
+                        <div class="text"><a href="<?php echo __ROOT__; ?>?c=image&a=show&type=list&mode={$mode}&id={$id}&inputName={$inputName}&name={$value}&level={$level}">{$value}</a></div></li>
+                    <?php endif; ?>
+                    <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+            
+            
+            <div class="footer">
+                <div style=" border-top: 1px solid #e1e1e1;" ></div>
+                <input type="hidden" id="returnFilename" value="" />
+                <div style="margin: 10px; float: right;">
+                    图片大小：
+                    <select id="imagelevel" name="imagelevel" >
+                        <list name="levellist" item="v" >
+                            <option value="{$v.k}" >{$v.name}</option>
+                        </list>
+                    </select>
+                    &nbsp;&nbsp;&nbsp;
+                    <input type="button" onclick="save()" value="确定" />
+                </div>
+            </div>
+            
+        </div>
+        <script type="text/javascript">
+            //--选择图片 
+            function selectImg(e){
+                if(mode=='single' || mode=='singleSrc'){
+                    $("a[check='1']").attr("check", 0).css({'border':'0px solid #f00'});
+                    e.setAttribute("check",1); 
+                    e.style.border = "1px solid #f00";
+                }else if(mode=='multiple' || mode=='multipleSrc'){
+                    if(e.getAttribute("check")==0){
+                        e.setAttribute("check",1);  //--根据 这个属性判断 图片 是否被 选中添加 到父窗口
+                        e.style.border = "1px solid #f00";
+                    }else{
+                        e.setAttribute("check",0);
+                        e.style.border = "0px solid #f00";
+                    }
+                }
+            }
+            
+            <!-- //向父窗口插入图片 -->
+            function save(){
+                if(type=='paste'){
+                       return multipleSave();
+                }else{
+                        if(mode=='single'){
+                            return singleSave();
+                        }else if(mode=='multiple'){
+                            return multipleSave();
+                        }else if(mode=='singleSrc'){
+                            return singleSrc();
+                        }else if(mode=='multipleSrc'){
+
+                        }
+                }
+            }
+            <!-- //单选模式插入图片 -->
+            function singleSave(){
+                var src = $("a[check='1']").attr("src");
+                if(!src){
+                    return false;
+                }
+                
+                var img = document.createElement("img");
+                img.setAttribute("src","<?php echo IMAGE_URL;  ?>"+src);  //--在网站显示的图片需要加上url地址
+                $.get("<?php echo IMAGE_URL;  ?>"+src);   //--这一句代码 是为了加载图片 ，因为 有浏览器不显示 图片 ，需要 加载一遍。
+                 
+                var inputHidden = document.createElement("input");
+                inputHidden.setAttribute("type","hidden");
+                inputHidden.setAttribute("name","{$inputName}");
+                inputHidden.setAttribute("value",src);  //--用于写入数据的图片不需要加url地址
+                
+                var a1 = document.createElement("a");
+                a1.innerHTML = "删除图片";
+                a1.setAttribute("href",'javascript:void(0);');
+                a1.setAttribute("onclick","deleteImgSingle(this)");
+                
+                var parentElem = window.parent.document.getElementById("{$id}");
+                var div1 = document.createElement("div");
+                parentElem.innerHTML='';
+                div1.appendChild(img);
+                div1.appendChild(inputHidden);
+                div1.appendChild(a1);
+                parentElem.appendChild(div1);
+                window.parent.imageBox.hide();
+            }
+            
+             <!-- //多选模式插入图片 -->
+            function multipleSave(){
+                var bool_ = false; <!-- //判断 是否选择了图片 的参数 -->
+                var imglist = document.getElementById("imglist").getElementsByTagName("a");
+                for(var i=0; i<imglist.length; i++){
+                    if(imglist[i].getAttribute("check")==1){
+                        bool_ = true;
+                        var file = imglist[i].getAttribute("src");
+                        if(file=="") return ;
+                        var div1 = document.createElement("div");
+                        div1.className = "hoverArea";
+                        var img = document.createElement("img");
+                        img.setAttribute("src","<?php echo IMAGE_URL;  ?>"+file);  <!-- //在网站显示的图片需要加上url地址 -->
+                        $.get("<?php echo IMAGE_URL;  ?>"+file);   <!-- //这一句代码 是为了加载图片 ，因为 有浏览器不显示 图片 ，需要 加载一遍。-->
+                        
+                        var a1 = document.createElement("a");
+                        a1.innerHTML = "删除图片";
+                        a1.setAttribute("onclick","deleteImg(this)");
+                        a1.style.color='red'; 
+
+                        var inputhidden = document.createElement("input");
+                        inputhidden.setAttribute("type","hidden");
+                        inputhidden.setAttribute("name","{$inputName}");
+                        inputhidden.setAttribute("value",file);  <!-- //用于写入数据的图片不需要加url地址 -->
+                        
+                        div1.appendChild(img);
+                        div1.appendChild(a1);
+                        div1.appendChild(inputhidden);
+                        
+                        var li_ = document.createElement("li");
+                        li_.appendChild(div1);
+                        var Pimglist=window.parent.document.getElementById("{$id}");
+                        Pimglist.appendChild(li_);
+                    }
+                }
+                
+                if(!bool_){
+                    return ;
+                }else{
+                    window.parent.imageBox.hide();
+                }
+            }
+            
+            <!-- //用于  ke editor 插件 中的图片 插入 -->
+            function singleSrc(){
+                var src_ = $("a[check='1']").attr("src");
+                var src = replaceSrc(src_);
+                if(!src){
+                    return false;
+                }
+                var parentElem = window.parent.keeditiframe.document.getElementById("{$id}");
+                parentElem.innerHTML='<img src="<?php echo IMAGE_URL_EXT;  ?>'+src+'" width="" height="" alt="" ></img>';
+                window.parent.imageBox.hide();
+            }
+            <!-- //根据选择的大小返回对应大小的图片 -->
+            function replaceSrc(src){
+                var level = document.getElementsByName('imagelevel').item(0).value;
+                var str = '';
+                switch (level)
+                {
+                    case '1':
+                      return src;
+                      break;
+                    case '2':
+                      str = '400_';
+                      break;
+                    case '3':
+                      str = '800_';
+                      break;
+                    case '4':
+                      str = '';
+                      break;
+                    default:
+                      return src;
+                }
+                return src.replace(/thumb_/, str);
+            }
+        </script>
+    </body>
+</html>

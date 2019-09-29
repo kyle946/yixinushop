@@ -1,0 +1,59 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+    
+    
+    <div class='orderlist_area1 clearfix' >
+        <list name='goodslist' item='v'  >
+        <div class="li clearfix" >
+            <div class="clearfix" >
+                <div class="fl color9" >支付：<font class="f2">{$v.payStatus}</font> </div>
+                <div class="fr color9" >订单号：<font class="f2">{$v.orderSn}</font></div>
+            </div>
+            <div class="clearfix" >
+                <div class="fl color9" >配送：<font class="f2">{$v.delStatus}</font></div>
+                <div class="fr time color9" >{$v.createTime}&nbsp;下单</div>
+            </div>
+            <div class="hr" ></div>
+            <div class="goodsinfo clearfix" >
+                <div class="fl img" ><img src="<?php echo IMAGE_URL; ?>{$v.goodsthumb}" /></div>
+                <div class="title fl" >{$v.goodsname}&nbsp;&nbsp;,<font class="colorf00" >{$v.goodsprice}</font><font class="f2" >&nbsp;&nbsp;x&nbsp;&nbsp;{$v.goodsnum}</font>&nbsp;</div>
+            </div>
+            <div class="button clearfix" >
+                <button style="background-color: #ca0000;" onclick="publicMethod.comment({$v.id_},{$v.goodsid})" >发表评价</button>
+            </div>
+        </div>
+        </list>
+    </div>
+    
+</div>
+<div class="hg10 w100" ></div>
+<div class="hg10 w100" ></div>
+<div class='pageinfo' >{$pageinfo}</div>
+<script>
+    publicMethod = {};
+    $(function(){
+        publicMethod.init();
+    });
+    publicMethod.init = function(){
+        var w1 = parseInt( $(".goodslist").width() );
+        var w2 = parseInt( $(".goodslist .left").width() );
+        $(".goodslist .right").css({'width':w1-w2-10});
+    };
+    
+    publicMethod.comment = function(id,goodsid){
+        window.location.href = '<?php echo createLink("goods/comment"); ?>goodsid_'+id+'_id_'+goodsid;
+    };
+    
+    //--分页加载数据
+    publicMethod.nextpage = function (p,s){
+        $.get('<?php echo createLink("user/BuyTheGoods"); ?>p_'+p,function(d){ 
+            $.each(d.data,function(n,item){
+                var html = '<div class="li clearfix"> <div class="clearfix"> <div class="fl color9">支付：<font class="f2"><font class="f1">'+item.payStatus+'</font></font> </div> <div class="fr color9">订单号：<font class="f2">'+item.orderSn+'</font></div> </div> <div class="clearfix"> <div class="fl color9">配送：<font class="f2">'+item.delStatus+'</font></div> <div class="fr time color9">'+item.createTime+'&nbsp;下单</div> </div> <div class="hr"></div> <div class="goodsinfo clearfix"> <div class="fl img"><img src="<?php echo IMAGE_URL; ?>'+item.goodsthumb+'"></div> <div class="title fl">'+item.goodsname+'&nbsp;&nbsp;,<font class="colorf00">'+item.goodsprice+'</font><font class="f2">&nbsp;&nbsp;x&nbsp;&nbsp;'+item.goodsnum+'</font>&nbsp;</div> </div> <div class="button clearfix"> <button style="background-color: #ca0000;" onclick="publicMethod.comment('+item.id_+','+item.goodsid+')">发表评价</button> </div> </div>';
+                $(".orderlist_area1").append(html); 
+            });
+            $(".pageinfo").html(d.page);
+        },'json');
+    };
+    
+</script>

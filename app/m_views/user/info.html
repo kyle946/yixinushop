@@ -1,0 +1,68 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+    <div class="userinfo_area" >
+        <div class="a1 img clearfix" ><font class="fl w2" >头像</font><img src="http://<?php echo MAIN_DOMAIN; ?>avatar/{$info.avatar}" /><button onclick="publicMethod.img()" class="fr">修改</button></div>
+        <div class="a1 a" ><font class="w3" >用户名</font>{$info.username}</div>
+        <div class="a1 a" ><font>手机号码</font>{$info.mobile}</div>
+        <div class="a1 a" ><font class="w2" >邮箱</font>{$info.email}</div>
+        <div class="a1 a clearfix" ><font class="w2" >昵称</font>{$info.nickname} <button onclick="publicMethod.edit()" class="fr">修改</button></div>
+        <div class="a1 a" ><font>注册时间</font>{$info.regTime}</div>
+    </div>
+</div>
+<div class="hg10 w100" ></div>
+<div></div>
+<script>
+    publicMethod = {};
+    $(function() {
+
+    });
+    //--检测昵称是否合法
+    publicMethod.icheck = function() {
+        var v = document.getElementsByName("inputvalue").item(0).value;
+        var rule = new RegExp(/^.{1,16}$/);
+        if (rule.test(v)) {
+            return true;
+        } else {
+            layer.open({content: '昵称为1至16个字符！', time: 3});
+            return false;
+        }
+    };
+    //--修改图片
+    publicMethod.img = function() {
+        var url = '<?php echo createLink("user/info"); ?>';
+        layer.open({
+            content: "<form method='post' id='form2' action='"+url+"' enctype='multipart/form-data' ><input name='imagefile' type='file' /><input type='hidden' name='type' value='2' /></form>",
+            btn: ['保存', '取消'],
+            shadeClose: true,
+            yes: function() {
+                $('#form2').submit();
+            }, no: function() {
+
+            }
+        });
+    };
+    //--编辑修改字段
+    publicMethod.edit = function() {
+        layer.open({
+            content: "<form method='post' id='form1' onsubmit='return false;' ><input name='inputvalue' class='t1' placeholder='……' type='text' /><input type='hidden' name='type' value='1' /></form>",
+            btn: ['保存', '取消'],
+            shadeClose: true,
+            yes: function() {
+                publicMethod.icheck();
+                var formdata = $("#form1").serialize();
+                $.post('<?php echo createLink("user/info"); ?>', formdata, function(d) {
+                    console.log(d);
+                    if (d.status == 1) {
+                        window.location.reload();
+                    } else {
+                        layer.open({content: '失败！', time: 1});
+                    }
+                }, 'json');
+            }, no: function() {
+
+            }
+        });
+    };
+
+</script>

@@ -1,0 +1,132 @@
+目录结构：
+----------------------------
+web/
+  App/              应用目录，自动生成 。。
+    config/         应用配置文件
+    controllers/    包含控制器类
+    models/         包含模型类
+    views/          视图文件
+    cache/          缓存文件
+  www/            应用根目录
+    install/      安装程序
+    static/       静态资源
+    index.php     入口文件
+  iframe/         iframe框架
+    core/
+        iframe.php
+    config/
+    lib/
+    views/
+    i.php
+
+
+nginx  配置 
+----------------------------
+        location / {
+            if (!-e $request_filename) {
+                rewrite ^(.*)$  /index.php?v=$1 last; 
+            }
+        }
+
+apache 配置
+----------------------------
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?v=$1 [QSA,PT,L]
+</IfModule>
+
+
+
+netbeans调试变量
+&XDEBUG_SESSION_START=netbeans-xdebug
+<input type="hidden" name="XDEBUG_SESSION_START" value="netbeans-xdebug">
+
+
+
+============================================================================================================
+url表现的几种方式：
+    1、使用原生的url  ，例如：
+                demo.yixinu.com/index.php?c=index&a=test&userid=1
+    2、使用框架生成的url，例如：
+                demo.yixinu.com/index.php?v=/index/test/userid/1
+                或者 demo.yixinu.com/?v=/index/test/userid/1.html 
+                或者 demo.yixinu.com/index/test/userid/1.html 
+    上面两种表现方式在项目配置中都 可以 做路由控制，例如：
+                demo.yixinu.com/item/205.html   路由正则：array('/^\/?item\/[0-9]+/','goods/gitem'),
+                解析之后 会访问  goods 控制器的 gitem 方法，与下面的url 访问同样有效
+                demo.yixinu.com/?v=/goods/gitem/item/205.html
+
+    
+    根据这几种表现的方式：
+        1、首先对  GET 变量中带  v 的做判断、
+                    如果发现在 v 变量，并且后面的参数是 框架 生成的规则
+                        取到两种结果（做了伪静态的和没做伪静态的url，1和3）
+                    如果不带 v ，当原生 url 处理，
+                        取到两种结果（做了伪静态的和没做伪静态的url，2和4）
+                        
+              把从上面取到的  querystring  再和项目的路由控制做正则判断，
+        
+        
+写入测试 。
+
+============================================================================================================
+
+mysql 任务计划 ， 删除订单
+
+
+1 、查询是否开启任务计划功能 
+mysql> show variables like '%event%';
+
+2、开启
+mysql> set global event_scheduler = ON;
+关闭语句： mysql> set global event_scheduler = 0 ;
+
+
+3、创建存储过程 deleteorder1 ,deleteorder2    （DELIMITER  意思是以什么符号为结束标志）
+mysql>DELIMITER //
+create procedure deleteorder1 ()
+begin
+delete from `y_orders` where `payStatus` = 1 and createTime < now()-INTERVAL  48 hour;
+delete from `y_order_goods` where `payStatus` = 1 and createTime < now()-INTERVAL 48 hour;
+end;
+
+
+mysql>DELIMITER //
+create procedure deleteorder2 ()
+begin
+delete from `y_orders` where `payStatus` = 1 and createTime < now()-INTERVAL  120 minute;
+delete from `y_order_goods` where `payStatus` = 1 and createTime < now()-INTERVAL 120 minute;
+end;
+
+
+4、创建event  （任务计划）
+mysql>DELIMITER //
+create event deleteorder
+on schedule every 5 minute
+do call deleteorder1();
+
+===================== 相关命令语法  start =====================
+
+查询任务计划 procedure
+mysql>select * from mysql.event
+
+删除任务计划
+mysql>drop event deleteorder
+
+查看存储过程
+mysql>show procedure status;
+
+查看存储过程或函数的创建代码
+mysql>show create procedure proc_name;
+mysql>show create function func_name;
+
+删除存储过程
+mysql>drop procedure deleteorder2
+
+===================== 相关命令语法  end =====================
+
+
+
+

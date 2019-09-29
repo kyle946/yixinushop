@@ -1,0 +1,217 @@
+<layout name="layout/layout_null" />
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=UKOBZ-QLMWX-IEF4G-7WDPG-DMKH7-MRBGT"></script>
+<script src="<root />static/ConfirmAnOrder.js" type="text/javascript"></script>
+<div class="h10 w100" ></div>
+<div class="br1 w1" >
+    <div class="ConfirmAnOrder_area1" >
+        <div class="head" ><i></i>选择收货地址</div>
+        <div class="area1" >
+            <list name="adrlist" item="v" >
+                <div class="a1" id='{$v.id}' >
+                    <div class="b1" >{$v.recipients}&nbsp;&nbsp;{$v.mobile}</div>
+                    <div class="b2" >{$v.provice_name},{$v.city_name},{$v.county_name},{$v.town_name} {$v.street} </div>
+                    <div class="b3" ><a href="<root />user/addNewAddress/id_{$v.id}" >修改</a></div>
+                    <i></i>
+                </div>
+            </list>
+        </div>
+        <div class="area2" >
+        <?php if(count($adrlist) >= 12){ ?>
+            <a href="javascript:void(0)" style="background-color: #777;border:0px;" >添加新地址</a>
+        <?php }else{ ?>
+            <a href="javascript:void(0);" onclick="goodsOrder.addNewAddress();" >添加新地址</a>
+        <?php } ?>
+        </div>
+        <div class="head" ><i></i>选择付款方式</div>
+        <div class="area3 br1" >
+            
+            <div class="tableswitch clearfix" >
+                <div class="tableswitch_area dis clearfix">
+                    
+                <if con="$payment['face_pay']!==false" >
+                    <div class="a1" id="{$payment['face_pay']['sn']}" ><img src="<root />static/{$payment['face_pay']['logo']}" /><i></i></div>
+                </if>
+                <if con="$payment['alipay']!==false" >
+                    <div class="a1" id="{$payment['alipay']['sn']}" ><img src="<root />static/{$payment['alipay']['logo']}" /><i></i></div>
+                </if>
+                <if con="$payment['weixinPay']!==false" >
+                    <div class="a1" id="{$payment['weixinPay']['sn']}" ><img src="<root />static/{$payment['weixinPay']['logo']}" /><i></i></div>
+                </if>
+                <if con="$payment['transfer']!==false" >
+                    <div class="a1" id="{$payment['transfer']['sn']}" ><img src="<root />static/{$payment['transfer']['logo']}" /><i></i></div>
+                </if>
+                    
+                </div>
+            </div>
+            
+        </div>
+        <div class="head" ><i></i>配送方式</div>
+        <div class="area6 " >
+                    <!--<div class="a1" ><img src="<root />static/pay_5.png" /><i></i></div>-->
+                    <list name="freighlist" item="v" >
+                    <div class="a1 f{$v.id}" id="{$v.id}" ><div class="title" style="display: block;float: none;" >{$v.name}</div><i></i></div>
+                    </list>
+        </div>
+        
+        <div class="head" ><i></i>确认订单信息</div>
+        
+        <div class="area4" >
+            <table border="0" cellspacing="4"  >
+                <thead>
+                    <tr>
+                        <th style="width:40%;" >商品名称</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>活动优惠</th>
+                        <th>小计</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    
+    <?php $quehuo = false; ?>
+    <?php foreach($order_list as $business_no=>$order){ ?>
+                <tr>
+                    <td colspan="5" style="text-align: left; border-bottom: 1px dashed #00c1de;color:#ca0000;" >
+                        <?php echo $order['business']['business_name']; ?>
+                        &nbsp;&nbsp;<span style="color:#ea9f2e;">从最近仓库 [ {$order.warehouse_address} ] 发货</span>
+                    </td>
+                </tr>
+                <?php foreach($order['goodslist'] as $v){ ?>
+                    <tr>
+                        <td style="width:40%;text-align: left;" >
+                            <div class="thumb fl" ><img src="<?php echo IMAGE_URL; ?>{$v.thumb}"></div>
+                            <div class="title fl" >
+                                <?php if(@$v['quehuo']){ $quehuo=true; ?><span style="background-color:#c20;color:#fff;">仓库缺货</span>&nbsp;<?php } ?>
+                                {$v.name} -- {$v.attributeStr}
+                            </div>
+                        </td>
+                        <td>
+                            <div>{$v.shopPrice}</div>
+                        </td>
+                        <td style="width:12%;" > {$v.num} </td>
+                        <td style="width:12%;"></td>
+                        <td> <div class="shopprice">{$v.shopPriceTotal}</div> </td>
+                    </tr>
+                <?php } ?>
+                <tr><td colspan="5" >&nbsp;</td></tr>
+                <tr>
+                    <td colspan="2" rowspan="2" class="bg3" >
+                        <input type="text" placeholder="在这里填写补充说明……" style="width:68%; padding: 7px;" />
+                    </td>
+                    <td colspan="3" class="bg3" >
+                        <div class="shopprice"><span>运费：</span><?php printf("%.2f",$order['freight']); ?></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="bg3" >
+                        <div class="shopprice"><span>商品总额：</span><?php printf("%.2f",$order['goodstotal']); ?></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="bg3" >
+                        <div class="shopprice"><span>应付款：</span><?php printf("%.2f",$order['total']); ?></div>
+                    </td>
+                </tr>
+                <tr><td colspan="5" >&nbsp;</td></tr>
+        <?php } ?>
+        
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="area5" >
+            <form action="" method="post" name="iform" id="iform" onsubmit="return goodsOrder.checkform()" >
+            <input type="hidden" name="addressid" id="addressid" value="<?php if(!empty($addressid)):echo $addressid; else: echo 0; endif; ?>" />
+            <input type="hidden" name="paymentid" id="paymentid" value="<?php if(!empty($paymentid)):echo $paymentid; else: echo 0; endif; ?>" />
+            <input type="hidden" name="freightid" id="freightid" value="<?php if(!empty($freightid)):echo $freightid; else: echo 0; endif; ?>" />
+            <table border="0" cellspacing="4">
+<!--                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>-->
+                <tbody>
+                    <tr>
+<!--                        <td class="t1">补充说明：</td>
+                        <td class="t2"><input style="width:250px;" name="comment" type="text" /></td>-->
+                        <td></td>
+                        <td></td>
+                        <td class="t3">购物车商品合计：</td>
+                        <td class="t4" >
+                            <div class="total_1" >&yen;{$goodstotal}</div>
+                        </td>
+                    </tr>
+<!--                    <tr>
+                        <td class="t1"></td>
+                        <td class="t2"></td>
+                        <td class="t3">会员优惠：</td>
+                        <td class="t4" >
+                            <div>-&nbsp;{$Preferential}</div>
+                        </td>
+                    </tr>-->
+                    <tr>
+                        <td class="t1"></td>
+                        <td class="t2"></td>
+                        <td class="t3">运费：</td>
+                        <td class="t4" >
+                            <div>+&nbsp;{$freight}</div>
+                        </td>
+                    </tr>
+<!--                    <tr>
+                        <td class="t1"></td>
+                        <td class="t2"></td>
+                        <td class="t3"><input type="button" value="优惠券" class="bt1" onclick="goodsOrder.useCoupon()" /></td>
+                        <td class="t4" >
+                            <div>-&nbsp;{$coupon}</div>
+                        </td>
+                    </tr>-->
+                    <tr>
+                        <td class="t1"></td>
+                        <td class="t2"></td>
+                        <td class="t3">实付款：</td>
+                        <td class="t4" >
+                            <div class="total" >&yen;{$total}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="t1"></td>
+                        <td class="t2"></td>
+                        <td class="t3"></td>
+                        <td class="t4" >
+                            <div>
+                                <input type="submit" class="submit1" name="_submit_" value="提交订单" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </form>
+        </div>
+        <div class="h10 w100" ></div><div class="h10 w100" ></div>
+    </div>
+</div>
+<div class="h10 w100" ></div>
+<script>
+    obj2 = {};
+    geocoder = new qq.maps.Geocoder({
+        complete : function(result){
+            //--console.log(result);
+            $("input[name='lat']").val(result.detail.location.lat);
+            $("input[name='long']").val(result.detail.location.lng);
+        }
+    });
+    obj2.get_coordinate = function(){
+        $("input[name='lat']").val('正在定位…');
+        $("input[name='long']").val('正在定位…');
+        var provice = $("select[name=provice] option:selected").text();
+        var city = $("select[name=city] option:selected").text();
+        var county = $("select[name=county] option:selected").text();
+        var street = $("input[name=street]").val();
+        var address = provice +','+ city +','+county+','+street;
+        geocoder.getLocation(address);
+    };
+</script>

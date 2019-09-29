@@ -1,0 +1,100 @@
+<layout name="layout/layout1" />
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?business=cashier"><img src="<?php echo __ROOT__; ?>static/icon/a1.png" /><font>列表</font></a>
+    <a href="<?php echo __ROOT__; ?>?business=cashier_edit"><img src="<?php echo __ROOT__; ?>static/icon/a6.png" /><font>添加</font></a>
+</div>
+<div class="w100">
+    <form method="post" action="" name="iform" onsubmit="return icheck();" >
+    <table class="w100 content_list">
+        <tr>
+            <th width="180" style="text-align: left;">编辑 - 收银员</th>
+            <th width="300"></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">商户号：</span></td>
+            <td><input type="text" class="input11" name="business_no"  onblur="ch.onecheck(this)"  value="{$info.business_no}" /></td>
+            <td><span id="business_notips" class="c1">一个有效的商户号，否则收银账号无效</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">门店ID：</span></td>
+            <td><input type="text" class="input11" name="stores_id"  onblur="ch.onecheck(this)"  value="{$info.stores_id}" /></td>
+            <td><span id="stores_idtips" class="c1">一个有效的门店ID，否则收银账号无效</span></td>
+        </tr>
+        <?php if( isset($_GET['id']) ){ ?>
+        <tr>
+            <td style="text-align: right;"><span class="fb">商户名称：</span></td>
+            <td><input type="text" class="input11 bg2" readonly='readonly'  value="{$info.business_name}" /></td>
+            <td><span id="business_nametips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">门店：</span></td>
+            <td><input type="text" class="input11 bg2" readonly='readonly'  value="{$info.store_name}" /></td>
+            <td><span id="store_nametips" class="c1"></span></td>
+        </tr>
+        <?php } ?>
+        <tr>
+            <td style="text-align: right;"><span class="fb">收银账号：</span></td>
+            <td><input type="text"  class="input11" name="username"  onblur="ch.onecheck(this)" value="{$info.username}" /></td>
+            <td><span id="usernametips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb cy">登录密码：</span></td>
+            <td><input type="password" class="input11"  onblur="ch.onecheck(this)" name="pwd" value="" /></td>
+            <td><span id="pwdtips" class="c1">如果不修改密码请留空</span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb cy">再次输入：</span></td>
+            <td><input type="password" class="input11"  onblur="ch.onecheck(this)" name="pwd2" value="" /></td>
+            <td><span id="pwd2tips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">收银员姓名：</span></td>
+            <td><input type="text" class="input11"  onblur="ch.onecheck(this)" name="s_name" value="{$info.s_name}" /></td>
+            <td><span id="s_nametips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><span class="fb">收银员手机：</span></td>
+            <td><input type="text" class="input11" onblur="ch.onecheck(this)" name="s_mobile" value="{$info.s_mobile}" /></td>
+            <td><span id="s_mobiletips" class="c1"></span></td>
+        </tr>
+        <tr>
+             <td style="text-align: right;"><span class="fb">状态：</span></td>
+             <td>
+                 <label><input type="radio" name='status' value="1" <?php if(@$info[status]==1){ ?>checked='checked'<?php } ?> />正常</label>
+                 <label><input type="radio" name='status' value="2" <?php if(@$info[status]==2){ ?>checked='checked'<?php } ?> />禁用</label>
+             </td>
+            <td><span id="business_nametips" class="c1"></span></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="bt1" name="_submit_" value="保存" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    </form>
+    <script>
+        $(function(){
+            var option = new Array();
+            option[0] = {name:'pwd',type:'password',msg:'输入一个 6 - 16个字符的密码！' ,required:2};
+            option[1] = {name:'pwd2',type:'password2',msg:'两次密码输入不一致！'};
+            option[2] = {name: 's_name', type: 'regexp', msg: '1到22个字符，不能包括： < > \ = / . ? \'  | & \"', rule: /^[^<>\\=/.?+'|&\"]{1,22}$/, required: 1};
+            option[3] = {name:'s_mobile',type:'mobile',msg:'请输入正确的手机号码！'}; 
+            option[4] = {name:'business_no',type:'int11',msg:'请输入11位以内数字！', required: 1}; 
+            option[5] = {name:'stores_id',type:'int11',msg:'请输入11位以内数字！', required: 1};
+            option[6] = {name: 'username', type: 'regexp', msg: '必须是字母或者数字(22个字符以内),', rule: /^[0-9a-z]{1,22}$/, required: 1};
+            ch = new formCheck(option);
+        });
+        
+        function icheck(){
+            var bool_ = false;
+            var res = ch.start();
+            if(res==1){
+                bool_ = true;
+            }
+            return bool_;
+        }
+    </script>
+</div>

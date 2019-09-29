@@ -1,0 +1,78 @@
+<layout name="layout/layout1" />
+<style>
+    #goodscommentlisttable tr th,#goodscommentlisttable tr td{text-align: center;}
+</style>
+<div class="content_title w100 clearfix">
+    <a href="<?php echo __ROOT__; ?>?system=sendmsglog"><img src="<root />static/icon/a1.png" /><font>所有记录</font></a>
+    <a href="javascript:publicMethod.delete();"><img src="<root />static/icon/a4.png" /><font>删除</font></a>
+</div>
+<div class="w100">
+    <table class="content_list w100" id="goodscommentlisttable" >
+        <tr>
+            <th style="width:50px;" ><input type="checkbox" onclick="publicMethod.listcheck(this,'allsms')"/></th>
+            <th style="width:450px;" >内容</th>
+            <th>手机号码</th>
+            <th>发送时间</th>
+        </tr>
+        <list name="list" item="v">
+            <tr>
+                <td><input name="allsms[]" type="checkbox" value="{$v.id}" />{$v.id}</td>
+                <td>{$v.content}</td>
+                <td>{$v.mobile}</td>
+                <td>{$v.datetime}</td>
+            </tr>
+        </list>
+    </table>
+    <div id="page" class="clearfix">{$pageinfo}</div>
+</div>
+<script>
+    publicMethod = {};
+    
+    //--删除评论 start
+    publicMethod.delete = function(){
+        var str = publicMethod.check('allsms');
+        if(str==false){
+            confirm_('请至少选择一条信息！',null,380,100);
+            return false;
+        }
+        confirm_('你确定要删除吗？',function(){publicMethod.isdelete();},380,100);
+    };
+    publicMethod.isdelete = function(){
+        var str = publicMethod.check('allsms');
+        if(str==false){
+            confirm_('请至少选择一条信息！');
+            return false;
+        }else{
+            $.ajax({
+                url:'<root />?c=system&a=sendmsgDelete',
+                dataType:'json',
+                data:str,
+                type:'get',
+                beforeSend:function(){ confirm_('正在删除，请稍后……');  },
+                success:function(d){
+                    window.location.reload();
+                }
+            });
+        }
+    };
+    //--删除评论 end
+    
+    //--全选函数
+    publicMethod.listcheck = function(e,chk){
+         var elems = document.getElementsByTagName("INPUT");
+          for (var i=0; i < elems.length; i++){
+                if (elems[i].name == chk || elems[i].name == chk + "[]") {
+                      elems[i].checked = e.checked;
+                }
+          }
+    };
+    //--检测是否选择了
+    publicMethod.check = function(chk){
+        var str=$("input[name='"+chk+"[]']:checked").serialize();
+        if(str==''){
+            return false;
+        }else{
+            return str;
+        }
+    };
+</script>

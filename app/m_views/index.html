@@ -1,0 +1,263 @@
+<layout name="layout/layout_mobile1" />
+
+<div class="index_content" >
+    <!--http://www.easyicon.net/-->
+    <div class="index_area2 clearfix" >
+        <ul>
+            <li>
+                <a>
+                    <img src="<root />static/images/68029.jpg" />
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="w100 hg5" ></div>
+    <div class="index_menu" >
+        <ul class="clearfix" >
+            <li><a href=" <?php echo createLink('goods/category'); ?> " ><i style="background-color: <pr />;" class="iconfont">&#xe699</i><span>商品分类</span></a></li>
+            <li><a href="<?php echo createLink('user/shoppingcart'); ?>" ><i style="background-color: <pr />;" class="iconfont">&#xe698</i><span>购物车</span></a></li>
+            <li><a href="<?php echo createLink('user/orderlist'); ?>" ><i style="background-color: <pr />;" class="iconfont">&#xe696;</i><span>我的订单</span></a></li>
+            <li><a href="<?php echo createLink('user/index'); ?>" ><i style="background-color: <pr />;" class="iconfont">&#xe6b8</i><span>我的</span></a></li>
+        </ul>
+    </div>
+    
+    <div class="hg10" ></div>
+    <div class="hg10" ></div>
+    <div class="index_area7 clearfix" >
+        <div class="fl b1" >资讯</div>
+        <div class="fl b2" >
+            <ul>
+                
+        <?php $arr = getcustom1('article1'); $list=$arr['list']; $info=$arr['info']; ?>
+        <!--<h2>{$info.title}<font>更多……</font></h2>-->
+        <?php foreach($list as $v){ ?>
+                <li><a href="<?php echo createLink('article/item',array('m'=>$v['mark'],'id'=>$v['id'])); ?>" >{fun ysubstr($v[title],16)}</a></li>
+        <?php } ?>
+            </ul>
+        </div>
+    </div>
+    <div class="hg10" ></div>
+    
+    <div class="hr" > </div>
+    <div class="index_area8 clearfix" >
+        <div class="title" >秒抢嗨翻天&nbsp;&nbsp;—&nbsp;&nbsp; </div>
+        <div class="c clearfix" >
+            <?php 
+            $arr = getcustom1('goods5'); 
+            $list=$arr['list']; $info=$arr['info']; 
+            $i=1;  
+            foreach($list as $v){
+            if($i>3) break;
+            $i++;
+            ?>
+            <div class="li" >
+                <a href="<?php echo createLink('index/item',array('id'=>$v['id'])); ?>" >
+                    <div class="img" >
+                        <img  init="1" src="<root />static/default.gif"  xsrc="http://<?php echo MAIN_DOMAIN; ?>image/{$v.thumb}" />
+                    </div>
+                    <div class="shopname" ><?php echo ysubstr($v['goodsname'].$v['attributeStr'],12); ?></div>
+                    <div class="price" >{$v.shopPrice}</div>
+                </a>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+    
+    
+    <!--这一组商品从这里开始-->
+    <?php $arr = getcustom1('goods3'); $list=$arr['list']; $info=$arr['info']; ?>
+    <div class="index_title" >——&nbsp;&nbsp;{$info.title}&nbsp;&nbsp;——</div>
+    <div class="index_goods_list1 clearfix" >
+        <?php foreach($list as $v){ ?>
+        <a class="fl" href="<?php echo createLink('index/item',array('id'=>$v['id'])); ?>" >
+            <img  init="1" src="<root />static/default.gif"  xsrc="http://<?php echo MAIN_DOMAIN; ?>image/{$v.thumb}" />
+            <div class="pos1" >
+                <div class="title" ><?php echo ysubstr($v['goodsname'].$v['attributeStr'],12); ?></div>
+                <div class="price" >{$v.shopPrice}</div>
+            </div>
+        </a>
+        <?php } ?>
+    </div>
+    <!--在这里结束-->
+    
+    
+    <!--这一组商品从这里开始-->
+    <?php $arr = getcustom1('goods2'); $list=$arr['list']; $info=$arr['info']; ?>
+    <div class="index_title" >——&nbsp;&nbsp;{$info.title}&nbsp;&nbsp;——</div>
+    <div class="index_goods_list1 clearfix" >
+        <?php foreach($list as $v){ ?>
+        <a class="fl" href="<?php echo createLink('index/item',array('id'=>$v['id'])); ?>" >
+            <img  init="1" src="<root />static/default.gif"  xsrc="http://<?php echo MAIN_DOMAIN; ?>image/{$v.thumb}" />
+            <div class="pos1" >
+                <div class="title" ><?php echo ysubstr($v['goodsname'].$v['attributeStr'],12); ?></div>
+                <div class="price" >{$v.shopPrice}</div>
+            </div>
+        </a>
+        <?php } ?>
+    </div>
+    <!--在这里结束-->
+    
+    
+    <!--这一组商品从这里开始-->
+    <?php $arr = getcustom1('goods6'); $list=$arr['list']; $info=$arr['info']; ?>
+    <div class="index_title" >——&nbsp;&nbsp;{$info.title}&nbsp;&nbsp;——</div>
+    <div class="index_goods_list1 clearfix" >
+        <?php foreach($list as $v){ ?>
+        <a class="fl" href="<?php echo createLink('index/item',array('id'=>$v['id'])); ?>" >
+            <img  init="1" src="<root />static/default.gif"  xsrc="http://<?php echo MAIN_DOMAIN; ?>image/{$v.thumb}" />
+            <div class="pos1" >
+                <div class="title" ><?php echo ysubstr($v['goodsname'].$v['attributeStr'],12); ?></div>
+                <div class="price" >{$v.shopPrice}</div>
+            </div>
+        </a>
+        <?php } ?>
+    </div>
+    <!--在这里结束-->
+
+    <!--一个文章列表  start-->
+    <div class="w100 hg40" ></div>
+    <div class="index_title"> <i></i>最新动态 </div>
+    <div class="w100 hg10" ></div>
+    <div class="indexArtcileArea1" >
+        <?php $arr = getcustom1('article1'); $list=$arr['list']; $info=$arr['info']; ?>
+        <!--<h2>{$info.title}<font>更多……</font></h2>-->
+        <?php foreach($list as $v){ ?>
+        <section class="clearfix" > 
+            <div class="l" style="background-color: <pr />;" >
+                <a href="<?php echo createLink('article/item',array('m'=>$v['mark'],'id'=>$v['id'])); ?>" >
+                    <?php if( !empty($v['picname']) ){ ?>
+                    <img src="<?php echo IMAGE_URL; ?>/{$v.picname}" />
+                    <?php }else{ ?>
+                    <div>{fun ysubstr($v[title],7)}</div>
+                    <?php } ?>
+                </a>
+            </div>
+            <div class="r" >
+                <a href="<?php echo createLink('article/item',array('m'=>$v['mark'],'id'=>$v['id'])); ?>" ><div class="text" >{fun ysubstr($v[title],28)}</div></a>
+                <div class="info" ><?php echo substr($v['addtime'],0,10); ?>&nbsp;&nbsp;&nbsp;&nbsp;{$v.hits}人看过</div>
+            </div>
+        </section>
+        <?php } ?>
+    </div>
+    <!--一个文章列表  end-->
+
+
+    <!--一个文章列表  start-->
+    <div class="w100 hg40" ></div>
+    <div class="index_title"> <i></i> 人事招聘 </div>
+    <div class="w100 hg10" ></div>
+    <?php $arr = getjobslist(); ?>
+    <div class="indexArtcileArea1" >
+        <!--<h2>{$info.title}<font>更多……</font></h2>-->
+        <?php foreach($arr as $v){ ?>
+        <section class="clearfix" > 
+            <div class="l" style="background-color: <pr />;" >
+                <a href="<?php echo createLink('article/jobinfo',array('id'=>$v['id'])); ?>" >
+                    <?php if( !empty($v['picname']) ){ ?>
+                    <img src="<?php echo IMAGE_URL; ?>/{$v.picname}" />
+                    <?php }else{ ?>
+                    <div>{fun ysubstr($v[title],7)}</div>
+                    <?php } ?>
+                </a>
+            </div>
+            <div class="r" >
+                <a href="<?php echo createLink('article/jobinfo',array('id'=>$v['id'])); ?>" ><div class="text" >{fun ysubstr($v[title],16)}</div></a>
+                <div class="info2" >{$v.didian}&nbsp;&nbsp;|&nbsp;&nbsp;{$v.xinzi}&nbsp;&nbsp;|&nbsp;&nbsp;学历:{$v.xueli}</div>
+                <div class="info" ><?php echo substr($v['addtime'],0,10); ?></div>
+            </div>
+        </section>
+        <?php } ?>
+    </div>
+    <!--一个文章列表  end-->
+
+    <div class="hg40 w100" ></div>
+    <div class="hr" ></div>
+    <div class="hg10 w100" ></div><div class="hg10 w100" ></div>
+    <div class="indexArtcileArea2" >
+        <ul>
+            <?php $arr = getcolumn('xnews','m'); ?>
+            <li><a href='{$arr.link}'>{$arr.name}</a></li>
+            <?php $arr = getcolumn('news','m'); ?>
+            <li><a href='{$arr.link}'>{$arr.name}</a></li>
+            <?php $arr = getcolumn('technology','m'); ?>
+            <li><a href='{$arr.link}'>{$arr.name}</a></li>
+            <li><a class="none" href="javascript:void(0);" >联系我们</a></li>
+        </ul>
+    </div>
+    <div class="hg40 w100" ></div>
+</div>
+
+<script>
+    privateMethod = {};
+    privateMethod.search = function(){
+        var v = document.getElementsByName('keywords').item(0).value;
+        window.location.href = '<?php echo createLink("goods/search"); ?>keywords_' + v;
+    };
+    privateMethod.init = function() {
+        var w = document.documentElement.clientWidth;
+        var h = document.documentElement.clientHeight;
+        var w_ = w - 80;
+        $(".index_area1 .text").css({width: w_});
+        
+        //-- 新闻滚动
+//--        $(".index_area7 .b2 ul li:not(first)").css('display','none');
+        var gundong_b = $(".index_area7 .b2 ul li:last");
+        var gundong_c = $(".index_area7 .b2 ul li:first");
+        setInterval(function(){
+            if( gundong_b.is(":visible")){
+                gundong_c.fadeIn(500).addClass("in");gundong_b.hide()
+            }else{
+                $(".index_area7 .b2 ul li:visible").addClass("in");
+                $(".index_area7 .b2 ul li.in").next().fadeIn(500);
+                $(".index_area7 .b2 ul li.in").hide().removeClass("in");
+            }
+        },2000) //--每3秒钟切换一条，你可以根据需要更改
+    };
+
+    $(window).resize(function() {
+        privateMethod.init();
+    });
+
+    $(function() {
+        privateMethod.init();
+        var obj = $(".mainMenu1");
+        setmenu(obj);
+    });
+
+    $(function() {
+        //-- 图片延迟加载 start
+        privateMethod.loadimage();
+        $(window).scroll(function() {
+            privateMethod.loadimage();
+        });
+        //-- 图片延迟加载 end
+    });
+
+    //-- 图片延迟加载 start
+    privateMethod.loadimageAllimg = function() {
+        var allimg = document.getElementsByTagName('img');
+        var img_ = new Array();
+        for (x in allimg) {
+            var t1 = allimg.item(x).getAttribute('init');
+            if (t1 == 1) {
+                img_.push(allimg.item(x));
+            }
+        }
+        return img_;
+    };
+    privateMethod.loadimage = function() {
+        var img_ = privateMethod.loadimageAllimg();
+        var documentTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var documentHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        var dt = documentTop + documentHeight;
+        $.each(img_, function(i, n) {
+            var nodeTop = $(this).offset().top;
+            if (nodeTop <= dt) {
+                var src_ = $(this).attr('xsrc');
+                $(this).attr('src', src_);
+                $(this).attr('init', 0);
+            }
+        });
+    };
+    //-- 图片延迟加载 end
+</script>

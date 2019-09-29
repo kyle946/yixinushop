@@ -1,0 +1,114 @@
+<layout name="layout/layout1" />
+<div class="h10 w100" ></div>
+
+    
+    <!--商品分类position  开始--> 
+    <div class="goodsCatetroyPos w1" >
+        <list name="goodsCatetroyPosData" item="v1" >
+        <div class="a1" >
+            <a href="<root />{u g/$v1[id]}" >{$v1.name}&nbsp;&nbsp;↓</a>
+            <div class="a3" ></div>
+            <div class="a2" >
+                <?php if( isset($v1['list']) ): foreach($v1['list'] as $v2): ?>
+                <a href="<root />{u g/$v2[id]}" >{$v2.name}</a>
+                <?php endforeach; endif; ?>
+            </div>
+        </div>
+        &nbsp;&nbsp;>&nbsp;&nbsp;
+        </list>
+    </div>
+    <script>
+        $(".goodsCatetroyPos .a1").mouseenter(function(){ 
+            $(this).find('.a3').css({'display':'block',"border-left":"1px solid #EAAE34","border-right":"1px solid #EAAE34"});
+            $(this).find('.a2').css({'display':'block',"border":"1px solid #EAAE34"});
+            $(this).css({"border":"1px solid #EAAE34"});
+        });
+        $(".goodsCatetroyPos .a1").mouseleave(function(){ 
+            $('.goodsCatetroyPos .a3').css({'display':'none',"border-left":"1px solid #FFE2A6","border-right":"1px solid #FFE2A6"});
+            $('.goodsCatetroyPos .a2').css({'display':'none',"border":"1px solid #FFE2A6"});
+            $('.goodsCatetroyPos .a1').css({"border":"1px solid #FFE2A6"});
+        });
+    </script>
+    <!--商品分类position  结束-->
+    
+    
+<div class="h10 w100" ></div>
+<div class="w1 catepage_index clearfix" >
+    <div class="w22 clearfix fl area2" >
+        <div class="area3 w100" >
+            <div class="title">所有分类</div>
+            <?php if( isset($cateList) and is_array($cateList) ): foreach($cateList as $key=>$v): ?>
+            <dl>
+                <dt><a href="<root />{u g/$v[id] }" >{$v.name}</a></dt>
+                <?php if( isset($v['son']) and is_array($v['son']) and $v['id']==$cateid ): foreach($v['son'] as $k2=>$v2): ?>
+                <dd><a href="<root />{u g/$v2[id] }" >{$v2.name}</a></dd>
+                <?php endforeach; endif; ?>
+            </dl>
+            <?php endforeach; endif; ?>
+        </div>
+        <div class="h10 w100" ></div>
+        <div class="area4" >
+            <div class='title' >推荐商品</div>
+            <ul>
+                <li>
+                    dsfads
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="w92 clearfix fr" >
+        <?php if(!empty($info['list'])): foreach($info['list'] as $k1=>$v1): ?>
+        <div class="glist_area3 w100 clearfix" > 
+            <div class="a1 clearfix" >
+                <div class="a2 fl" ><a href="<root />{u g/$v1[cateid] }" >{$v1.name}</a></div>
+                <font class="fr" ><a href="<root />{u g/$v1[cateid] }" >更多……</a></font>
+            </div>
+        </div>
+        <div class="glist_area2_1 w100" >
+            <ul>
+                
+                
+                <?php foreach($v1['goodsData'] as $k2=>$v){ ?>
+                <li>
+                    <if con="!empty($v['aid'])"><i></i></if>
+                    <div class="thumb" ><a href="<root />{u item/$v[id] }" ><img border="0" src="<root />image/{$v.thumb}"></a></div>
+                    <div class="t1" ><a href="<root />{u item/$v[id] }" >{$v.goodsname} {$v.attributeStr}</a></div>
+                    <div class="t2" >
+                        ￥{$v.shopPrice}&nbsp;&nbsp;&nbsp;&nbsp;
+                        <if con="!empty($v['aid'])"><span class='c1' style="text-decoration: line-through;font-weight: normal;" >{$v.sprice}</span></if>
+                    </div>
+                    <!--<div class="t3" > 人气：<font>{$v.clickCount}</font>&nbsp;&nbsp;&nbsp;评论：<font>{$v.comments}</font></div>-->
+                    <div class="t4" >
+                        <!--<a href="javascript:goodsfun.buy('{$v.id}');" >立即购买</a>-->
+                        
+                        <!--库存不足和限购判断  --> 
+                        <?php if( $v['numbers']<KUCUNBUZU ){ ?>
+                        <a href="javascript:void(0);" >库存不足,再等等吧</a>
+                        <?php }elseif( $v['xiangou']>0 && $v['xiangouuser']>0 && $v['xiangouuser']>=$v['xiangou'] ){ ?>
+                        <a href="javascript:void(0);" >[限购] 今天已经买过了</a>
+                        <?php }else{ ?>
+                        <a href="javascript:goodsfun.addcart('{$v.id}');" >加入购物车</a>
+                        <?php } ?>
+                    </div>
+                </li>
+                <?php } ?>
+                
+                
+            </ul>
+        </div>
+        <div class="h10 w100" ></div><div class="h10 w100" ></div>
+        <?php endforeach; endif; ?>
+        
+    </div>
+</div>
+<div class="h10 w100" ></div>
+<script>
+    function loginMinCallback(param,goodsid){
+        if(param==1){
+            goodsfun.buy(goodsid);
+        }else if(param==2){
+            goodsfun.addcart(goodsid);
+            <!-- window.location.reload(); -->
+        }
+    }
+</script>

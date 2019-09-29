@@ -1,0 +1,21 @@
+CREATE TABLE `y_goods` (
+  `id` mediumint(15) NOT NULL AUTO_INCREMENT,
+  `catId` int(11) DEFAULT NULL,
+  `typeId` int(11) NOT NULL,
+  `name` varchar(254) DEFAULT NULL,
+  `name2` varchar(255) NOT NULL,
+  `shopPrice` decimal(9,2) DEFAULT NULL,
+  `goodsDesc` text,
+  `imgs` text NOT NULL,
+  `brandId` int(11) DEFAULT NULL COMMENT '品牌ID',
+  `dateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
+  `isDelete` tinyint(1) NOT NULL DEFAULT '2' COMMENT '是否已经删除，1为已经删除，2为否',
+  `sort` mediumint(15) DEFAULT NULL COMMENT '用来排序',
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  `sn` varchar(120) NOT NULL,
+  `attr` text NOT NULL,
+  `attrs` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `name` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;

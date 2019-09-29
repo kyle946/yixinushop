@@ -1,0 +1,187 @@
+<layout name="layout/layout1" />
+<div class="h10 w100" ></div>
+<div class="w1 clearfix">
+    <div class="artlist_area3 clearfix" >
+
+        <div class="br1 clearfix " >
+            <h3 >热门招聘职位</h3>
+            <ul>
+                <?php $arr=getartlist2('channel-renshi'); ?>
+                <?php foreach($arr as $v){ ?>
+                <li>
+                    <div class="area1 fl" >
+                        <a href="<root />{u m/$v[mark]/id_$v[id]}" >
+                            <if con="empty($v['picname'])">
+                                <div style='background-color: <pr />' class='nothumb' ><div class="title" >{fun ysubstr($v[title],8)}</div></div>
+                                <else />
+                                <img border="0" src="<root />image/{$v.picname}" />
+                            </if>
+                        </a>
+                    </div>
+                    <div class="area2 fr" ><p><a href="<root />{u m/$v[mark]/id_$v[id]}" >{fun ysubstr($v[title],18)}</a></p></div>
+                    <div class="area3 fr" ><p><?php echo substr($v['addtime'],0,10); ?></p></div>
+                </li>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
+
+    <div class="artlist_area2 clearfix" >
+        <div class="area71" >
+            <div class="area7" >
+
+                <?php $i=1; ?>
+                <?php foreach($list2 as $v){  ?>
+                <p>
+                    {$v.name}：
+                    <?php foreach($v['list'] as $k=>$h ){ ?>
+                    <a <?php if( substr(rget('t'),$i-1,1)==$k){ ?>class="cur"<?php } ?> href="<?php echo createLink('jobs/index', array('t'=> replaceStr($link,$i,$k) ) ); ?>" >{$h}</a>
+                    <?php } ?>
+                </p>
+                <?php 
+                $i++;
+                } 
+                ?>
+            </div>
+        </div>
+        <div class="h10 w100" ></div>
+        <!--        <ul>
+                    <if con="empty($info)" ><li class="nocontent" >暂无内容，敬请期待。</li></if>
+                </ul>-->
+    </div>
+    <div class="artcontent_area1 fr" >
+        <div class="area5"> 
+            <h2 style="color:<pr />" >{$info.title}</h2> 
+            <div class="a1"></div> 
+            <div>
+                <p><font style="color:<2pr />" >发布时间：</font><?php echo substr($info['addtime'],0,10); ?></p>
+                <p><font style="color:<2pr />" >工作地点：</font>{$info.didian}</p>
+                <p><font style="color:<2pr />" >工作经验：</font>{$info.jinyan}</p>
+                <p><font style="color:<2pr />" >薪资：</font>{$info.xinzi}</p>
+                <p><font style="color:<2pr />" >学历要求：</font>{$info.xueli}</p>
+                <div class="a1"></div> 
+                <p><font style="color:<2pr />" >岗位职责：</font></p>
+                <div style='margin-left: 90px;' >
+                    <p>
+                        <?php 
+                        $order   = array("\r\n", "\n", "\r");
+                        echo str_replace($order,'</p><p>',$info['zhize']); 
+                        ?>
+                    </p>
+                </div>
+                <div class="a1"></div> 
+                <p><font style="color:<2pr />" >任职资格：</font></p>
+                <div style='margin-left: 90px;' >
+                    <p>
+                        <?php 
+                        $order   = array("\r\n", "\n", "\r");
+                        echo str_replace($order,'</p><p>',$info['zige']); 
+                        ?>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="area2" ></div>
+        <div class="h10 w100" ></div><div class="h10 w100" ></div>
+        <div class="area4 clearfix" >
+            <font>分享到：</font>
+            <div class="bdsharebuttonbox" data-tag="share_1">
+                <a class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+                <a class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+                <!--<a class="bds_baidu" data-cmd="baidu"></a>-->
+                <a class="bds_tsina" data-cmd="tsina">新浪微博</a>
+                <a class="bds_renren" data-cmd="renren">人人网</a>
+                <a class="bds_tqq" data-cmd="tqq">腾讯微博</a>
+                <a class="bds_more" data-cmd="more">更多</a>
+                <a class="bds_count" data-cmd="count"></a>
+            </div>
+            <script>
+                window._bd_share_config = {
+                    common: {bdText: document.getElementsByTagName('title').item(0).innerHTML, bdDesc: document.getElementsByTagName('title').item(0).innerHTML, },
+                    share: [{"bdSize": 16}]
+                };
+                with (document)
+                    0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+            </script>
+        </div>
+        <div class="h10 w100" ></div><div class="h10 w100" ></div>
+        <div class="h10 w100" ></div>
+    </div>
+
+    <div class="artcontent_area3 fr clearfix" id='jump1' >
+        <div class="a6 w100"><h2>申请职位</h2></div>
+        <div class="h10 w100" ></div>
+        <div class="a5 w8">发送太频繁了，过两个小时再来吧!</div>
+        <div class="qiuzhijianli2 clearfix" >
+            <form action="<?php echo createLink('jobs/saveJianli'); ?>" method="post" id="qiuzhijianli" name="qiuzhijianli" onsubmit="return publicMethod.icheck()" >
+                <p class="fl" ><span>姓名：</span><input  onblur="ch.onecheck(this);" type="text" name='a' value="" /></p>
+                <p class="fl" ><span>年龄：</span><input  onblur="ch.onecheck(this);" type="text" name='b' value="" /></p>
+                <p class="fl" ><span>手机号码：</span><input  onblur="ch.onecheck(this);" type="text" name='c' value="" /></p>
+                <p class="fl" ><span>学历：</span><input  onblur="ch.onecheck(this);" type="text" name='d' value="" /></p>
+                <p class="fl" ><span>联系地址：</span><input  onblur="ch.onecheck(this);" type="text" name='e' value="" /></p>
+                <div class='h10 w100 fl' ></div>
+                <p class='w100' style="float: left;" ><span>工作经历：</span>
+                    <textarea  onblur="ch.onecheck(this);" name="f" ></textarea>
+                </p>
+                <p class='w100' style="float: left;"  ><span>自我评价：</span>
+                    <textarea  onblur="ch.onecheck(this);" name="g" ></textarea>
+                </p>
+                <p class='fl' >
+                    <span id='atips' ></span>
+                    <span id='btips' ></span>
+                    <span id='ctips' ></span>
+                    <span id='dtips' ></span>
+                    <span id='etips' ></span>
+                    <span id='ftips' ></span>
+                    <span id='gtips' ></span>
+                    <span id='htips' ></span>
+                    <span id='yzmtips' ></span>
+                </p>
+                <p class="fr" >
+                    <span>验证码：</span><input style="min-width:60px;width:60px;"  onblur="ch.onecheck(this,rootPath+'u/checkVerify/verifystr/'+this.value,'图片验证码不正确！');" type="text" name='yzm' value="" />
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a style="padding: 0px;" href="javascript:publicMethod.getverify()" ><img border="0" title="点击更换图片" id="yzmi" style="width:80px; height:30px; position: absolute;" src="/u/verifyCode"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font class='c1' >点击图片更换</font>
+                </p>
+                <input type="hidden" name="id" value="<?php echo rget('id'); ?>" />
+                <div class="a3 clearfix fr w100" >
+                    <button class="bt1">提交申请</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="h10 w100" ></div>
+<script type="text/javascript" >
+    
+    $(function(){
+        
+        var option = new Array();
+        option[0] = {name:'a',type:'str30',msg:'[姓名] 1至30个字符，'};
+        option[1] = {name:'b',type:'regexp',msg:'[年龄] 两位数的整数，',rule:/^[1-9]{1,2}$/,required:1};
+        option[2] = {name:'c',type:'mobile',msg:'[手机号码] 不合法，'};
+        option[3] = {name:'d',type:'str30',msg:'[学历] 1至30个字符，'};
+        option[4] = {name:'e',type:'regexp',msg:'[联系地址] 1至60个字符，',rule:/^.{1,60}$/,required:1};
+        option[5] = {name:'f',type:'str200',msg:'[工作经历] 1至200个字符，'};
+        option[6] = {name:'g',type:'str200',msg:'[自我评价] 1至200个字符，'};
+        option[7] = {name:'yzm',type:'regexp',msg:'[验证码] 不正确！',rule:/^.{5,5}$/,required:1}; 
+        ch = new formCheck(option);
+        
+    });
+    
+    publicMethod = {};
+    //--更新验证码
+    publicMethod.getverify = function (){
+        var imgyzm = document.getElementById('yzmi');
+        imgyzm.setAttribute('src',"<root />u/verifyCode/rand_"+Math.random());
+    };
+    
+    publicMethod.icheck = function(){
+        var bool_ = false;
+        var res = ch.start();
+        if(res==1){
+            bool_ = true;
+        }
+        return bool_;
+    };
+</script>

@@ -1,0 +1,61 @@
+<layout name="layout/layout_mobile2" />
+<div class="hr" ></div>
+<div class="w100" >
+    <div class="userinfo_area" >
+        <div class="a1 img clearfix" ><font>积分总数</font>{$info.payPoints}</div>
+        <div class="a1 a" ><font class="w2" >等级</font>{$info.rankName}</div>
+        <div class="a1 img clearfix" ><font>已兑积分</font>{$info.usepayPoints}</div>
+        <div class="a1 img clearfix" ><font>可兑积分</font><?php echo $info['payPoints'] - $info['usepayPoints']; ?></div>
+
+    </div>
+</div>
+<div class="hg10 w100" ></div>
+<div> <p>最近一次积分增加记录：<span class='cf60' ><?php if($info['pointslog']){ echo $info['pointslog'];  }else{ echo '无'; } ?></span></p> </div>
+<div class="hg10 w100" ></div>
+<div class="hr" ></div>
+
+
+<table border="0" cellspacing="0" >
+    <tr>
+        <td colspan="4" >
+            <div>积分与等级：</div>
+            <div class='usercenterIntegralArea2' >
+                <table>
+                    <thead>
+                        <tr>
+                            <th>等级</th>
+                            <th>别名</th>
+                            <th>达到等级的积分</th>
+                            <th>等级折扣</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <list name='list' item="v" >
+                    <tr>
+                        <td>{$v.name}</td>
+                        <td>{$v.alias}</td>
+                        <td>{$v.points}</td>
+                        <td>{$v.discount}%</td>
+                    </tr>
+                    </list>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+</tbody>
+</table>
+
+<div class="hg10 w100" ></div>
+<div class="hr" ></div>
+<div>什么时候增加积分：</div>
+<div class='usercenterIntegralArea3' >
+    <ol>
+        <li>新用户注册</li>
+        <li>PC端下单并支付</li>
+        <li>PC端发表商品好评</li>
+        <li>登录微商城</li>
+        <li>微商城下单并支付</li>
+        <li>微商城发表商品好评</li>
+    </ol>
+</div>
